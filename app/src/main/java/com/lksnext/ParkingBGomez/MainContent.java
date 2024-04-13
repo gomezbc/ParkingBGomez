@@ -16,14 +16,14 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.ParkingBGomez.databinding.FragmentMainContentBinding;
 import com.lksnext.ParkingBGomez.domain.BottomNavState;
-import com.lksnext.ParkingBGomez.viewmodel.BottomNavViewModel;
+import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.util.Objects;
 
 public class MainContent extends Fragment {
 
     private FragmentMainContentBinding binding;
-    private BottomNavViewModel bottomNavViewModel;
+    private MainViewModel mainViewModel;
     private MenuItem prevMenuItem;
     private Drawable prevIcon;
 
@@ -41,8 +41,8 @@ public class MainContent extends Fragment {
         BottomNavigationView bottomNav = binding.bottomNavigation;
         setBottomNavListener(bottomNav, navController);
 
-        bottomNavViewModel = new ViewModelProvider(requireActivity()).get(BottomNavViewModel.class);
-        restoreBottomNavState(bottomNav, Objects.requireNonNull(bottomNavViewModel.getBottomNavState().getValue()));
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        restoreBottomNavState(bottomNav, Objects.requireNonNull(mainViewModel.getBottomNavState().getValue()));
 
         return binding.getRoot();
 
@@ -71,19 +71,19 @@ public class MainContent extends Fragment {
             final int id = item.getItemId();
             if (id == R.id.item_1) {
                 item.setIcon(R.drawable.home_fill);
-                bottomNavViewModel.setBottomNavState(BottomNavState.HOME);
+                mainViewModel.setBottomNavState(BottomNavState.HOME);
                 navController.navigate(R.id.inicioMainFragment);
             } else if (id == R.id.item_2) {
                 item.setIcon(R.drawable.directions_car_fill);
-                bottomNavViewModel.setBottomNavState(BottomNavState.RESERVAR);
+                mainViewModel.setBottomNavState(BottomNavState.RESERVAR);
                 navController.navigate(R.id.reservarMainFragment);
             } else if (id == R.id.item_3) {
                 item.setIcon(R.drawable.bookmark_fill);
-                bottomNavViewModel.setBottomNavState(BottomNavState.RESERVAS);
+                mainViewModel.setBottomNavState(BottomNavState.RESERVAS);
                 navController.navigate(R.id.reservasMainFragment);
             } else if (id == R.id.item_4) {
                 item.setIcon(R.drawable.person_fill);
-                bottomNavViewModel.setBottomNavState(BottomNavState.CUENTA);
+                mainViewModel.setBottomNavState(BottomNavState.CUENTA);
                 navController.navigate(R.id.cuentaMainFragment);
             }
 
@@ -97,8 +97,8 @@ public class MainContent extends Fragment {
     /**
      * Restores the state of the content.
      *
-     * @param bottomNav
-     * @param state
+     * @param bottomNav The bottom navigation bar view
+     * @param state    The state to restore
      */
     private void restoreBottomNavState(BottomNavigationView bottomNav, BottomNavState state) {
         switch (state) {
