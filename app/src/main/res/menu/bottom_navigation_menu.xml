@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.lksnext.ParkingBGomez.MainActivity">
+    <item
+        android:id="@+id/item_1"
+        android:enabled="true"
+        android:icon="@drawable/home"
+        android:title="@string/menuItem1"/>
+    <item
+        android:id="@+id/item_2"
+        android:enabled="true"
+        android:icon="@drawable/directions_car"
+        android:title="@string/menuItem2"/>
+    <item
+        android:id="@+id/item_3"
+        android:enabled="true"
+        android:icon="@drawable/bookmark"
+        android:title="@string/menuItem3"/>
+    <item
+        android:id="@+id/item_4"
+        android:enabled="true"
+        android:icon="@drawable/person"
+        android:title="@string/menuItem4"/>
+</menu>
