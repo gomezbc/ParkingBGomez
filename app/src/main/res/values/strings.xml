@@ -47,4 +47,8 @@
     <string name="menuItem2">Reservar</string>
     <string name="menuItem3">Reservas</string>
     <string name="menuItem4">Cuenta</string>
+    <string name="accessible_car">Coche adaptado</string>
+    <string name="car">Coche</string>
+    <string name="motorcycle">Moto</string>
+    <string name="electric_car">Coche electrico</string>
 </resources>
