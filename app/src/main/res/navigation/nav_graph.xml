@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/reservarMainFragment"
-        android:name="com.lksnext.ParkingBGomez.ReservarMainFragment"
+        android:name="com.lksnext.ParkingBGomez.view.fragment.ReservarMainFragment"
         android:label="fragment_reservar_main"
         tools:layout="@layout/fragment_reservar_main" />
     <fragment
         android:id="@+id/cuentaMainFragment"
-        android:name="com.lksnext.ParkingBGomez.CuentaMainFragment"
+        android:name="com.lksnext.ParkingBGomez.view.fragment.CuentaMainFragment"
         android:label="fragment_cuenta_main"
         tools:layout="@layout/fragment_cuenta_main" />
     <fragment
         android:id="@+id/inicioMainFragment"
-        android:name="com.lksnext.ParkingBGomez.InicioMainFragment"
+        android:name="com.lksnext.ParkingBGomez.view.fragment.InicioMainFragment"
         android:label="fragment_inicio_main"
         tools:layout="@layout/fragment_inicio_main" />
     <fragment
         android:id="@+id/reservasMainFragment"
-        android:name="com.lksnext.ParkingBGomez.ReservasMainFragment"
+        android:name="com.lksnext.ParkingBGomez.view.fragment.ReservasMainFragment"
         android:label="fragment_reservas_main"
         tools:layout="@layout/fragment_reservas_main" />
 </navigation>

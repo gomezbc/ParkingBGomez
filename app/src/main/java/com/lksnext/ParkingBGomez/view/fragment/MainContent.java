@@ -1,4 +1,4 @@
-package com.lksnext.ParkingBGomez;
+package com.lksnext.ParkingBGomez.view.fragment;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentMainContentBinding;
 import com.lksnext.ParkingBGomez.domain.BottomNavState;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;

@@ -1,4 +1,4 @@
-package com.lksnext.ParkingBGomez;
+package com.lksnext.ParkingBGomez.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
-import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
 
-public class ReservasMainFragment extends Fragment{
+public class ReservarMainFragment extends Fragment{
 
-    private FragmentReservasMainBinding binding;
+    private FragmentReservarMainBinding binding;
 
     @Override
     public View onCreateView(
@@ -21,7 +20,7 @@ public class ReservasMainFragment extends Fragment{
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentReservasMainBinding.inflate(inflater, container, false);
+        binding = FragmentReservarMainBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }

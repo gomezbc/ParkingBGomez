@@ -1,4 +1,4 @@
-package com.lksnext.ParkingBGomez;
+package com.lksnext.ParkingBGomez.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.lksnext.ParkingBGomez.NavigationHost;
 import com.lksnext.ParkingBGomez.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends Fragment {
