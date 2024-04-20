@@ -34,7 +34,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day1"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Widget.Material3.Chip.Filter.Elevated"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:checked="true"
@@ -57,7 +57,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day2"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Widget.Material3.Chip.Filter.Elevated"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -80,7 +80,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day3"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Widget.Material3.Chip.Filter.Elevated"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -103,7 +103,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day4"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Widget.Material3.Chip.Filter.Elevated"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -126,7 +126,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day5"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Widget.Material3.Chip.Filter.Elevated"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -149,7 +149,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day6"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Widget.Material3.Chip.Filter.Elevated"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -172,7 +172,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day7"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Widget.Material3.Chip.Filter.Elevated"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
