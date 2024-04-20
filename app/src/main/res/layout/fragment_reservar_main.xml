@@ -15,9 +15,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/materialDivider_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/textView_select_day">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/date_chip_group"
@@ -27,8 +29,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:selectionRequired="true"
-            app:singleSelection="true"
-            app:singleLine="true">
+            app:singleLine="true"
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day1"
@@ -55,6 +57,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day2"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -73,10 +76,11 @@
                 app:layout_constraintLeft_toRightOf="@+id/day1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:textEndPadding="6dp"
-                app:textStartPadding="6dp"/>
+                app:textStartPadding="6dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day3"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -95,10 +99,11 @@
                 app:layout_constraintLeft_toRightOf="@+id/day2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:textEndPadding="6dp"
-                app:textStartPadding="6dp"/>
+                app:textStartPadding="6dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day4"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -117,10 +122,11 @@
                 app:layout_constraintLeft_toRightOf="@+id/day3"
                 app:layout_constraintTop_toTopOf="parent"
                 app:textEndPadding="6dp"
-                app:textStartPadding="6dp"/>
+                app:textStartPadding="6dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day5"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -139,10 +145,11 @@
                 app:layout_constraintLeft_toRightOf="@+id/day4"
                 app:layout_constraintTop_toTopOf="parent"
                 app:textEndPadding="6dp"
-                app:textStartPadding="6dp"/>
+                app:textStartPadding="6dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day6"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -161,10 +168,11 @@
                 app:layout_constraintLeft_toRightOf="@+id/day5"
                 app:layout_constraintTop_toTopOf="parent"
                 app:textEndPadding="6dp"
-                app:textStartPadding="6dp"/>
+                app:textStartPadding="6dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/day7"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="10dp"
@@ -183,9 +191,128 @@
                 app:layout_constraintLeft_toRightOf="@+id/day6"
                 app:layout_constraintTop_toTopOf="parent"
                 app:textEndPadding="6dp"
-                app:textStartPadding="6dp"/>
+                app:textStartPadding="6dp" />
 
         </com.google.android.material.chip.ChipGroup>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date_chip_group">
+
+            <TextView
+                android:id="@+id/textView_day1"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="L"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView_day2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textView_day2"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="M"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView_day3"
+                app:layout_constraintStart_toEndOf="@id/textView_day1"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textView_day3"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="M"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView_day4"
+                app:layout_constraintStart_toEndOf="@id/textView_day2"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textView_day4"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="J"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView_day5"
+                app:layout_constraintStart_toEndOf="@id/textView_day3"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textView_day5"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="V"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView_day6"
+                app:layout_constraintStart_toEndOf="@id/textView_day4"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textView_day6"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="S"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView_day7"
+                app:layout_constraintStart_toEndOf="@id/textView_day5"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textView_day7"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="D"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textView_day6"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -193,7 +320,7 @@
         android:id="@+id/materialDivider_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:dividerInsetEnd="16dp"
         app:dividerInsetStart="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -207,9 +334,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/select_slot_text"
         android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/chipGroup"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialDivider_1" />
 
@@ -279,5 +408,19 @@
         app:layout_constraintEnd_toEndOf="@id/chipGroup"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+
+    <TextView
+        android:id="@+id/textView_select_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Selecciona la fecha"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/date_picker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
