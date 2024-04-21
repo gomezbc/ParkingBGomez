@@ -13,12 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.chip.Chip;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
+import com.lksnext.ParkingBGomez.domain.TipoPlaza;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.List;
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ public class ReservarMainFragment extends Fragment{
     private final List<Integer> day_text_id = new ArrayList<>(Arrays.asList(R.id.textView_day1,
             R.id.textView_day2, R.id.textView_day3, R.id.textView_day4, R.id.textView_day5,
             R.id.textView_day6, R.id.textView_day7));
+    private final List<Integer> tipoPlaza_chip_id = new ArrayList<>(Arrays.asList(R.id.chip_car,
+            R.id.chip_electric_car, R.id.chip_motorcycle, R.id.chip_accessible_car));
 
     @Override
     public View onCreateView(
@@ -41,10 +45,14 @@ public class ReservarMainFragment extends Fragment{
 
         binding = FragmentReservarMainBinding.inflate(inflater, container, false);
 
-        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        restoreSelectedDateDayChip();
+        restoreSelectedTipoPlaza();
 
-        setDay_chip_text();
+        setDay_chip();
         setDay_text();
+
+
+        setTipoPlazaChipsListener();
 
         return binding.getRoot();
 
@@ -58,6 +66,10 @@ public class ReservarMainFragment extends Fragment{
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void setDay_chip(){
+        setDay_chip_text();
     }
 
     /**
@@ -75,11 +87,17 @@ public class ReservarMainFragment extends Fragment{
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             day = calendar.get(Calendar.DAY_OF_MONTH);
             // Add a check change listener to handle the selection
-            chip.setOnClickListener(v -> {
-                final Chip  clickedChip = (Chip) v;
-                mainViewModel.setSelectedDateDay((Integer) clickedChip.getTag());
-            });
+            setDay_chip_listener(chip);
         }
+    }
+
+    private void setDay_chip_listener(Chip chip){
+        chip.setOnClickListener(v -> {
+            final Chip  clickedChip = (Chip) v;
+            // Update LiveData values
+            mainViewModel.setSelectedDateDay((Integer) clickedChip.getTag());
+            mainViewModel.setSelectedDateDayChip(clickedChip.getId());
+        });
     }
 
     /**
@@ -98,5 +116,52 @@ public class ReservarMainFragment extends Fragment{
             text.setText(dayOfWeek.substring(0, 1).toUpperCase());
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
+    }
+
+    private void restoreSelectedDateDayChip() {
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        // Set the initial selected date day chip
+        if (mainViewModel.getSelectedDateDayChip().getValue() == null){
+            mainViewModel.setSelectedDateDayChip(R.id.day1);
+        }
+        final Chip selectedChip = binding.datePicker.findViewById(mainViewModel.getSelectedDateDayChip().getValue());
+        selectedChip.setChecked(true);
+    }
+
+    private void restoreSelectedTipoPlaza() {
+        final TipoPlaza tipoPlaza = mainViewModel.getSelectedTipoPlaza().getValue();
+        switch (Objects.requireNonNull(tipoPlaza)){
+            case ESTANDAR:
+                binding.chipCar.setChecked(true);
+                break;
+            case ELECTRICO:
+                binding.chipElectricCar.setChecked(true);
+                break;
+            case MOTO:
+                binding.chipMotorcycle.setChecked(true);
+                break;
+            case DISCAPACITADO:
+                binding.chipAccessibleCar.setChecked(true);
+                break;
+        }
+    }
+
+    private void setTipoPlazaChipsListener() {
+        tipoPlaza_chip_id.forEach(chip_id -> {
+            final Chip chip = binding.chipGroup.findViewById(chip_id);
+            chip.setOnClickListener(v -> {
+                final Chip clickedChip = (Chip) v;
+                final int id = clickedChip.getId();
+                if (id == R.id.chip_car) {
+                    mainViewModel.setSelectedTipoPlaza(TipoPlaza.ESTANDAR);
+                } else if (id == R.id.chip_electric_car) {
+                    mainViewModel.setSelectedTipoPlaza(TipoPlaza.ELECTRICO);
+                } else if (id == R.id.chip_motorcycle) {
+                    mainViewModel.setSelectedTipoPlaza(TipoPlaza.MOTO);
+                } else if (id == R.id.chip_accessible_car) {
+                    mainViewModel.setSelectedTipoPlaza(TipoPlaza.DISCAPACITADO);
+                }
+            });
+        });
     }
 }
