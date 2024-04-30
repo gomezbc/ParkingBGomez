@@ -79,17 +79,7 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
                             clearItemsInRange(previousSelectedPosition, disabledPosition);
                             setPositionAsSelected(newSelectedPosition);
                             // Poner en middle los siguientes al newSelected hasta algun disabled si hay
-                            final List<HourItem> subList3 =
-                                    hours.subList(newSelectedPosition + 1, hours.size());
-                            Optional<HourItem> isDisabledInTheMiddle2 = subList3.stream()
-                                    .filter(h -> !h.isEnabled())
-                                    .findAny();
-                            if (isDisabledInTheMiddle2.isPresent()) {
-                                final int disabledPosition2 = hours.indexOf(isDisabledInTheMiddle2.get());
-                                setItemsInRangeAsInMiddle(newSelectedPosition + 1, disabledPosition2);
-                            }else {
-                                setItemsInRangeAsInMiddle(newSelectedPosition + 1, hours.size());
-                            }
+                            handleDisabledInTheMiddle(newSelectedPosition, false);
                         }else {
                             // Si no hay ninguno deshabilitado en medio poner en middle todos los siguientes
                             setItemsInRangeAsInMiddle(previousSelectedPosition + 1, newSelectedPosition);
@@ -108,39 +98,11 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
                     // quitar los middles
                     clearItemsInRange(0, hours.size());
 
-                    Optional<HourItem> isDisabledInTheMiddle = hours
-                            .subList(newSelectedPosition, hours.size())
-                            .stream()
-                            .filter(h -> !h.isEnabled())
-                            .findAny();
-
-                    if (isDisabledInTheMiddle.isPresent()) {
-                        // Si hay un deshabilitado en medio poner el nuevo como el unico seleccionado y poner middles hasta el deshabilitado
-                        final int disabledPosition = hours.indexOf(isDisabledInTheMiddle.get());
-                        setItemsInRangeAsInMiddle(newSelectedPosition, disabledPosition);
-                        setPositionAsSelected(newSelectedPosition);
-                    }else {
-                        // Si no hay ninguno deshabilitado en medio poner en middle todos los siguientes
-                        setItemsInRangeAsInMiddle(newSelectedPosition + 1, hours.size());
-                        setPositionAsSelected(newSelectedPosition);
-                    }
+                    handleDisabledInTheMiddle(newSelectedPosition, true);
                 }
             }else {
                 // Si no hay ninguno seleccionado
-                final List<HourItem> subList =
-                        hours.subList(newSelectedPosition + 1, hours.size());
-                Optional<HourItem> isDisabledInTheMiddle = subList.stream()
-                        .filter(h -> !h.isEnabled())
-                        .findAny();
-                if (isDisabledInTheMiddle.isPresent()) {
-                    // Si hay un deshabilitado en medio poner en middle todos los anteriores hasta el deshabilitado
-                    final int disabledPosition = hours.indexOf(isDisabledInTheMiddle.get());
-                    setItemsInRangeAsInMiddle(newSelectedPosition + 1, disabledPosition);
-                }else {
-                    // Si no hay ninguno deshabilitado en medio poner en middle todos los siguientes
-                    setItemsInRangeAsInMiddle(newSelectedPosition + 1, hours.size());
-                }
-                setPositionAsSelected(newSelectedPosition);
+                handleDisabledInTheMiddle(newSelectedPosition, true);
             }
         });
     }
@@ -187,5 +149,24 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         hourItem.setSelected(true);
         hourItem.setInMiddle(false);
         notifyItemChanged(position);
+    }
+
+    private void handleDisabledInTheMiddle(int newSelectedPosition, boolean positionAsSelected){
+        final List<HourItem> subList =
+                hours.subList(newSelectedPosition + 1, hours.size());
+        Optional<HourItem> isDisabledInTheMiddle = subList.stream()
+                .filter(h -> !h.isEnabled())
+                .findAny();
+        if (isDisabledInTheMiddle.isPresent()) {
+            // Si hay un deshabilitado en medio poner en middle todos los anteriores hasta el deshabilitado
+            final int disabledPosition = hours.indexOf(isDisabledInTheMiddle.get());
+            setItemsInRangeAsInMiddle(newSelectedPosition + 1, disabledPosition);
+        }else {
+            // Si no hay ninguno deshabilitado en medio poner en middle todos los siguientes
+            setItemsInRangeAsInMiddle(newSelectedPosition + 1, hours.size());
+        }
+        if (positionAsSelected){
+            setPositionAsSelected(newSelectedPosition);
+        }
     }
 }
