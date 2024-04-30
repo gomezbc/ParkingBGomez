@@ -43,7 +43,9 @@ public class MainContent extends Fragment {
         setBottomNavListener(bottomNav, navController);
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        restoreBottomNavState(bottomNav, Objects.requireNonNull(mainViewModel.getBottomNavState().getValue()));
+        if (savedInstanceState != null) {
+            String myString = savedInstanceState.getString("bottomNavState");
+        }
 
         return binding.getRoot();
 
@@ -59,6 +61,14 @@ public class MainContent extends Fragment {
         binding = null;
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mainViewModel.getBottomNavState().getValue() != null){
+            outState.putString("bottomNavState", mainViewModel.getBottomNavState().getValue().name());
+        }
+    }
+
     private void setBottomNavListener(BottomNavigationView bottomNav, NavController navController) {
         bottomNav.setOnItemSelectedListener(item -> {
             // If there was a previously selected item, restore its icon
@@ -70,23 +80,35 @@ public class MainContent extends Fragment {
             prevIcon = item.getIcon();
 
             final int id = item.getItemId();
+            int actionId = -1;
+            BottomNavState state = null;
+
             if (id == R.id.item_1) {
+                actionId = R.id.inicioMainFragment;
+                state = BottomNavState.HOME;
                 item.setIcon(R.drawable.home_fill);
-                mainViewModel.setBottomNavState(BottomNavState.HOME);
-                navController.navigate(R.id.inicioMainFragment);
             } else if (id == R.id.item_2) {
+                actionId = R.id.reservarMainFragment;
+                state = BottomNavState.RESERVAR;
                 item.setIcon(R.drawable.directions_car_fill);
-                mainViewModel.setBottomNavState(BottomNavState.RESERVAR);
-                navController.navigate(R.id.reservarMainFragment);
             } else if (id == R.id.item_3) {
+                actionId = R.id.reservasMainFragment;
+                state = BottomNavState.RESERVAS;
                 item.setIcon(R.drawable.bookmark_fill);
-                mainViewModel.setBottomNavState(BottomNavState.RESERVAS);
-                navController.navigate(R.id.reservasMainFragment);
             } else if (id == R.id.item_4) {
+                actionId = R.id.cuentaMainFragment;
+                state = BottomNavState.CUENTA;
                 item.setIcon(R.drawable.person_fill);
-                mainViewModel.setBottomNavState(BottomNavState.CUENTA);
-                navController.navigate(R.id.cuentaMainFragment);
             }
+
+            // Check if the current destination is the same as the destination you're navigating to
+            if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == actionId) {
+                return true;
+            }
+
+            // Update the state and navigate to the selected fragment
+            mainViewModel.setBottomNavState(state);
+            navController.navigate(actionId);
 
             // Update the previously selected item
             prevMenuItem = item;
