@@ -31,11 +31,11 @@
 <style name="HourItem.Theme.ParkingBGomez" parent="Theme.AppCompat.DayNight">
     <item name="colorPrimary">@color/md_theme_dark_primary</item>
     <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
-    <item name="colorPrimaryContainer">#453E55</item>
+    <item name="colorPrimaryContainer">@color/md_theme_dark_secondaryContainer</item>
     <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer</item>
     <item name="colorSecondary">@color/md_theme_dark_secondary</item>
     <item name="colorOnSecondary">@color/md_theme_dark_onSecondary</item>
-    <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer</item>
+    <item name="colorSecondaryContainer">#6C6283</item>
     <item name="colorOnSecondaryContainer">@color/md_theme_dark_onSecondaryContainer</item>
     <item name="colorTertiary">@color/md_theme_dark_tertiary</item>
     <item name="colorOnTertiary">@color/md_theme_dark_onTertiary</item>
