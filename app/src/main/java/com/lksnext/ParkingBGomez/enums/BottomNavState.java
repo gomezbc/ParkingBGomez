@@ -1,4 +1,4 @@
-package com.lksnext.ParkingBGomez.domain;
+package com.lksnext.ParkingBGomez.enums;
 
 public enum BottomNavState {
     HOME,

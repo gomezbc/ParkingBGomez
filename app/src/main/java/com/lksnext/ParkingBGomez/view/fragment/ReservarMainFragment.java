@@ -14,6 +14,8 @@ import com.google.android.material.chip.Chip;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
 import com.lksnext.ParkingBGomez.domain.TipoPlaza;
+import com.lksnext.ParkingBGomez.domain.HourItem;
+import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.ZoneId;

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.lksnext.ParkingBGomez.domain.BottomNavState;
 import com.lksnext.ParkingBGomez.domain.TipoPlaza;
+import com.lksnext.ParkingBGomez.enums.BottomNavState;
+import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

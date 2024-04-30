@@ -16,7 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentMainContentBinding;
-import com.lksnext.ParkingBGomez.domain.BottomNavState;
+import com.lksnext.ParkingBGomez.enums.BottomNavState;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.util.Objects;
