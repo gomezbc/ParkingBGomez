@@ -9,13 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
-import com.lksnext.ParkingBGomez.domain.TipoPlaza;
 import com.lksnext.ParkingBGomez.domain.HourItem;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
+import com.lksnext.ParkingBGomez.view.HourAdapter;
+import com.lksnext.ParkingBGomez.view.HourItemDecoration;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.ZoneId;
@@ -55,6 +58,40 @@ public class ReservarMainFragment extends Fragment{
 
 
         setTipoPlazaChipsListener();
+
+        RecyclerView recyclerView = binding.recyclerView;
+        recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 5)); // 5 columns
+        List<HourItem> hours = Arrays.asList(
+                new HourItem("07:00", true),
+                new HourItem("07:30", true),
+                new HourItem("08:00", true),
+                new HourItem("08:30", true),
+                new HourItem("09:00", true),
+                new HourItem("09:30", true),
+                new HourItem("10:00", true),
+                new HourItem("10:30", true),
+                new HourItem("11:00", true),
+                new HourItem("11:30", false),
+                new HourItem("12:00", true),
+                new HourItem("12:30", true),
+                new HourItem("13:00", true),
+                new HourItem("13:30", false),
+                new HourItem("14:00", false),
+                new HourItem("14:30", true),
+                new HourItem("15:00", true),
+                new HourItem("15:30", true),
+                new HourItem("16:00", true),
+                new HourItem("16:30", true),
+                new HourItem("17:00", true),
+                new HourItem("17:30", true),
+                new HourItem("18:00", true),
+                new HourItem("18:30", true),
+                new HourItem("19:00", true),
+                new HourItem("19:30", true),
+                new HourItem("20:00", true));
+        HourAdapter adapter = new HourAdapter(hours, mainViewModel);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new HourItemDecoration(20, 5));
 
         return binding.getRoot();
 
