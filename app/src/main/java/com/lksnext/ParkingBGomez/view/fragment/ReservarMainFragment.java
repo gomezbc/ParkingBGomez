@@ -89,7 +89,7 @@ public class ReservarMainFragment extends Fragment{
                 new HourItem("19:00", true),
                 new HourItem("19:30", true),
                 new HourItem("20:00", true));
-        HourAdapter adapter = new HourAdapter(hours);
+        HourAdapter adapter = new HourAdapter(hours, mainViewModel);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new HourItemDecoration(20, 5));
 

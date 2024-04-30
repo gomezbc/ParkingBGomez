@@ -6,16 +6,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lksnext.ParkingBGomez.R;
+import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.HourItem;
+import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
     private final List<HourItem> hours;
+    private final MainViewModel mainViewModel;
 
-    public HourAdapter(List<HourItem> hours) {
+    public HourAdapter(List<HourItem> hours, MainViewModel mainViewModel) {
         this.hours = hours;
+        this.mainViewModel = mainViewModel;
+        restoreSelectedHour();
         setHasStableIds(true);
     }
 
@@ -97,13 +106,13 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
                     // Si el nuevo seleccionado es anterior al anterior seleccionado o si ya hay 2 seleccionados
                     // quitar los middles
                     clearItemsInRange(0, hours.size());
-
                     handleDisabledInTheMiddle(newSelectedPosition, true);
                 }
             }else {
                 // Si no hay ninguno seleccionado
                 handleDisabledInTheMiddle(newSelectedPosition, true);
             }
+            updateSelectedHour();
         });
     }
 
@@ -115,6 +124,46 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
     @Override
     public long getItemId(int position) {
         return hours.get(position).getHour().hashCode();
+    }
+
+    private void updateSelectedHour(){
+        List<HourItem> selectedHours =  hours.stream()
+                .filter(HourItem::isSelected)
+                .collect(Collectors.toList());
+        if (selectedHours.size() == 2){
+            LocalTime time = LocalTime.parse(selectedHours.get(0).getHour());
+            final LocalDateTime horaInicio = LocalDateTime.of(LocalDate.now(), time);
+
+            time = LocalTime.parse(selectedHours.get(1).getHour());
+            final LocalDateTime horaFin = LocalDateTime.of(LocalDate.now(), time);
+
+            mainViewModel.setSelectedHour(new Hora(horaInicio, horaFin));
+        }
+    }
+
+    private void restoreSelectedHour(){
+        final Hora selectedHour = mainViewModel.getSelectedHour().getValue();
+        if (selectedHour != null){
+            final LocalTime horaInicio = selectedHour.horaInicio().toLocalTime();
+            final LocalTime horaFin = selectedHour.horaFin().toLocalTime();
+            final String horaInicioString = horaInicio.toString();
+            final String horaFinString = horaFin.toString();
+            final HourItem hourInicio = hours.stream()
+                    .filter(h -> h.getHour().equals(horaInicioString))
+                    .findAny()
+                    .orElse(null);
+            final HourItem hourFin = hours.stream()
+                    .filter(h -> h.getHour().equals(horaFinString))
+                    .findAny()
+                    .orElse(null);
+            if (hourInicio != null && hourFin != null){
+                final int inicioPosition = hours.indexOf(hourInicio);
+                final int finPosition = hours.indexOf(hourFin);
+                setItemsInRangeAsInMiddle(inicioPosition, finPosition);
+                setPositionAsSelected(inicioPosition);
+                setPositionAsSelected(finPosition);
+            }
+        }
     }
 
     private void clearItemsInRange(int start, int end) {
