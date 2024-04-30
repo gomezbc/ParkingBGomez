@@ -40,7 +40,8 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
             holder.button.setAlpha(0.5f);
         }
 
-        holder.button.setRotationY(hour.isInMiddle() ? 180f : 0f);
+        holder.button.setBackgroundResource(hour.isInMiddle() ?
+                R.drawable.in_middle_timeslot : R.drawable.default_timeslot);
 
         holder.button.setSelected(hour.isSelected());
 
