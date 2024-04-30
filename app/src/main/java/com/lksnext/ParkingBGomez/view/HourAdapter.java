@@ -121,6 +121,9 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
                         newSelectedHourItem.setSelected(true);
                         newSelectedHourItem.setInMiddle(false);
                         notifyItemChanged(newSelectedPosition);
+                        // quitar middle todos los siguientes
+                        hours.subList(newSelectedPosition, hours.size()).forEach(h -> h.setInMiddle(false));
+                        notifyItemRangeChanged(newSelectedPosition + 1, hours.size());
                     }
                 }else {
                     // Si el nuevo seleccionado es anterior al anterior seleccionado o si ya hay 2 seleccionados
