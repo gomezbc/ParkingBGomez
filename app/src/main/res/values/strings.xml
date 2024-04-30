@@ -53,4 +53,5 @@
     <string name="electric_car">Coche electrico</string>
     <string name="select_slot_text">Selecciona el tipo de plaza</string>
     <string name="select_date">Selecciona la fecha</string>
+    <string name="select_horario">Selecciona horario</string>
 </resources>
