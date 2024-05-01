@@ -1,5 +1,6 @@
 <resources>
 <style name="Base.Theme.ParkingBGomez" parent="Theme.Material3.Light.NoActionBar">
+    <item name="android:fontFamily">@font/roboto</item>
     <item name="colorPrimary">@color/md_theme_light_primary</item>
     <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
     <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
@@ -29,6 +30,7 @@
 </style>
 
 <style name="HourItem.Theme.ParkingBGomez" parent="Theme.AppCompat.DayNight">
+    <item name="android:fontFamily">@font/roboto</item>
     <item name="colorPrimary">@color/md_theme_light_primary</item>
     <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
     <item name="colorPrimaryContainer">#F4F1FB</item>
