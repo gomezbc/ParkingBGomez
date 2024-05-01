@@ -29,6 +29,8 @@ import java.util.Objects;
 import java.util.TimeZone;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ReservarMainFragment extends Fragment{
 
@@ -41,6 +43,7 @@ public class ReservarMainFragment extends Fragment{
             R.id.textView_day6, R.id.textView_day7));
     private final List<Integer> tipoPlaza_chip_id = new ArrayList<>(Arrays.asList(R.id.chip_car,
             R.id.chip_electric_car, R.id.chip_motorcycle, R.id.chip_accessible_car));
+    private final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
     @Override
     public View onCreateView(
@@ -59,42 +62,47 @@ public class ReservarMainFragment extends Fragment{
 
         setTipoPlazaChipsListener();
 
-        RecyclerView recyclerView = binding.recyclerView;
-        recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 5)); // 5 columns
-        List<HourItem> hours = Arrays.asList(
-                new HourItem("07:00", true),
-                new HourItem("07:30", true),
-                new HourItem("08:00", true),
-                new HourItem("08:30", true),
-                new HourItem("09:00", true),
-                new HourItem("09:30", true),
-                new HourItem("10:00", true),
-                new HourItem("10:30", true),
-                new HourItem("11:00", true),
-                new HourItem("11:30", false),
-                new HourItem("12:00", true),
-                new HourItem("12:30", true),
-                new HourItem("13:00", true),
-                new HourItem("13:30", false),
-                new HourItem("14:00", false),
-                new HourItem("14:30", true),
-                new HourItem("15:00", true),
-                new HourItem("15:30", true),
-                new HourItem("16:00", true),
-                new HourItem("16:30", true),
-                new HourItem("17:00", true),
-                new HourItem("17:30", true),
-                new HourItem("18:00", true),
-                new HourItem("18:30", true),
-                new HourItem("19:00", true),
-                new HourItem("19:30", true),
-                new HourItem("20:00", true));
-        HourAdapter adapter = new HourAdapter(hours, mainViewModel);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new HourItemDecoration(20, 5));
+        executorService.execute(() -> {
+            // Your background task here that fetch data
+            List<HourItem> hours = Arrays.asList(
+                    new HourItem("07:00", true),
+                    new HourItem("07:30", true),
+                    new HourItem("08:00", true),
+                    new HourItem("08:30", true),
+                    new HourItem("09:00", true),
+                    new HourItem("09:30", true),
+                    new HourItem("10:00", true),
+                    new HourItem("10:30", true),
+                    new HourItem("11:00", true),
+                    new HourItem("11:30", false),
+                    new HourItem("12:00", true),
+                    new HourItem("12:30", true),
+                    new HourItem("13:00", true),
+                    new HourItem("13:30", false),
+                    new HourItem("14:00", false),
+                    new HourItem("14:30", true),
+                    new HourItem("15:00", true),
+                    new HourItem("15:30", true),
+                    new HourItem("16:00", true),
+                    new HourItem("16:30", true),
+                    new HourItem("17:00", true),
+                    new HourItem("17:30", true),
+                    new HourItem("18:00", true),
+                    new HourItem("18:30", true),
+                    new HourItem("19:00", true),
+                    new HourItem("19:30", true),
+                    new HourItem("20:00", true));
+            // Update the UI on the UI thread
+            requireActivity().runOnUiThread(() -> {
+                RecyclerView recyclerView = binding.recyclerView;
+                recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 5)); // 5 columns
+                HourAdapter adapter = new HourAdapter(hours, mainViewModel);
+                recyclerView.setAdapter(adapter);
+                recyclerView.addItemDecoration(new HourItemDecoration(20, 5));
+            });
+        });
 
         return binding.getRoot();
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -104,6 +112,7 @@ public class ReservarMainFragment extends Fragment{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        executorService.shutdown();
         binding = null;
     }
 
