@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +53,10 @@ public class ReservarMainFragment extends Fragment{
     ) {
 
         binding = FragmentReservarMainBinding.inflate(inflater, container, false);
+
+        binding.buttonReservarContinue.setOnClickListener(v ->
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_reservarMainFragment_to_reservarConfirm));
 
         restoreSelectedDateDayChip();
         restoreSelectedTipoPlaza();
