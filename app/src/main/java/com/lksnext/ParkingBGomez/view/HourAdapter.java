@@ -138,6 +138,8 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
             final LocalDateTime horaFin = LocalDateTime.of(LocalDate.now(), time);
 
             mainViewModel.setSelectedHour(new Hora(horaInicio, horaFin));
+        }else {
+            mainViewModel.setSelectedHour(null);
         }
     }
 
