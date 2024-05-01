@@ -8,8 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
-import com.lksnext.ParkingBGomez.NavigationHost;
+import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends Fragment {
@@ -25,7 +26,7 @@ public class LoginFragment extends Fragment {
 
         binding.button.setOnClickListener(v -> {
             // Navigate to the MainContent
-            ((NavigationHost) requireActivity()).navigateTo(new MainContent(), false);
+            Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_main_content);
         });
 
         return binding.getRoot();

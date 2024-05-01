@@ -94,11 +94,13 @@ public class ReservarMainFragment extends Fragment{
                     new HourItem("20:00", true));
             // Update the UI on the UI thread
             requireActivity().runOnUiThread(() -> {
-                RecyclerView recyclerView = binding.recyclerView;
-                recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 5)); // 5 columns
-                HourAdapter adapter = new HourAdapter(hours, mainViewModel);
-                recyclerView.setAdapter(adapter);
-                recyclerView.addItemDecoration(new HourItemDecoration(20, 5));
+                if (binding != null) {
+                    RecyclerView recyclerView = binding.recyclerView;
+                    recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 5)); // 5 columns
+                    HourAdapter adapter = new HourAdapter(hours, mainViewModel);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.addItemDecoration(new HourItemDecoration(20, 5));
+                }
             });
         });
 
