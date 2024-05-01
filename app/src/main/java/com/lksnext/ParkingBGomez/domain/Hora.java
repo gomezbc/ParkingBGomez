@@ -1,7 +1,7 @@
 package com.lksnext.ParkingBGomez.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
-public record Hora(LocalDateTime horaInicio,
-                   LocalDateTime horaFin) {
+public record Hora(LocalTime horaInicio,
+                   LocalTime horaFin) {
 }

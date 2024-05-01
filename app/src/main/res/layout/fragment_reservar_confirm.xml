@@ -55,6 +55,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/confirm_hour_interval"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -89,13 +90,47 @@
                         app:chipIconVisible="true" />
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_selected_car_type"
+                        android:id="@+id/chip_car"
                         style="@style/Widget.Material3.Chip.Assist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:text="@string/car"
+                        android:visibility="gone"
                         app:chipIcon="@drawable/directions_car_fill"
+                        app:chipIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_accessible_car"
+                        style="@style/Widget.Material3.Chip.Assist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/accessible_car"
+                        android:visibility="gone"
+                        app:chipIcon="@drawable/accessible_forward_fill"
+                        app:chipIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_motorcycle"
+                        style="@style/Widget.Material3.Chip.Assist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/motorcycle"
+                        android:visibility="gone"
+                        app:chipIcon="@drawable/motorcycle_fill"
+                        app:chipIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_electric_car"
+                        style="@style/Widget.Material3.Chip.Assist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/electric_car"
+                        android:visibility="gone"
+                        app:chipIcon="@drawable/electric_car_fill"
                         app:chipIconVisible="true" />
 
                     <com.google.android.material.chip.Chip

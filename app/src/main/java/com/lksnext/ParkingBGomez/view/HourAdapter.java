@@ -131,12 +131,8 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
                 .filter(HourItem::isSelected)
                 .collect(Collectors.toList());
         if (selectedHours.size() == 2){
-            LocalTime time = LocalTime.parse(selectedHours.get(0).getHour());
-            final LocalDateTime horaInicio = LocalDateTime.of(LocalDate.now(), time);
-
-            time = LocalTime.parse(selectedHours.get(1).getHour());
-            final LocalDateTime horaFin = LocalDateTime.of(LocalDate.now(), time);
-
+            final LocalTime horaInicio = LocalTime.parse(selectedHours.get(0).getHour());
+            final LocalTime horaFin = LocalTime.parse(selectedHours.get(1).getHour());
             mainViewModel.setSelectedHour(new Hora(horaInicio, horaFin));
         }else {
             mainViewModel.setSelectedHour(null);
@@ -146,10 +142,8 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
     private void restoreSelectedHour(){
         final Hora selectedHour = mainViewModel.getSelectedHour().getValue();
         if (selectedHour != null){
-            final LocalTime horaInicio = selectedHour.horaInicio().toLocalTime();
-            final LocalTime horaFin = selectedHour.horaFin().toLocalTime();
-            final String horaInicioString = horaInicio.toString();
-            final String horaFinString = horaFin.toString();
+            final String horaInicioString = selectedHour.horaInicio().toString();
+            final String horaFinString = selectedHour.horaFin().toString();
             final HourItem hourInicio = hours.stream()
                     .filter(h -> h.getHour().equals(horaInicioString))
                     .findAny()
