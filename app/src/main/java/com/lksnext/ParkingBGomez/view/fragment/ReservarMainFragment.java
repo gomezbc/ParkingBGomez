@@ -141,6 +141,10 @@ public class ReservarMainFragment extends Fragment{
             mainViewModel.setReservarState(ReservarState.RESERVAR);
             mainViewModel.setBottomNavState(BottomNavState.RESERVAS);
         }
+
+        mainViewModel.getSelectedHour()
+                .observe(getViewLifecycleOwner(),
+                        hour -> binding.buttonReservarContinue.setEnabled(hour != null));
     }
 
     @Override
