@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.lksnext.ParkingBGomez.databinding.FragmentCuentaMainBinding;
-import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
 
 public class CuentaMainFragment extends Fragment{
 
@@ -24,10 +23,6 @@ public class CuentaMainFragment extends Fragment{
         binding = FragmentCuentaMainBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
-    }
-
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

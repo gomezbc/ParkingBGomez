@@ -35,11 +35,6 @@ public class ReservarConfirm extends Fragment {
     private MainViewModel mainViewModel;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentReservarConfirmBinding.inflate(inflater, container, false);

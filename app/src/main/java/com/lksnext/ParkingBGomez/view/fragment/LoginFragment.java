@@ -24,10 +24,10 @@ public class LoginFragment extends Fragment {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false);
 
-        binding.button.setOnClickListener(v -> {
-            // Navigate to the MainContent
-            Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_main_content);
-        });
+        // Navigate to the MainContent
+        binding.button.setOnClickListener(v ->
+            Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_main_content)
+        );
 
         return binding.getRoot();
     }

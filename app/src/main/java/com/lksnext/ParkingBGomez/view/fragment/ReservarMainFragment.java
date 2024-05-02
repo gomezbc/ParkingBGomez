@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
@@ -42,12 +43,12 @@ public class ReservarMainFragment extends Fragment{
 
     private FragmentReservarMainBinding binding;
     private MainViewModel mainViewModel;
-    private final List<Integer> day_chip_id = new ArrayList<>(Arrays.asList(R.id.day1, R.id.day2,
+    private final List<Integer> dayChipId = new ArrayList<>(Arrays.asList(R.id.day1, R.id.day2,
             R.id.day3, R.id.day4, R.id.day5, R.id.day6, R.id.day7));
-    private final List<Integer> day_text_id = new ArrayList<>(Arrays.asList(R.id.textView_day1,
+    private final List<Integer> dayTextId = new ArrayList<>(Arrays.asList(R.id.textView_day1,
             R.id.textView_day2, R.id.textView_day3, R.id.textView_day4, R.id.textView_day5,
             R.id.textView_day6, R.id.textView_day7));
-    private final List<Integer> tipoPlaza_chip_id = new ArrayList<>(Arrays.asList(R.id.chip_car,
+    private final List<Integer> tipoPlazaChipId = new ArrayList<>(Arrays.asList(R.id.chip_car,
             R.id.chip_electric_car, R.id.chip_motorcycle, R.id.chip_accessible_car));
     private final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
@@ -71,8 +72,8 @@ public class ReservarMainFragment extends Fragment{
         restoreSelectedDateDayChip();
         restoreSelectedTipoPlaza();
 
-        setDay_chip();
-        setDay_text();
+        setDayChip();
+        setDayText();
 
 
         setTipoPlazaChipsListener();
@@ -122,12 +123,13 @@ public class ReservarMainFragment extends Fragment{
         return binding.getRoot();
     }
 
+    @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         ReservarState state = mainViewModel.getReservarState().getValue();
         if (state == ReservarState.RESERVADO){
-            Snackbar.make(view, "Reserva realizada", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Reserva realizada", BaseTransientBottomBar.LENGTH_LONG)
                     .setAction("Ver", v -> {
                                 NavController navController = Navigation.findNavController(v);
                                 NavOptions navOptions = new NavOptions.Builder()
@@ -154,18 +156,18 @@ public class ReservarMainFragment extends Fragment{
         binding = null;
     }
 
-    private void setDay_chip(){
-        setDay_chip_text();
+    private void setDayChip(){
+        setDayChipText();
     }
 
     /**
      * Set the text of the day chips in the date picker
      * The text is the day of the month
      */
-    private void setDay_chip_text(){
+    private void setDayChipText(){
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        for (int chip_id: day_chip_id
+        for (int chip_id: dayChipId
              ) {
             final Chip chip = binding.datePicker.findViewById(chip_id);
             chip.setText(String.valueOf(day));
@@ -173,11 +175,11 @@ public class ReservarMainFragment extends Fragment{
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             day = calendar.get(Calendar.DAY_OF_MONTH);
             // Add a check change listener to handle the selection
-            setDay_chip_listener(chip);
+            setDayChipListener(chip);
         }
     }
 
-    private void setDay_chip_listener(Chip chip){
+    private void setDayChipListener(Chip chip){
         chip.setOnClickListener(v -> {
             final Chip  clickedChip = (Chip) v;
             // Update LiveData values
@@ -190,9 +192,9 @@ public class ReservarMainFragment extends Fragment{
      * Set the text of the day text views in the date picker
      * The text is the day of the month
      */
-    private void setDay_text(){
+    private void setDayText(){
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));
-        for (int text_id: day_text_id
+        for (int text_id: dayTextId
              ) {
             final TextView text = binding.datePicker.findViewById(text_id);
             String dayOfWeek = calendar.getDisplayName(
@@ -233,8 +235,8 @@ public class ReservarMainFragment extends Fragment{
     }
 
     private void setTipoPlazaChipsListener() {
-        tipoPlaza_chip_id.forEach(chip_id -> {
-            final Chip chip = binding.chipGroup.findViewById(chip_id);
+        tipoPlazaChipId.forEach(chipId -> {
+            final Chip chip = binding.chipGroup.findViewById(chipId);
             chip.setOnClickListener(v -> {
                 final Chip clickedChip = (Chip) v;
                 final int id = clickedChip.getId();
