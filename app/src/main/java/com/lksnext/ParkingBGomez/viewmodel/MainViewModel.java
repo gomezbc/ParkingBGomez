@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.enums.BottomNavState;
+import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 
 import java.time.LocalDate;
@@ -23,6 +24,8 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<TipoPlaza> selectedTipoPlaza =
             new MutableLiveData<>(TipoPlaza.ESTANDAR);
     private final MutableLiveData<Hora> selectedHour = new MutableLiveData<>(null);
+    private final MutableLiveData<ReservarState> reservarState =
+            new MutableLiveData<>(ReservarState.RESERVAR);
 
     public MutableLiveData<BottomNavState> getBottomNavState() {
         return bottomNavState;
@@ -72,5 +75,13 @@ public class MainViewModel extends ViewModel {
 
     public void setSelectedHour(Hora hora) {
         selectedHour.setValue(hora);
+    }
+
+    public MutableLiveData<ReservarState> getReservarState() {
+        return reservarState;
+    }
+
+    public void setReservarState(ReservarState state) {
+        reservarState.setValue(state);
     }
 }

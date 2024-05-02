@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".view.fragment.ReservarMainFragment">
+    android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView_select_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/select_date"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/date_picker"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        tools:context=".view.fragment.ReservarMainFragment"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -330,21 +347,21 @@
         app:layout_constraintStart_toStartOf="@id/date_picker"
         app:layout_constraintTop_toBottomOf="@+id/date_picker" />
 
-    <TextView
-        android:id="@+id/select_slot_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/select_slot_text"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/chipGroup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialDivider_1" />
+        <TextView
+            android:id="@+id/select_slot_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/select_slot_text"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/chipGroup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialDivider_1" />
 
-    <com.google.android.material.chip.ChipGroup
+        <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -412,21 +429,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
 
-    <TextView
-        android:id="@+id/textView_select_day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="8dp"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/select_date"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/date_picker"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
+        <TextView
         android:id="@+id/select_horario_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -452,18 +455,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_horario_text" />
 
-    <Button
-        android:id="@+id/button_reservar_continue"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/continue_label"
-        app:cornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        <Button
+            android:id="@+id/button_reservar_continue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/continue_label"
+            app:cornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

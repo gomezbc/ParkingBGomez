@@ -1,0 +1,8 @@
+package com.lksnext.ParkingBGomez.enums;
+
+public enum ReservarState {
+    RESERVAR,
+    CONFIRMAR,
+    RESERVADO,
+    ERROR
+}

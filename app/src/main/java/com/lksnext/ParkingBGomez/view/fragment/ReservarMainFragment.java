@@ -9,14 +9,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
 import com.lksnext.ParkingBGomez.domain.HourItem;
+import com.lksnext.ParkingBGomez.enums.BottomNavState;
+import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.view.HourAdapter;
 import com.lksnext.ParkingBGomez.view.HourItemDecoration;
@@ -54,9 +59,14 @@ public class ReservarMainFragment extends Fragment{
 
         binding = FragmentReservarMainBinding.inflate(inflater, container, false);
 
-        binding.buttonReservarContinue.setOnClickListener(v ->
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_reservarMainFragment_to_reservarConfirm));
+        binding.buttonReservarContinue.setOnClickListener(v -> {
+                    NavController navController = Navigation.findNavController(v);
+                    NavOptions navOptions = new NavOptions.Builder()
+                            .setPopUpTo(R.id.reservarMainFragment, true)
+                            .build();
+                    navController.navigate(
+                            R.id.action_reservarMainFragment_to_reservarConfirm, null, navOptions);
+                });
 
         restoreSelectedDateDayChip();
         restoreSelectedTipoPlaza();
@@ -114,6 +124,23 @@ public class ReservarMainFragment extends Fragment{
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ReservarState state = mainViewModel.getReservarState().getValue();
+        if (state == ReservarState.RESERVADO){
+            Snackbar.make(view, "Reserva realizada", Snackbar.LENGTH_LONG)
+                    .setAction("Ver", v -> {
+                                NavController navController = Navigation.findNavController(v);
+                                NavOptions navOptions = new NavOptions.Builder()
+                                        .setPopUpTo(R.id.reservarMainFragment, true)
+                                        .build();
+                                navController.navigate(
+                                        R.id.action_reservarMainFragment_to_reservasMainFragment, null, navOptions);
+                            })
+                    .show();
+
+            mainViewModel.setReservarState(ReservarState.RESERVAR);
+            mainViewModel.setBottomNavState(BottomNavState.RESERVAS);
+        }
     }
 
     @Override

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_reservarMainFragment_to_reservarConfirm"
             app:destination="@id/reservarConfirm" />
+        <action
+            android:id="@+id/action_reservarMainFragment_to_reservasMainFragment"
+            app:destination="@id/reservasMainFragment" />
     </fragment>
     <fragment
         android:id="@+id/cuentaMainFragment"
@@ -36,6 +39,9 @@
         tools:layout="@layout/fragment_reservar_confirm" >
         <action
             android:id="@+id/action_reservarConfirm_to_reservarMainFragment"
+            app:destination="@id/reservarMainFragment" />
+        <action
+            android:id="@+id/action_reservarConfirm_to_reservarMainFragment_confirmed"
             app:destination="@id/reservarMainFragment" />
     </fragment>
 </navigation>

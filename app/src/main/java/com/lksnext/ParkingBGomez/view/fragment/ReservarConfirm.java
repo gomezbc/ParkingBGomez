@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarConfirmBinding;
 import com.lksnext.ParkingBGomez.domain.Hora;
+import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
@@ -102,5 +103,13 @@ public class ReservarConfirm extends Fragment {
         binding.toolbarReservarConfirm.setNavigationOnClickListener(v ->
                 Navigation.findNavController(v)
                         .navigate(R.id.action_reservarConfirm_to_reservarMainFragment));
+
+        binding.buttonReservarContinue.setOnClickListener(v -> {
+
+            mainViewModel.setReservarState(ReservarState.RESERVADO);
+
+            Navigation.findNavController(v)
+                    .navigate(R.id.action_reservarConfirm_to_reservarMainFragment_confirmed);
+        });
     }
 }

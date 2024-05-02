@@ -20,6 +20,8 @@ import com.lksnext.ParkingBGomez.databinding.FragmentMainContentBinding;
 import com.lksnext.ParkingBGomez.enums.BottomNavState;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
+import java.util.Objects;
+
 public class MainContent extends Fragment {
 
     private FragmentMainContentBinding binding;
@@ -65,7 +67,6 @@ public class MainContent extends Fragment {
                 prevMenuItem.setIcon(prevIcon);
             }
 
-            // Store the original icon of the currently selected item
             prevIcon = item.getIcon();
 
             final int id = item.getItemId();
@@ -86,7 +87,16 @@ public class MainContent extends Fragment {
             }
 
             // Update the state and navigate to the selected fragment
-            mainViewModel.setBottomNavState(state);
+            if (state != null){
+                mainViewModel.setBottomNavState(state);
+            }
+
+            // Check if the current destination is the same as the destination you're navigating to
+            if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == id) {
+                return true;
+            }
+
+            navController.popBackStack(id, true);
             navController.navigate(id);
 
             // Update the previously selected item
