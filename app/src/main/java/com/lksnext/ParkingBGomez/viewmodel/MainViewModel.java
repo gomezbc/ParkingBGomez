@@ -12,6 +12,7 @@ import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,7 +30,7 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<ReservarState> reservarState =
             new MutableLiveData<>(ReservarState.RESERVAR);
     private final MutableLiveData<List<Reserva>> reservasList =
-            new MutableLiveData<>(List.of());
+            new MutableLiveData<>(new ArrayList<>());
 
     public MutableLiveData<BottomNavState> getBottomNavState() {
         return bottomNavState;
@@ -95,5 +96,13 @@ public class MainViewModel extends ViewModel {
 
     public void setReservasList(List<Reserva> reservas) {
         reservasList.setValue(reservas);
+    }
+
+    public void addReserva(Reserva reserva) {
+        final List<Reserva> currentReservas = reservasList.getValue();
+        if (currentReservas != null) {
+            currentReservas.add(reserva);
+            reservasList.setValue(currentReservas);
+        }
     }
 }

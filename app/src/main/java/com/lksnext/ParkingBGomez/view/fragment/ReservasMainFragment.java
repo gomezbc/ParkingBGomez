@@ -12,17 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
-import com.lksnext.ParkingBGomez.domain.Hora;
-import com.lksnext.ParkingBGomez.domain.Plaza;
-import com.lksnext.ParkingBGomez.domain.Reserva;
-import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.view.adapter.ReservasAdapter;
 import com.lksnext.ParkingBGomez.view.decoration.ReservaItemDecoration;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
-
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
 
 public class ReservasMainFragment extends Fragment{
 
@@ -41,19 +33,6 @@ public class ReservasMainFragment extends Fragment{
         RecyclerView recyclerView = binding.recyclerViewReservas;
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false));
 
-        List<Reserva> reservas = List.of(
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1))),
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1))),
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1))),
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1))),
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1))),
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1))),
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1))),
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1))),
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1))),
-                new Reserva(LocalDateTime.now(), "usuario", 1L, new Plaza(1L, TipoPlaza.ESTANDAR), new Hora(LocalTime.now(), LocalTime.now().plusHours(1)))
-        );
-        mainViewModel.setReservasList(reservas);
         ReservasAdapter adapter = new ReservasAdapter();
         mainViewModel.getReservasList().observe(getViewLifecycleOwner(), adapter::submitList);
         recyclerView.addItemDecoration(new ReservaItemDecoration(20));

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/reservaItemCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,110 +11,101 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- Title, secondary and supporting text -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/parking_zuatzu"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/confirm_hour_interval"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Viernes 15 mar 8:00 - 12:30"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="?android:attr/textColorSecondary" />
-
-        </LinearLayout>
-
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/materialDivider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:dividerInsetEnd="16dp"
-            app:dividerInsetStart="16dp" />
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/date_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_selected_duration"
+                android:id="@+id/chip_duration"
                 style="@style/Widget.Material3.Chip.Assist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="2,5 h"
+                android:layout_marginStart="8dp"
+                android:clickable="false"
+                android:fontFamily="@font/roboto"
+                app:chipEndPadding="0dp"
                 app:chipIcon="@drawable/baseline_av_timer_24"
-                app:chipIconVisible="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_car"
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/car"
-                android:visibility="gone"
-                app:chipIcon="@drawable/directions_car_fill"
-                app:chipIconVisible="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_accessible_car"
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/accessible_car"
-                android:visibility="gone"
-                app:chipIcon="@drawable/accessible_forward_fill"
-                app:chipIconVisible="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_motorcycle"
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/motorcycle"
-                android:visibility="gone"
-                app:chipIcon="@drawable/motorcycle_fill"
-                app:chipIconVisible="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_electric_car"
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/electric_car"
-                android:visibility="gone"
-                app:chipIcon="@drawable/electric_car_fill"
-                app:chipIconVisible="true" />
+                app:chipIconVisible="true"
+                app:chipStartPadding="2dp"
+                app:chipStrokeWidth="0dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_parking_slot"
                 style="@style/Widget.Material3.Chip.Assist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="48B"
+                android:clickable="false"
+                android:fontFamily="@font/roboto"
+                app:chipEndPadding="0dp"
                 app:chipIcon="@drawable/local_parking_24"
-                app:chipIconVisible="true" />
+                app:chipIconVisible="true"
+                app:chipStartPadding="0dp"
+                app:chipStrokeWidth="0dp"
+                app:closeIconEnabled="false" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_car"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="@string/car"
+                android:visibility="gone"
+                app:chipIcon="@drawable/directions_car_fill"
+                app:chipIconVisible="true"
+                app:chipStrokeWidth="0dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_accessible_car"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="@string/accessible_car"
+                android:visibility="gone"
+                app:chipIcon="@drawable/accessible_forward_fill"
+                app:chipIconVisible="true"
+                app:chipStrokeWidth="0dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_motorcycle"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="@string/motorcycle"
+                android:visibility="gone"
+                app:chipIcon="@drawable/motorcycle_fill"
+                app:chipIconVisible="true"
+                app:chipStrokeWidth="0dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_electric_car"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="@string/electric_car"
+                android:visibility="gone"
+                app:chipIcon="@drawable/electric_car_fill"
+                app:chipIconVisible="true"
+                app:chipStrokeWidth="0dp" />
+
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

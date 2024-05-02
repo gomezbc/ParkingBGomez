@@ -15,13 +15,18 @@ import android.view.ViewGroup;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarConfirmBinding;
 import com.lksnext.ParkingBGomez.domain.Hora;
+import com.lksnext.ParkingBGomez.domain.Plaza;
+import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.TextStyle;
+import java.util.Objects;
 
 
 public class ReservarConfirm extends Fragment {
@@ -107,6 +112,17 @@ public class ReservarConfirm extends Fragment {
         binding.buttonReservarContinue.setOnClickListener(v -> {
 
             mainViewModel.setReservarState(ReservarState.RESERVADO);
+
+            LocalDate selectedDate = mainViewModel.getSelectedDate().getValue();
+            LocalTime horaInicio = Objects.requireNonNull(mainViewModel.getSelectedHour().getValue()).horaInicio();
+            LocalDateTime fechaHoraInicio = LocalDateTime.of(selectedDate, horaInicio);
+            Reserva reserva = new Reserva(fechaHoraInicio,
+                    "usuario",
+                    1L,
+                    new Plaza(1L, mainViewModel.getSelectedTipoPlaza().getValue()),
+                    mainViewModel.getSelectedHour().getValue());
+
+            mainViewModel.addReserva(reserva);
 
             Navigation.findNavController(v)
                     .navigate(R.id.action_reservarConfirm_to_reservarMainFragment_confirmed);
