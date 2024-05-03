@@ -1,5 +1,13 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id "org.sonarqube" version "5.0.0.4638"
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "gomezbc_ParkingBGomez_4934b277-e989-4497-9c9c-a744a875fe35"
+        property "sonar.projectName", "ParkingBGomez"
+    }
 }
 
 android {
