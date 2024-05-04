@@ -5,7 +5,7 @@ plugins {
 
 sonar {
     properties {
-        property "sonar.projectKey", "gomezbc_ParkingBGomez_4934b277-e989-4497-9c9c-a744a875fe35"
+        property "sonar.projectKey", "gomezbc_ParkingBGomez_59f23139-bdb3-486b-bf31-22b7e57e6af4"
         property "sonar.projectName", "ParkingBGomez"
     }
 }
