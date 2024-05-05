@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
 import com.lksnext.ParkingBGomez.domain.HourItem;
@@ -78,6 +79,13 @@ public class ReservarMainFragment extends Fragment{
 
         setTipoPlazaChipsListener();
 
+        loadAvailableHours();
+
+        return binding.getRoot();
+    }
+
+    @AddTrace( name = " loadAvailableHours " , enabled = true )
+    private void loadAvailableHours() {
         executorService.execute(() -> {
             // Your background task here that fetch data
             List<HourItem> hours = Arrays.asList(
@@ -119,8 +127,6 @@ public class ReservarMainFragment extends Fragment{
                 }
             });
         });
-
-        return binding.getRoot();
     }
 
     @Override
