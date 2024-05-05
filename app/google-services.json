@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "316056691670",
+    "project_id": "parkingbgomez",
+    "storage_bucket": "parkingbgomez.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316056691670:android:02df7e3383386a97bc7a77",
+        "android_client_info": {
+          "package_name": "com.lksnext.ParkingBGomez"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJIJ_tGv_eaeYs5lDIv7hjy_Vj1amf_g0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

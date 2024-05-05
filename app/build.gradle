@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     id "org.sonarqube" version "5.0.0.4638"
+    id 'com.google.gms.google-services'
 }
 
 sonar {
@@ -41,15 +42,17 @@ android {
 }
 
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.constraintlayout
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
     implementation libs.gridlayout
+    implementation libs.firebase.perf
+    implementation libs.firebase.analytics
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
     implementation libs.material.v1110
+    implementation platform(libs.firebase.bom)
 }
