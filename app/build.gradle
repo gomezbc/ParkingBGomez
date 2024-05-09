@@ -55,4 +55,5 @@ dependencies {
     androidTestImplementation libs.espresso.core
     implementation libs.material.v1110
     implementation platform(libs.firebase.bom)
+    debugImplementation libs.leakcanary.android
 }
