@@ -73,44 +73,10 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
             if (isAnyHourSelected.isPresent()) {
                 // Si ya hay alguno seleccionado
                 final int previousSelectedPosition = hours.indexOf(isAnyHourSelected.get());
-                if (newSelectedPosition > previousSelectedPosition && selectedCount < 2) {
-                    // Si el nuevo seleccionado es posterior al anterior seleccionado y no hay 2 seleccionados
-                    final List<HourItem> subList =
-                            hours.subList(previousSelectedPosition + 1, newSelectedPosition);
-                    if (!subList.isEmpty()){
-                        // La seleccionada no es la siguiente
-                        Optional<HourItem> isDisabledInTheMiddle = subList.stream()
-                                .filter(h -> !h.isEnabled())
-                                .findAny();
-                        if (isDisabledInTheMiddle.isPresent()) {
-                            // Si hay un deshabilitado en medio poner el nuevo como el unico seleccionado y quitar middles
-                            final int disabledPosition = hours.indexOf(isDisabledInTheMiddle.get());
-                            clearItemsInRange(previousSelectedPosition, disabledPosition);
-                            setPositionAsSelected(newSelectedPosition);
-                            // Poner en middle los siguientes al newSelected hasta algun disabled si hay
-                            handleDisabledInTheMiddle(newSelectedPosition, false);
-                        }else {
-                            // Si no hay ninguno deshabilitado en medio poner en middle todos los siguientes
-                            setItemsInRangeAsInMiddle(previousSelectedPosition + 1, newSelectedPosition);
-                            setPositionAsSelected(newSelectedPosition);
-                            // Quitar middle de los siguientes
-                            clearItemsInRange(newSelectedPosition + 1, hours.size());
-                        }
-                    }else {
-                        // La seleccionada es la siguiente
-                        setPositionAsSelected(newSelectedPosition);
-                        // quitar middle todos los siguientes
-                        clearItemsInRange(newSelectedPosition + 1, hours.size());
-                    }
-                }else {
-                    // Si el nuevo seleccionado es anterior al anterior seleccionado o si ya hay 2 seleccionados
-                    // quitar los middles
-                    clearItemsInRange(0, hours.size());
-                    handleDisabledInTheMiddle(newSelectedPosition, true);
-                }
+                handleExistingSelection(newSelectedPosition, previousSelectedPosition, selectedCount);
             }else {
                 // Si no hay ninguno seleccionado
-                handleDisabledInTheMiddle(newSelectedPosition, true);
+                handleNoSelection(newSelectedPosition);
             }
             updateSelectedHour();
         });
@@ -212,6 +178,53 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         }
         if (positionAsSelected){
             setPositionAsSelected(newSelectedPosition);
+        }
+    }
+
+
+    private void handleNoSelection(int newSelectedPosition) {
+        handleDisabledInTheMiddle(newSelectedPosition, true);
+    }
+
+    private void handleExistingSelection(int newSelectedPosition, int previousSelectedPosition, int selectedCount) {
+        if (newSelectedPosition > previousSelectedPosition && selectedCount < 2) {
+            handleAfterPreviousSelection(newSelectedPosition, previousSelectedPosition);
+        }else {
+            // Si el nuevo seleccionado es anterior al anterior seleccionado o si ya hay 2 seleccionados
+            // quitar los middles
+            clearItemsInRange(0, hours.size());
+            handleNoSelection(newSelectedPosition);
+        }
+    }
+
+    private void handleAfterPreviousSelection(int newSelectedPosition, int previousSelectedPosition) {
+        // Si el nuevo seleccionado es posterior al anterior seleccionado y no hay 2 seleccionados
+        final List<HourItem> subList =
+                hours.subList(previousSelectedPosition + 1, newSelectedPosition);
+        if (!subList.isEmpty()){
+            // La seleccionada no es la siguiente
+            Optional<HourItem> isDisabledInTheMiddle = subList.stream()
+                    .filter(h -> !h.isEnabled())
+                    .findAny();
+            if (isDisabledInTheMiddle.isPresent()) {
+                // Si hay un deshabilitado en medio poner el nuevo como el unico seleccionado y quitar middles
+                final int disabledPosition = hours.indexOf(isDisabledInTheMiddle.get());
+                clearItemsInRange(previousSelectedPosition, disabledPosition);
+                setPositionAsSelected(newSelectedPosition);
+                // Poner en middle los siguientes al newSelected hasta algun disabled si hay
+                handleDisabledInTheMiddle(newSelectedPosition, false);
+            }else {
+                // Si no hay ninguno deshabilitado en medio poner en middle todos los siguientes
+                setItemsInRangeAsInMiddle(previousSelectedPosition + 1, newSelectedPosition);
+                setPositionAsSelected(newSelectedPosition);
+                // Quitar middle de los siguientes
+                clearItemsInRange(newSelectedPosition + 1, hours.size());
+            }
+        }else {
+            // La seleccionada es la siguiente
+            setPositionAsSelected(newSelectedPosition);
+            // quitar middle todos los siguientes
+            clearItemsInRange(newSelectedPosition + 1, hours.size());
         }
     }
 }
