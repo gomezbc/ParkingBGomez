@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.Objects;
+import java.util.Random;
 
 
 public class ReservarConfirm extends Fragment {
@@ -106,6 +107,10 @@ public class ReservarConfirm extends Fragment {
 
         binding.buttonReservarContinue.setOnClickListener(v -> {
 
+            // TODO: temporal solution to generate a reserva id
+            Random random = new Random();
+            long randomLong = random.nextLong();
+
             mainViewModel.setReservarState(ReservarState.RESERVADO);
 
             LocalDate selectedDate = mainViewModel.getSelectedDate().getValue();
@@ -113,7 +118,7 @@ public class ReservarConfirm extends Fragment {
             LocalDateTime fechaHoraInicio = LocalDateTime.of(selectedDate, horaInicio);
             Reserva reserva = new Reserva(fechaHoraInicio,
                     "usuario",
-                    1L,
+                    randomLong,
                     new Plaza(1L, mainViewModel.getSelectedTipoPlaza().getValue()),
                     mainViewModel.getSelectedHour().getValue());
 

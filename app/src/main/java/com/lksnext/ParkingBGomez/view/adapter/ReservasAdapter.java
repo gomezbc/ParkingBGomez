@@ -17,6 +17,7 @@ import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.view.holder.ReservasViewHolder;
 
 import java.time.Duration;
+import java.util.List;
 
 public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
@@ -38,7 +39,7 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
         Hora hora = setSelectedHourInterval(holder, reserva);
 
-        long plaza = reserva.id();
+        long plaza = reserva.plaza().id();
         TextView plazaTextView = holder.itemView.findViewById(R.id.text_parking_slot);
         plazaTextView.setText(String.valueOf(plaza));
 
