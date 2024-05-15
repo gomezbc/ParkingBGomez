@@ -19,7 +19,6 @@ import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +44,19 @@ public class ReservasMainFragment extends Fragment{
         mainViewModel.getReservasByDay().observe(getViewLifecycleOwner(), newReservasByDay ->
             reservasByDay.putAll(newReservasByDay)
         );
+
+        final Reserva reserva = new Reserva(null, null, -1L, null, null);
+
+        // Get the current date
+        LocalDate today = LocalDate.now();
+
+        // Add a null reserva to all days of the past month to the map
+        LocalDate date = today.withDayOfMonth(1);
+        while (date.isBefore(today) || date.isEqual(today)) {
+            reservasByDay.putIfAbsent(date, new ArrayList<>(List.of(reserva)));
+            date = date.plusDays(1);
+        }
+
         ReservasByDayAdapter adapter = new ReservasByDayAdapter(reservasByDay);
 
         recyclerView.addItemDecoration(new ReservaItemDecoration(20));

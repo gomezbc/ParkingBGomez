@@ -39,6 +39,11 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
         Hora hora = setSelectedHourInterval(holder, reserva);
 
+        if (reserva.plaza() == null || reserva.fecha() == null ||
+                reserva.hora() == null || reserva.usuario() == null) {
+            return;
+        }
+
         long plaza = reserva.plaza().id();
         TextView plazaTextView = holder.itemView.findViewById(R.id.text_parking_slot);
         plazaTextView.setText(String.valueOf(plaza));

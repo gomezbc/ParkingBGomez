@@ -60,7 +60,7 @@
     <string name="reservar_label">Reservar</string>
     <string name="confirmation_label">Confirmación</string>
     <string name="parking_zuatzu">Parking Zuatzu - Parque de Empresas</string>
-    <string name="no_reservas">No hay eventos grabados</string>
+    <string name="no_reservas">No hay reservas para este día</string>
     <string name="tipo_plaza_icon">Icono del tipo de plaza</string>
     <string name="today">Hoy</string>
     <string name="tomorrow">Mañana</string>

@@ -104,7 +104,17 @@ public class MainViewModel extends ViewModel {
             List<Reserva> reservasForDate =
                     new ArrayList<>(Objects.requireNonNull(reservasByDay.getValue()).get(localDate));
             reservasForDate.add(reserva);
-            Objects.requireNonNull(reservasByDay.getValue()).put(localDate, reservasForDate);
+
+            Reserva firstReserva = Objects.requireNonNull(reservasForDate).get(0);
+            if (firstReserva.plaza() == null || firstReserva.fecha() == null ||
+                    firstReserva.hora() == null || firstReserva.usuario() == null) {
+                // Remove the null reserva
+                Objects.requireNonNull(reservasByDay.getValue())
+                        .put(localDate, new ArrayList<>(reservasForDate));
+            }else {
+                // Append the new reserva
+                Objects.requireNonNull(reservasByDay.getValue()).put(localDate, reservasForDate);
+            }
         }
     }
 }
