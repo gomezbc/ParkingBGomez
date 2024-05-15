@@ -7,9 +7,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
@@ -27,12 +32,21 @@ public class MainViewModelTest {
 
     @Test
     public void testAddReserva() throws InterruptedException {
-        List<Reserva> reservas = LiveDataTestUtil.getOrAwaitValue(mainViewModel.getReservasList());
-        assertEquals(0, reservas.size());
+        LocalDateTime curentLocalDateTime = LocalDateTime.now();
+        Map<LocalDate, List<Reserva>> reservas = LiveDataTestUtil.getOrAwaitValue(mainViewModel.getReservasByDay());
+        assertNull(reservas.get(curentLocalDateTime.toLocalDate()));
 
-        mainViewModel.addReserva(null);
+        Reserva reserva = new Reserva(
+                curentLocalDateTime,
+                "usuario",
+                1L,
+                null,
+                null);
 
-        reservas = LiveDataTestUtil.getOrAwaitValue(mainViewModel.getReservasList());
-        assertEquals(1, reservas.size());
+        mainViewModel.addReserva(reserva);
+
+        reservas = LiveDataTestUtil.getOrAwaitValue(mainViewModel.getReservasByDay());
+        assertEquals(1,
+                Objects.requireNonNull(reservas.get(curentLocalDateTime.toLocalDate())).size());
     }
 }

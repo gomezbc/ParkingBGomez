@@ -37,24 +37,14 @@ public class ReservasMainFragment extends Fragment{
         binding = FragmentReservasMainBinding.inflate(inflater, container, false);
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        reservasByDay = new HashMap<>();
+        reservasByDay = mainViewModel.getReservasByDay().getValue();
 
         RecyclerView recyclerView = binding.recyclerViewReservas;
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false));
 
-        mainViewModel.getReservasList().observe(getViewLifecycleOwner(), reservas -> {
-            for (Reserva reserva : reservas) {
-                LocalDate localDate = reserva.fecha().toLocalDate();
-                if (!reservasByDay.containsKey(localDate)) {
-                    reservasByDay.put(localDate, List.of(reserva));
-                } else {
-                    List<Reserva> reservasForDate = new ArrayList<>(reservasByDay.get(localDate));
-                    reservasForDate.add(reserva);
-                    reservasByDay.put(localDate, reservasForDate);
-                }
-            }
-
-        });
+        mainViewModel.getReservasByDay().observe(getViewLifecycleOwner(), newReservasByDay ->
+            reservasByDay.putAll(newReservasByDay)
+        );
         ReservasByDayAdapter adapter = new ReservasByDayAdapter(reservasByDay);
 
         recyclerView.addItemDecoration(new ReservaItemDecoration(20));
