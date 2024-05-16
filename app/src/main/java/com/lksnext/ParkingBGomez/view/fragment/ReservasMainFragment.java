@@ -45,15 +45,13 @@ public class ReservasMainFragment extends Fragment{
             reservasByDay.putAll(newReservasByDay)
         );
 
-        final Reserva reserva = new Reserva(null, null, -1L, null, null);
-
         // Get the current date
         LocalDate today = LocalDate.now();
 
         // Add a null reserva to all days of the past month to the map
         LocalDate date = today.withDayOfMonth(1);
         while (date.isBefore(today) || date.isEqual(today)) {
-            reservasByDay.putIfAbsent(date, new ArrayList<>(List.of(reserva)));
+            reservasByDay.putIfAbsent(date, new ArrayList<>());
             date = date.plusDays(1);
         }
 

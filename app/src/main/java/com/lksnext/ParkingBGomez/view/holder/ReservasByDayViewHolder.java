@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
     public ReservasByDayViewHolder(@NonNull View itemView) {
@@ -28,7 +29,6 @@ public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
 
         setFormattedDate(localDate, dateTextView);
 
-
         RecyclerView recyclerView = itemView.findViewById(R.id.reservas_by_day);
         recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL,false));
         recyclerView.setNestedScrollingEnabled(false);
@@ -38,6 +38,12 @@ public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
         adapter.submitList(reservas);
         recyclerView.addItemDecoration(new ReservaItemDecoration(20));
         recyclerView.setAdapter(adapter);
+
+        boolean isRecyclerViewEmpty = Objects.requireNonNull(recyclerView.getAdapter())
+                .getItemCount() == 0;
+        if (isRecyclerViewEmpty) {
+            itemView.findViewById(R.id.default_reserva).setVisibility(View.VISIBLE);
+        }
     }
 
     private static void setFormattedDate(LocalDate localDate, TextView dateTextView) {

@@ -101,20 +101,11 @@ public class MainViewModel extends ViewModel {
         if (!Objects.requireNonNull(reservasByDay.getValue()).containsKey(localDate)) {
             Objects.requireNonNull(reservasByDay.getValue()).put(localDate, List.of(reserva));
         } else {
-            List<Reserva> reservasForDate =
+            List<Reserva> prevReservasForDate =
                     new ArrayList<>(Objects.requireNonNull(reservasByDay.getValue()).get(localDate));
-            reservasForDate.add(reserva);
 
-            Reserva firstReserva = Objects.requireNonNull(reservasForDate).get(0);
-            if (firstReserva.plaza() == null || firstReserva.fecha() == null ||
-                    firstReserva.hora() == null || firstReserva.usuario() == null) {
-                // Remove the null reserva
-                Objects.requireNonNull(reservasByDay.getValue())
-                        .put(localDate, new ArrayList<>(reservasForDate));
-            }else {
-                // Append the new reserva
-                Objects.requireNonNull(reservasByDay.getValue()).put(localDate, reservasForDate);
-            }
+            prevReservasForDate.add(reserva);
+            Objects.requireNonNull(reservasByDay.getValue()).put(localDate, prevReservasForDate);
         }
     }
 }
