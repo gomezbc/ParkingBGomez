@@ -62,4 +62,5 @@ dependencies {
     implementation libs.material.v1110
     implementation platform(libs.firebase.bom)
     debugImplementation libs.leakcanary.android
+    androidTestImplementation libs.core.testing
 }

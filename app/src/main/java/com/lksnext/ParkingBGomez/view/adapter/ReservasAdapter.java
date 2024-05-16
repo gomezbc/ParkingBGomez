@@ -3,13 +3,13 @@ package com.lksnext.ParkingBGomez.view.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.google.android.material.chip.Chip;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.Reserva;
@@ -17,8 +17,7 @@ import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.view.holder.ReservasViewHolder;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
+import java.util.List;
 
 public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
@@ -40,23 +39,25 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
         Hora hora = setSelectedHourInterval(holder, reserva);
 
-        long plaza = reserva.id();
-        TextView plazaTextView = holder.itemView.findViewById(R.id.chip_parking_slot);
+        if (reserva.plaza() == null || reserva.fecha() == null ||
+                reserva.hora() == null || reserva.usuario() == null) {
+            return;
+        }
+
+        long plaza = reserva.plaza().id();
+        TextView plazaTextView = holder.itemView.findViewById(R.id.text_parking_slot);
         plazaTextView.setText(String.valueOf(plaza));
 
         setTipoPlazaInfo(holder, reserva);
 
-        setSelectedDateInfo(holder, reserva, hora);
+        setTimeInfo(holder, hora);
     }
 
-    private static void setSelectedDateInfo(@NonNull ReservasViewHolder holder, Reserva reserva, Hora hora) {
-        LocalDate fecha = reserva.fecha().toLocalDate();
-        if (fecha != null && hora != null) {
-            final String dia = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
-            final String mes = fecha.getMonth().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
+    private static void setTimeInfo(@NonNull ReservasViewHolder holder, Hora hora) {
+        if (hora != null) {
             TextView hourInterval = holder.itemView.findViewById(R.id.date_info);
-            hourInterval.setText(String.format("%s %s %s %s:%s - %s:%s",
-                    dia, fecha.getDayOfMonth(), mes, hora.horaInicio().getHour(),
+            hourInterval.setText(String.format("%s:%s - %s:%s",
+                    hora.horaInicio().getHour(),
                     String.format("%02d", hora.horaInicio().getMinute()),
                     hora.horaFin().getHour(),
                     String.format("%02d", hora.horaFin().getMinute())));
@@ -65,23 +66,25 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
     private static void setTipoPlazaInfo(@NonNull ReservasViewHolder holder, Reserva reserva) {
         TipoPlaza tipoPlaza = reserva.plaza().tipoPlaza();
+        TextView tipoPlazaTextView = holder.itemView.findViewById(R.id.text_slot_type);
+        ImageView tipoPlazaImageView = holder.itemView.findViewById(R.id.tipo_plaza_icon);
         if (tipoPlaza != null) {
             switch (tipoPlaza){
                 case ESTANDAR:
-                    Chip chipCar = holder.itemView.findViewById(R.id.chip_car);
-                    chipCar.setVisibility(View.VISIBLE);
+                    tipoPlazaTextView.setText(R.string.car);
+                    tipoPlazaImageView.setImageResource(R.drawable.directions_car_fill);
                     break;
                 case ELECTRICO:
-                    Chip chipElectricCar = holder.itemView.findViewById(R.id.chip_electric_car);
-                    chipElectricCar.setVisibility(View.VISIBLE);
+                    tipoPlazaTextView.setText(R.string.electric_car);
+                    tipoPlazaImageView.setImageResource(R.drawable.electric_car_fill);
                     break;
                 case MOTO:
-                    Chip chipMotorcycle = holder.itemView.findViewById(R.id.chip_motorcycle);
-                    chipMotorcycle.setVisibility(View.VISIBLE);
+                    tipoPlazaTextView.setText(R.string.motorcycle);
+                    tipoPlazaImageView.setImageResource(R.drawable.motorcycle_fill);
                     break;
                 case DISCAPACITADO:
-                    Chip chipAccessibleCar = holder.itemView.findViewById(R.id.chip_accessible_car);
-                    chipAccessibleCar.setVisibility(View.VISIBLE);
+                    tipoPlazaTextView.setText(R.string.accessible_car);
+                    tipoPlazaImageView.setImageResource(R.drawable.accessible_forward_fill);
                     break;
             }
         }
@@ -93,7 +96,7 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
         if (hora != null) {
             final Duration duration = Duration.between(hora.horaInicio(), hora.horaFin());
             final long minutesToHour = duration.toMinutes() % 60;
-            TextView durationTextView = holder.itemView.findViewById(R.id.chip_duration);
+            TextView durationTextView = holder.itemView.findViewById(R.id.text_duration);
             if (minutesToHour == 0L) {
                 durationTextView.setText(String.format("%s h", duration.toHours()));
             } else {

@@ -55,10 +55,14 @@
     <string name="select_date">Selecciona la fecha</string>
     <string name="select_horario">Selecciona horario</string>
     <string name="continue_label">Continuar</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="warning_reservar_confirm">Por favor, recuerda liberar la plaza antes de que finalize tu reserva para que otros puedan disfrutar de ella después de ti.</string>
     <string name="reservar_label">Reservar</string>
     <string name="confirmation_label">Confirmación</string>
     <string name="parking_zuatzu">Parking Zuatzu - Parque de Empresas</string>
+    <string name="no_reservas">No hay reservas para este día</string>
+    <string name="tipo_plaza_icon">Icono del tipo de plaza</string>
+    <string name="today">Hoy</string>
+    <string name="tomorrow">Mañana</string>
+    <string name="yesterday">Ayer</string>
 </resources>

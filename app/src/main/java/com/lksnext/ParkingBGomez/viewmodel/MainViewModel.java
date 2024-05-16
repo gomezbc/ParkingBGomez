@@ -13,7 +13,9 @@ import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class MainViewModel extends ViewModel {
@@ -29,8 +31,8 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<Hora> selectedHour = new MutableLiveData<>(null);
     private final MutableLiveData<ReservarState> reservarState =
             new MutableLiveData<>(ReservarState.RESERVAR);
-    private final MutableLiveData<List<Reserva>> reservasList =
-            new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Map<LocalDate, List<Reserva>>> reservasByDay =
+            new MutableLiveData<>(new HashMap<>());
 
     public MutableLiveData<BottomNavState> getBottomNavState() {
         return bottomNavState;
@@ -90,19 +92,20 @@ public class MainViewModel extends ViewModel {
         reservarState.setValue(state);
     }
 
-    public MutableLiveData<List<Reserva>> getReservasList() {
-        return reservasList;
-    }
-
-    public void setReservasList(List<Reserva> reservas) {
-        reservasList.setValue(reservas);
+    public MutableLiveData<Map<LocalDate, List<Reserva>>> getReservasByDay() {
+        return reservasByDay;
     }
 
     public void addReserva(Reserva reserva) {
-        final List<Reserva> currentReservas = reservasList.getValue();
-        if (currentReservas != null) {
-            currentReservas.add(reserva);
-            reservasList.setValue(currentReservas);
+        LocalDate localDate = reserva.fecha().toLocalDate();
+        if (!Objects.requireNonNull(reservasByDay.getValue()).containsKey(localDate)) {
+            Objects.requireNonNull(reservasByDay.getValue()).put(localDate, List.of(reserva));
+        } else {
+            List<Reserva> prevReservasForDate =
+                    new ArrayList<>(Objects.requireNonNull(reservasByDay.getValue()).get(localDate));
+
+            prevReservasForDate.add(reserva);
+            Objects.requireNonNull(reservasByDay.getValue()).put(localDate, prevReservasForDate);
         }
     }
 }
