@@ -16,7 +16,7 @@
 
     <include
         android:id="@+id/default_reserva"
-        layout="@layout/item_reserva"
+        layout="@layout/item_reserva_default"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
