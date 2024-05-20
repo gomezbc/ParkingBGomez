@@ -97,7 +97,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void addReserva(Reserva reserva) {
-        LocalDate localDate = reserva.fecha().toLocalDate();
+        LocalDate localDate = reserva.getFecha().toLocalDate();
         if (!Objects.requireNonNull(reservasByDay.getValue()).containsKey(localDate)) {
             Objects.requireNonNull(reservasByDay.getValue()).put(localDate, List.of(reserva));
         } else {

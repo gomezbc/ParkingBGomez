@@ -17,7 +17,6 @@ import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.view.holder.ReservasViewHolder;
 
 import java.time.Duration;
-import java.util.List;
 
 public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
@@ -39,12 +38,12 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
         Hora hora = setSelectedHourInterval(holder, reserva);
 
-        if (reserva.plaza() == null || reserva.fecha() == null ||
-                reserva.hora() == null || reserva.usuario() == null) {
+        if (reserva.getPlaza() == null || reserva.getFecha() == null ||
+                reserva.getHora() == null || reserva.getUsuario() == null) {
             return;
         }
 
-        long plaza = reserva.plaza().id();
+        long plaza = reserva.getPlaza().getId();
         TextView plazaTextView = holder.itemView.findViewById(R.id.text_parking_slot);
         plazaTextView.setText(String.valueOf(plaza));
 
@@ -57,15 +56,15 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
         if (hora != null) {
             TextView hourInterval = holder.itemView.findViewById(R.id.date_info);
             hourInterval.setText(String.format("%s:%s - %s:%s",
-                    hora.horaInicio().getHour(),
-                    String.format("%02d", hora.horaInicio().getMinute()),
-                    hora.horaFin().getHour(),
-                    String.format("%02d", hora.horaFin().getMinute())));
+                    hora.getHoraFin().getHour(),
+                    String.format("%02d", hora.getHoraInicio().getMinute()),
+                    hora.getHoraFin().getHour(),
+                    String.format("%02d", hora.getHoraFin().getMinute())));
         }
     }
 
     private static void setTipoPlazaInfo(@NonNull ReservasViewHolder holder, Reserva reserva) {
-        TipoPlaza tipoPlaza = reserva.plaza().tipoPlaza();
+        TipoPlaza tipoPlaza = reserva.getPlaza().getTipoPlaza();
         TextView tipoPlazaTextView = holder.itemView.findViewById(R.id.text_slot_type);
         ImageView tipoPlazaImageView = holder.itemView.findViewById(R.id.tipo_plaza_icon);
         if (tipoPlaza != null) {
@@ -92,9 +91,9 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
     @Nullable
     private static Hora setSelectedHourInterval(@NonNull ReservasViewHolder holder, Reserva reserva) {
-        Hora hora = reserva.hora();
+        Hora hora = reserva.getHora();
         if (hora != null) {
-            final Duration duration = Duration.between(hora.horaInicio(), hora.horaFin());
+            final Duration duration = Duration.between(hora.getHoraInicio(), hora.getHoraFin());
             final long minutesToHour = duration.toMinutes() % 60;
             TextView durationTextView = holder.itemView.findViewById(R.id.text_duration);
             if (minutesToHour == 0L) {

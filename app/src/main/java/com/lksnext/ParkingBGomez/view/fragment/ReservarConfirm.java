@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.Objects;
-import java.util.Random;
+import java.util.UUID;
 
 
 public class ReservarConfirm extends Fragment {
@@ -56,7 +56,7 @@ public class ReservarConfirm extends Fragment {
     private Hora setSelectedHourInterval() {
         Hora hora = mainViewModel.getSelectedHour().getValue();
         if (hora != null) {
-            final Duration duration = Duration.between(hora.horaInicio(), hora.horaFin());
+            final Duration duration = Duration.between(hora.getHoraInicio(), hora.getHoraFin());
             final long minutesToHour = duration.toMinutes() % 60;
             if (minutesToHour == 0L) {
                 binding.chipSelectedDuration.setText(String.format("%s h", duration.toHours()));
@@ -74,7 +74,7 @@ public class ReservarConfirm extends Fragment {
             final String dia = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
             final String mes = fecha.getMonth().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
             binding.confirmHourInterval.setText(String.format("%s %s %s %s - %s",
-                    dia, fecha.getDayOfMonth(), mes, hora.horaInicio(), hora.horaFin()));
+                    dia, fecha.getDayOfMonth(), mes, hora.getHoraInicio(), hora.getHoraFin()));
         }
     }
 
@@ -114,11 +114,11 @@ public class ReservarConfirm extends Fragment {
             mainViewModel.setReservarState(ReservarState.RESERVADO);
 
             LocalDate selectedDate = mainViewModel.getSelectedDate().getValue();
-            LocalTime horaInicio = Objects.requireNonNull(mainViewModel.getSelectedHour().getValue()).horaInicio();
+            LocalTime horaInicio = Objects.requireNonNull(mainViewModel.getSelectedHour().getValue()).getHoraInicio();
             LocalDateTime fechaHoraInicio = LocalDateTime.of(selectedDate, horaInicio);
             Reserva reserva = new Reserva(fechaHoraInicio,
                     "usuario",
-                    randomLong,
+                    UUID.randomUUID().toString(),
                     new Plaza(1L, mainViewModel.getSelectedTipoPlaza().getValue()),
                     mainViewModel.getSelectedHour().getValue());
 

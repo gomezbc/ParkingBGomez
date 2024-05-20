@@ -10,8 +10,6 @@ import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.HourItem;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -108,8 +106,8 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
     private void restoreSelectedHour(){
         final Hora selectedHour = mainViewModel.getSelectedHour().getValue();
         if (selectedHour != null){
-            final String horaInicioString = selectedHour.horaInicio().toString();
-            final String horaFinString = selectedHour.horaFin().toString();
+            final String horaInicioString = selectedHour.getHoraInicio().toString();
+            final String horaFinString = selectedHour.getHoraFin().toString();
             final HourItem hourInicio = hours.stream()
                     .filter(h -> h.getHour().equals(horaInicioString))
                     .findAny()

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -39,7 +40,7 @@ public class MainViewModelTest {
         Reserva reserva = new Reserva(
                 curentLocalDateTime,
                 "usuario",
-                1L,
+                UUID.randomUUID().toString(),
                 null,
                 null);
 
