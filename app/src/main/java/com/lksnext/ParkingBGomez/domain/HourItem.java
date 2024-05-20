@@ -2,6 +2,8 @@ package com.lksnext.ParkingBGomez.domain;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class HourItem{
     private String hour;
     private boolean selected;
@@ -43,6 +45,19 @@ public class HourItem{
 
     public void setInMiddle(boolean inMiddle) {
         this.inMiddle = inMiddle;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HourItem hourItem = (HourItem) o;
+        return Objects.equals(hour, hourItem.hour);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hour);
     }
 
     @NonNull

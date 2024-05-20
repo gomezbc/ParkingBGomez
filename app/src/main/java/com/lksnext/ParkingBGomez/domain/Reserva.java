@@ -3,12 +3,11 @@ package com.lksnext.ParkingBGomez.domain;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Reserva {
 
-    private LocalDateTime fecha;
+    private String fecha;
     private String usuario;
     private String uuid;
     private Plaza plaza;
@@ -17,7 +16,7 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(LocalDateTime fecha, String usuario, String uuid, Plaza plaza, Hora hora) {
+    public Reserva(String fecha, String usuario, String uuid, Plaza plaza, Hora hora) {
         this.fecha = fecha;
         this.usuario = usuario;
         this.uuid = uuid;
@@ -25,11 +24,11 @@ public class Reserva {
         this.hora = hora;
     }
 
-    public LocalDateTime getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 

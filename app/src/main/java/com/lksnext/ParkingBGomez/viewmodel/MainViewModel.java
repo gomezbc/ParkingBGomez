@@ -9,6 +9,7 @@ import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.BottomNavState;
 import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
+import com.lksnext.ParkingBGomez.utils.TimeUtils;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -97,7 +98,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void addReserva(Reserva reserva) {
-        LocalDate localDate = reserva.getFecha().toLocalDate();
+        LocalDate localDate = TimeUtils.convertStringToDateLocalTime(reserva.getFecha()).toLocalDate();
         if (!Objects.requireNonNull(reservasByDay.getValue()).containsKey(localDate)) {
             Objects.requireNonNull(reservasByDay.getValue()).put(localDate, List.of(reserva));
         } else {

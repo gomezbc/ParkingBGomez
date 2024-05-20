@@ -1,5 +1,8 @@
 package com.lksnext.ParkingBGomez.view.adapter;
 
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +17,12 @@ import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
+import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.view.holder.ReservasViewHolder;
 
 import java.time.Duration;
+import java.util.Date;
+import java.util.Locale;
 
 public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
@@ -55,11 +61,13 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
     private static void setTimeInfo(@NonNull ReservasViewHolder holder, Hora hora) {
         if (hora != null) {
             TextView hourInterval = holder.itemView.findViewById(R.id.date_info);
-            hourInterval.setText(String.format("%s:%s - %s:%s",
-                    hora.getHoraFin().getHour(),
-                    String.format("%02d", hora.getHoraInicio().getMinute()),
-                    hora.getHoraFin().getHour(),
-                    String.format("%02d", hora.getHoraFin().getMinute())));
+            DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            final Date horaInicioDate = new Date(hora.getHoraInicio());
+            final Date horaFinDate = new Date(hora.getHoraFin());
+            final String horaInicioString = df.format(horaInicioDate);
+            final String horaFinString = df.format(horaFinDate);
+            Log.d("setTimeInfo", horaInicioString + " - " + horaFinString);
+            hourInterval.setText(String.format("%s - %s", horaInicioString, horaFinString));
         }
     }
 
@@ -93,7 +101,9 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
     private static Hora setSelectedHourInterval(@NonNull ReservasViewHolder holder, Reserva reserva) {
         Hora hora = reserva.getHora();
         if (hora != null) {
-            final Duration duration = Duration.between(hora.getHoraInicio(), hora.getHoraFin());
+            final Duration duration = Duration.between(
+                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
+                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
             final long minutesToHour = duration.toMinutes() % 60;
             TextView durationTextView = holder.itemView.findViewById(R.id.text_duration);
             if (minutesToHour == 0L) {

@@ -1,4 +1,6 @@
 package com.lksnext.ParkingBGomez.view;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.HourItem;
+import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -97,7 +102,9 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         if (selectedHours.size() == 2){
             final LocalTime horaInicio = LocalTime.parse(selectedHours.get(0).getHour());
             final LocalTime horaFin = LocalTime.parse(selectedHours.get(1).getHour());
-            mainViewModel.setSelectedHour(new Hora(horaInicio, horaFin));
+            mainViewModel.setSelectedHour(new Hora(
+                    TimeUtils.convertLocalTimeToEpoch(horaInicio),
+                    TimeUtils.convertLocalTimeToEpoch(horaFin)));
         }else {
             mainViewModel.setSelectedHour(null);
         }
@@ -105,9 +112,12 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
 
     private void restoreSelectedHour(){
         final Hora selectedHour = mainViewModel.getSelectedHour().getValue();
+        DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
         if (selectedHour != null){
-            final String horaInicioString = selectedHour.getHoraInicio().toString();
-            final String horaFinString = selectedHour.getHoraFin().toString();
+            final Date horaInicioDate = new Date(selectedHour.getHoraInicio());
+            final Date horaFinDate = new Date(selectedHour.getHoraFin());
+            final String horaInicioString = df.format(horaInicioDate);
+            final String horaFinString = df.format(horaFinDate);
             final HourItem hourInicio = hours.stream()
                     .filter(h -> h.getHour().equals(horaInicioString))
                     .findAny()
