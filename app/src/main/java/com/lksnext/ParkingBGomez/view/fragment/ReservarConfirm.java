@@ -83,12 +83,13 @@ public class ReservarConfirm extends Fragment {
         if (fecha != null && hora != null) {
             final String dia = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
             final String mes = fecha.getMonth().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
-            // TODO: fix how its shown
+
             DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            final Date horaInicioDate = new Date(hora.getHoraInicio());
-            final Date horaFinDate = new Date(hora.getHoraFin());
+            final Date horaInicioDate = new Date(hora.getHoraInicio() * 1000);
+            final Date horaFinDate = new Date(hora.getHoraFin() * 1000);
             final String horaInicioString = df.format(horaInicioDate);
             final String horaFinString = df.format(horaFinDate);
+
             binding.confirmHourInterval.setText(String.format("%s %s %s %s - %s",
                     dia, fecha.getDayOfMonth(), mes, horaInicioString, horaFinString));
         }
@@ -125,7 +126,6 @@ public class ReservarConfirm extends Fragment {
 
             mainViewModel.setReservarState(ReservarState.RESERVADO);
 
-            LocalDate selectedDate = mainViewModel.getSelectedDate().getValue();
             long horaInicioEpoch =
                     Objects.requireNonNull(mainViewModel.getSelectedHour().getValue()).getHoraInicio();
 
