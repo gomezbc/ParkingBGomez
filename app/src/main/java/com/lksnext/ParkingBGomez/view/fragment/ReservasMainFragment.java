@@ -1,21 +1,25 @@
 package com.lksnext.ParkingBGomez.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
+import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
+import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import com.lksnext.ParkingBGomez.view.adapter.ReservasByDayAdapter;
 import com.lksnext.ParkingBGomez.view.decoration.ReservaItemDecoration;
-import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,8 +29,6 @@ import java.util.Map;
 public class ReservasMainFragment extends Fragment{
 
     private FragmentReservasMainBinding binding;
-    private MainViewModel mainViewModel;
-    private Map<LocalDate, List<Reserva>> reservasByDay;
 
     @Override
     public View onCreateView(
@@ -35,15 +37,39 @@ public class ReservasMainFragment extends Fragment{
     ) {
         binding = FragmentReservasMainBinding.inflate(inflater, container, false);
 
-        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        reservasByDay = mainViewModel.getReservasByDay().getValue();
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         RecyclerView recyclerView = binding.recyclerViewReservas;
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false));
 
-        mainViewModel.getReservasByDay().observe(getViewLifecycleOwner(), newReservasByDay ->
-            reservasByDay.putAll(newReservasByDay)
-        );
+        fetchAndSetReservasFromDB(recyclerView);
+    }
+
+    private void fetchAndSetReservasFromDB(RecyclerView recyclerView) {
+        MainActivity activity = (MainActivity) getActivity();
+
+        DataRepository dataRepository = DataRepository.getInstance();
+
+        if (activity != null) {
+            LiveData<Map<LocalDate, List<Reserva>>> liveData =
+                    getReservasByDayByUser(dataRepository, activity);
+
+            // Is executed when the LiveData object is updated with db data
+            liveData.observe(getViewLifecycleOwner(), dbReservasByDay -> {
+                if (dbReservasByDay != null) {
+                    setReservasFromDB(recyclerView, dbReservasByDay);
+                }
+            });
+        }
+    }
+
+    private static void setReservasFromDB(RecyclerView recyclerView, Map<LocalDate,
+            List<Reserva>> dbReservasByDay) {
 
         // Get the current date
         LocalDate today = LocalDate.now();
@@ -51,16 +77,30 @@ public class ReservasMainFragment extends Fragment{
         // Add a null reserva to all days of the past month to the map
         LocalDate date = today.withDayOfMonth(1);
         while (date.isBefore(today) || date.isEqual(today)) {
-            reservasByDay.putIfAbsent(date, new ArrayList<>());
+            dbReservasByDay.putIfAbsent(date, new ArrayList<>());
             date = date.plusDays(1);
         }
 
-        ReservasByDayAdapter adapter = new ReservasByDayAdapter(reservasByDay);
+        ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay);
 
         recyclerView.addItemDecoration(new ReservaItemDecoration(20));
         recyclerView.setAdapter(adapter);
+    }
 
-        return binding.getRoot();
+    private static LiveData<Map<LocalDate, List<Reserva>>>
+    getReservasByDayByUser(DataRepository dataRepository, MainActivity activity) {
+        // Return the LiveData object with the reservas and handle the success and failure cases
+        return dataRepository.getReservasByDayByUser("usuario", activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d("getReservasByDayByUser", "Success.");
+            }
+
+            @Override
+            public void onFailure() {
+                Log.d("getReservasByDayByUser", "Error getting documents.");
+            }
+        });
     }
 
     @Override

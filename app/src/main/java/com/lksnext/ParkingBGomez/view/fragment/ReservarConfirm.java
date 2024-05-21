@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lksnext.ParkingBGomez.R;
+import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarConfirmBinding;
+import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.Plaza;
 import com.lksnext.ParkingBGomez.domain.Reserva;
@@ -135,10 +137,26 @@ public class ReservarConfirm extends Fragment {
                     new Plaza(1L, mainViewModel.getSelectedTipoPlaza().getValue()),
                     mainViewModel.getSelectedHour().getValue());
 
-            mainViewModel.addReserva(reserva);
+            MainActivity activity = (MainActivity) getActivity();
 
-            Navigation.findNavController(v)
-                    .navigate(R.id.action_reservarConfirm_to_reservarMainFragment_confirmed);
+            DataRepository dataRepository = DataRepository.getInstance();
+
+            if (activity != null) {
+                dataRepository.saveReserva(reserva, activity, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("addReserva","DocumentSnapshot added: ");
+                        Navigation.findNavController(v)
+                                .navigate(R.id.action_reservarConfirm_to_reservarMainFragment_confirmed);
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        Log.d("addReserva","Error adding document: ");
+                    }
+                });
+            }
+
         });
     }
 }
