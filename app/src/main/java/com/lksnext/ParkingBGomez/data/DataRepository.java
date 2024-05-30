@@ -1,8 +1,5 @@
 package com.lksnext.ParkingBGomez.data;
 
-import android.app.Activity;
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -73,6 +70,28 @@ public class DataRepository {
                             liveData.setValue(reservasByDay);
                         });
                         callback.onSuccess();
+                }).addOnFailureListener(e -> callback.onSuccess());
+        return liveData;
+    }
+
+
+    public LiveData<List<Reserva>> getReservasOfUserAfterToday(String user, MainActivity activity, Callback callback){
+        MutableLiveData<List<Reserva>> liveData = new MutableLiveData<>();
+        List<Reserva> reservas = new ArrayList<>();
+        long startOfTodayEpoch = TimeUtils.getStartOfTodayEpoch();
+
+        activity.getDb().collection("reservas")
+                .whereEqualTo("usuario", user)
+                .get()
+                .addOnSuccessListener(documentReference -> {
+                    documentReference.toObjects(Reserva.class).forEach(reserva -> {
+                        long fechaEpoch = TimeUtils.convertLocalDateTimeStringToEpoch(reserva.getFecha());
+                        if (fechaEpoch > startOfTodayEpoch && !reservas.contains(reserva)) {
+                            reservas.add(reserva);
+                        }
+                    });
+                    liveData.setValue(reservas);
+                    callback.onSuccess();
                 }).addOnFailureListener(e -> callback.onSuccess());
         return liveData;
     }

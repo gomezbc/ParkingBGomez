@@ -9,6 +9,8 @@ import java.time.ZoneOffset;
 
 public class TimeUtils {
 
+    public static final ZoneOffset ZONE_OFFSET = ZoneOffset.UTC;
+
     private TimeUtils() {
     }
 
@@ -25,5 +27,15 @@ public class TimeUtils {
     public static LocalDateTime convertEpochTolocalDateTime(long epoch) {
         Instant instant = Instant.ofEpochSecond(epoch);
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+
+    public static long convertLocalDateTimeStringToEpoch(String localDateTimeString) {
+        LocalDateTime localDateTime = LocalDateTime.parse(localDateTimeString);
+        return localDateTime.toEpochSecond(ZONE_OFFSET);
+    }
+
+    public static long getStartOfTodayEpoch() {
+        LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
+        return startOfToday.toEpochSecond(ZONE_OFFSET);
     }
 }

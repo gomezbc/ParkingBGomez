@@ -65,4 +65,6 @@
     <string name="today">Hoy</string>
     <string name="tomorrow">Mañana</string>
     <string name="yesterday">Ayer</string>
+    <string name="ver_todas">Ver todas</string>
+    <string name="proximas_reservas">Proximas Reservas</string>
 </resources>
