@@ -5,17 +5,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.lksnext.ParkingBGomez.domain.Hora;
-import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.BottomNavState;
 import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class MainViewModel extends ViewModel {
@@ -31,8 +26,6 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<Hora> selectedHour = new MutableLiveData<>(null);
     private final MutableLiveData<ReservarState> reservarState =
             new MutableLiveData<>(ReservarState.RESERVAR);
-    private final MutableLiveData<Map<LocalDate, List<Reserva>>> reservasByDay =
-            new MutableLiveData<>(new HashMap<>());
 
     public MutableLiveData<BottomNavState> getBottomNavState() {
         return bottomNavState;
@@ -90,22 +83,5 @@ public class MainViewModel extends ViewModel {
 
     public void setReservarState(ReservarState state) {
         reservarState.setValue(state);
-    }
-
-    public MutableLiveData<Map<LocalDate, List<Reserva>>> getReservasByDay() {
-        return reservasByDay;
-    }
-
-    public void addReserva(Reserva reserva) {
-        LocalDate localDate = reserva.fecha().toLocalDate();
-        if (!Objects.requireNonNull(reservasByDay.getValue()).containsKey(localDate)) {
-            Objects.requireNonNull(reservasByDay.getValue()).put(localDate, List.of(reserva));
-        } else {
-            List<Reserva> prevReservasForDate =
-                    new ArrayList<>(Objects.requireNonNull(reservasByDay.getValue()).get(localDate));
-
-            prevReservasForDate.add(reserva);
-            Objects.requireNonNull(reservasByDay.getValue()).put(localDate, prevReservasForDate);
-        }
     }
 }

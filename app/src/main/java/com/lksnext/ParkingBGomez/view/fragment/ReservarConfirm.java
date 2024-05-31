@@ -1,5 +1,7 @@
 package com.lksnext.ParkingBGomez.view.fragment;
 
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,26 +10,32 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lksnext.ParkingBGomez.R;
+import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarConfirmBinding;
+import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.Plaza;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
+import com.lksnext.ParkingBGomez.utils.TimeUtils;
+import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.TextStyle;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
-import java.util.Random;
+import java.util.UUID;
 
 
 public class ReservarConfirm extends Fragment {
@@ -56,7 +64,9 @@ public class ReservarConfirm extends Fragment {
     private Hora setSelectedHourInterval() {
         Hora hora = mainViewModel.getSelectedHour().getValue();
         if (hora != null) {
-            final Duration duration = Duration.between(hora.horaInicio(), hora.horaFin());
+            final Duration duration = Duration.between(
+                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
+                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
             final long minutesToHour = duration.toMinutes() % 60;
             if (minutesToHour == 0L) {
                 binding.chipSelectedDuration.setText(String.format("%s h", duration.toHours()));
@@ -73,8 +83,15 @@ public class ReservarConfirm extends Fragment {
         if (fecha != null && hora != null) {
             final String dia = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
             final String mes = fecha.getMonth().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
+
+            DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            final Date horaInicioDate = new Date(hora.getHoraInicio() * 1000);
+            final Date horaFinDate = new Date(hora.getHoraFin() * 1000);
+            final String horaInicioString = df.format(horaInicioDate);
+            final String horaFinString = df.format(horaFinDate);
+
             binding.confirmHourInterval.setText(String.format("%s %s %s %s - %s",
-                    dia, fecha.getDayOfMonth(), mes, hora.horaInicio(), hora.horaFin()));
+                    dia, fecha.getDayOfMonth(), mes, horaInicioString, horaFinString));
         }
     }
 
@@ -107,25 +124,39 @@ public class ReservarConfirm extends Fragment {
 
         binding.buttonReservarContinue.setOnClickListener(v -> {
 
-            // TODO: temporal solution to generate a reserva id
-            Random random = new Random();
-            long randomLong = random.nextLong();
-
             mainViewModel.setReservarState(ReservarState.RESERVADO);
 
-            LocalDate selectedDate = mainViewModel.getSelectedDate().getValue();
-            LocalTime horaInicio = Objects.requireNonNull(mainViewModel.getSelectedHour().getValue()).horaInicio();
-            LocalDateTime fechaHoraInicio = LocalDateTime.of(selectedDate, horaInicio);
-            Reserva reserva = new Reserva(fechaHoraInicio,
+            long horaInicioEpoch =
+                    Objects.requireNonNull(mainViewModel.getSelectedHour().getValue()).getHoraInicio();
+
+            LocalDateTime fechaHoraInicio = TimeUtils.convertEpochTolocalDateTime(horaInicioEpoch);
+
+            Reserva reserva = new Reserva(fechaHoraInicio.toString(),
                     "usuario",
-                    randomLong,
+                    UUID.randomUUID().toString(),
                     new Plaza(1L, mainViewModel.getSelectedTipoPlaza().getValue()),
                     mainViewModel.getSelectedHour().getValue());
 
-            mainViewModel.addReserva(reserva);
+            MainActivity activity = (MainActivity) getActivity();
 
-            Navigation.findNavController(v)
-                    .navigate(R.id.action_reservarConfirm_to_reservarMainFragment_confirmed);
+            DataRepository dataRepository = DataRepository.getInstance();
+
+            if (activity != null) {
+                dataRepository.saveReserva(reserva, activity, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("addReserva","DocumentSnapshot added: ");
+                        Navigation.findNavController(v)
+                                .navigate(R.id.action_reservarConfirm_to_reservarMainFragment_confirmed);
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        Log.d("addReserva","Error adding document: ");
+                    }
+                });
+            }
+
         });
     }
 }

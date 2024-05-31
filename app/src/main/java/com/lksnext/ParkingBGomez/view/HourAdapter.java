@@ -1,4 +1,5 @@
 package com.lksnext.ParkingBGomez.view;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.HourItem;
+import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -99,7 +100,9 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         if (selectedHours.size() == 2){
             final LocalTime horaInicio = LocalTime.parse(selectedHours.get(0).getHour());
             final LocalTime horaFin = LocalTime.parse(selectedHours.get(1).getHour());
-            mainViewModel.setSelectedHour(new Hora(horaInicio, horaFin));
+            mainViewModel.setSelectedHour(new Hora(
+                    TimeUtils.convertLocalTimeToEpoch(horaInicio),
+                    TimeUtils.convertLocalTimeToEpoch(horaFin)));
         }else {
             mainViewModel.setSelectedHour(null);
         }
@@ -108,8 +111,12 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
     private void restoreSelectedHour(){
         final Hora selectedHour = mainViewModel.getSelectedHour().getValue();
         if (selectedHour != null){
-            final String horaInicioString = selectedHour.horaInicio().toString();
-            final String horaFinString = selectedHour.horaFin().toString();
+            final LocalDateTime localDateTimeInicio =
+                    TimeUtils.convertEpochTolocalDateTime(selectedHour.getHoraInicio());
+            final LocalDateTime localDateTimeFin =
+                    TimeUtils.convertEpochTolocalDateTime(selectedHour.getHoraFin());
+            final String horaInicioString = localDateTimeInicio.toLocalTime().toString();
+            final String horaFinString = localDateTimeFin.toLocalTime().toString();
             final HourItem hourInicio = hours.stream()
                     .filter(h -> h.getHour().equals(horaInicioString))
                     .findAny()

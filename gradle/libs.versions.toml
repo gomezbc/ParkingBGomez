@@ -20,6 +20,8 @@ perfPlugin = "1.4.2"
 firebaseCrashlytics = "19.0.0"
 firebaseCrashlyticsGradle = "3.0.0"
 firebaseAnalytics = "22.0.0"
+googleGmsGoogleServices = "4.4.1"
+firebaseFirestore = "25.0.0"
 
 [libraries]
 core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
@@ -42,7 +44,9 @@ perf-plugin = { group = "com.google.firebase", name = "perf-plugin", version.ref
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+googleGmsGoogleServices = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
