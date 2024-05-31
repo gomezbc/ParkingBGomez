@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -101,6 +100,12 @@ public class InicioMainFragment extends Fragment{
         ReservaCardAdapter adapter = new ReservaCardAdapter();
         recyclerView.setAdapter(adapter);
         adapter.submitList(dbReservasOfUser);
+        if (dbReservasOfUser.isEmpty()) {
+            binding.fallbackCard.findViewById(R.id.progressIndicator).setVisibility(View.GONE);
+            binding.fallbackCard.findViewById(R.id.fallbackText).setVisibility(View.VISIBLE);
+        }else {
+            binding.fallbackCard.setVisibility(View.GONE);
+        }
     }
 
     private static LiveData<List<Reserva>> getReservasOfUserAfterToday(View view, DataRepository dataRepository, MainActivity activity) {

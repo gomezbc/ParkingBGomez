@@ -32,6 +32,7 @@
                     android:id="@+id/imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
+                    android:contentDescription="@string/parque_empresarial_zuatzu"
                     android:layout_weight="1"
                     android:src="@drawable/parking_zuatzu" />
 
@@ -114,26 +115,48 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/proximas_reservas">
+            android:layout_marginHorizontal="16dp"
+            app:layout_constraintTop_toBottomOf="@id/proximas_reservas"
+            android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reservas_card_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
                 android:orientation="horizontal" />
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/fallbackCard"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="1dp"
+                app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge"
+                app:strokeWidth="1dp">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progressIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="true" />
+
+                <TextView
+                    android:id="@+id/fallbackText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/no_hay_reservas"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
-
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
