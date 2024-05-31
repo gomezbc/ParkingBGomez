@@ -1,6 +1,5 @@
 package com.lksnext.ParkingBGomez.view;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,9 @@ import com.lksnext.ParkingBGomez.domain.HourItem;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -112,12 +110,13 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
 
     private void restoreSelectedHour(){
         final Hora selectedHour = mainViewModel.getSelectedHour().getValue();
-        DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
         if (selectedHour != null){
-            final Date horaInicioDate = new Date(selectedHour.getHoraInicio());
-            final Date horaFinDate = new Date(selectedHour.getHoraFin());
-            final String horaInicioString = df.format(horaInicioDate);
-            final String horaFinString = df.format(horaFinDate);
+            final LocalDateTime localDateTimeInicio =
+                    TimeUtils.convertEpochTolocalDateTime(selectedHour.getHoraInicio());
+            final LocalDateTime localDateTimeFin =
+                    TimeUtils.convertEpochTolocalDateTime(selectedHour.getHoraFin());
+            final String horaInicioString = localDateTimeInicio.toLocalTime().toString();
+            final String horaFinString = localDateTimeFin.toLocalTime().toString();
             final HourItem hourInicio = hours.stream()
                     .filter(h -> h.getHour().equals(horaInicioString))
                     .findAny()
