@@ -18,6 +18,8 @@ import java.util.Objects;
 
 public class DataRepository {
 
+    private static final String RESERVAS_COLLECTION = "reservas";
+
     private static DataRepository instance;
     private DataRepository(){
 
@@ -25,7 +27,7 @@ public class DataRepository {
 
     //Creación de la instancia en caso de que no exista.
     public static synchronized DataRepository getInstance(){
-        if (instance==null){
+        if (instance == null){
             instance = new DataRepository();
         }
         return instance;
@@ -42,7 +44,7 @@ public class DataRepository {
     }
 
     public void saveReserva(Reserva reserva, MainActivity activity, Callback callback){
-        activity.getDb().collection("reservas").document(reserva.getUuid())
+        activity.getDb().collection(RESERVAS_COLLECTION).document(reserva.getUuid())
                 .set(reserva)
                 .addOnSuccessListener(documentReference -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure());
@@ -53,7 +55,7 @@ public class DataRepository {
         Map<LocalDate, List<Reserva>> reservasByDay = new HashMap<>();
         final LocalDateTime firstDayOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
 
-        activity.getDb().collection("reservas")
+        activity.getDb().collection(RESERVAS_COLLECTION)
                 .whereEqualTo("usuario", user)
                 .get()
                 .addOnSuccessListener(documentReference -> {
@@ -80,7 +82,7 @@ public class DataRepository {
         List<Reserva> reservas = new ArrayList<>();
         long startOfTodayEpoch = TimeUtils.getStartOfTodayEpoch();
 
-        activity.getDb().collection("reservas")
+        activity.getDb().collection(RESERVAS_COLLECTION)
                 .whereEqualTo("usuario", user)
                 .get()
                 .addOnSuccessListener(documentReference -> {
