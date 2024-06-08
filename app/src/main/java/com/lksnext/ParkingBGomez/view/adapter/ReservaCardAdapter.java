@@ -31,6 +31,7 @@ public class ReservaCardAdapter extends ListAdapter<Reserva, ReservaCardAdapter.
     private static class Views {
         TextView chipSelectedDuration;
         TextView chipConfirmHourInterval;
+        TextView chipParkingSlot;
         Chip chipCar;
         Chip chipElectricCar;
         Chip chipMotorcycle;
@@ -43,6 +44,7 @@ public class ReservaCardAdapter extends ListAdapter<Reserva, ReservaCardAdapter.
             chipElectricCar = view.findViewById(R.id.chip_electric_car);
             chipMotorcycle = view.findViewById(R.id.chip_motorcycle);
             chipAccessibleCar = view.findViewById(R.id.chip_accessible_car);
+            chipParkingSlot = view.findViewById(R.id.chip_parking_slot);
         }
 
 
@@ -79,6 +81,7 @@ public class ReservaCardAdapter extends ListAdapter<Reserva, ReservaCardAdapter.
         final Hora hora = setSelectedHourInterval(reserva);
         setTipoPlazaInfo(reserva);
         setSelectedDateInfo(hora, reserva);
+        this.views.chipParkingSlot.setText(String.valueOf(reserva.getPlaza().getId()));
     }
 
     @Nullable
