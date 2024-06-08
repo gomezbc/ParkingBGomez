@@ -21,6 +21,12 @@
             app:title="Reservas"
             app:menu="@menu/reservas_top_bar"/>
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_bar_reservas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"/>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView

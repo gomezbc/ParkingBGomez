@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,6 +12,7 @@ import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ReservasMainFragment extends Fragment{
 
@@ -47,10 +48,10 @@ public class ReservasMainFragment extends Fragment{
         RecyclerView recyclerView = binding.recyclerViewReservas;
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false));
 
-        fetchAndSetReservasFromDB(recyclerView);
+        fetchAndSetReservasFromDB(recyclerView, binding.progressBarReservas);
     }
 
-    private void fetchAndSetReservasFromDB(RecyclerView recyclerView) {
+    private void fetchAndSetReservasFromDB(RecyclerView recyclerView, LinearProgressIndicator progressBar) {
         MainActivity activity = (MainActivity) getActivity();
 
         DataRepository dataRepository = DataRepository.getInstance();
@@ -61,6 +62,7 @@ public class ReservasMainFragment extends Fragment{
 
             // Is executed when the LiveData object is updated with db data
             liveData.observe(getViewLifecycleOwner(), dbReservasByDay -> {
+                progressBar.hide();
                 if (dbReservasByDay != null) {
                     setReservasFromDB(recyclerView, dbReservasByDay);
                 }
@@ -80,6 +82,9 @@ public class ReservasMainFragment extends Fragment{
             dbReservasByDay.putIfAbsent(date, new ArrayList<>());
             date = date.plusDays(1);
         }
+
+        // Order by date
+        dbReservasByDay = new TreeMap<>(dbReservasByDay).descendingMap();
 
         ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay);
 
