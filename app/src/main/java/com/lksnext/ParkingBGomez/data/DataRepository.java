@@ -1,7 +1,5 @@
 package com.lksnext.ParkingBGomez.data;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -15,11 +13,9 @@ import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +27,8 @@ public class DataRepository {
 
     private static final String RESERVAS_COLLECTION = "reservas";
     private static final String PLAZAS_COLLECTION = "plazas";
+    private static final String TIPO_PLAZA = "tipoPlaza";
+    private static final String USUARIO = "usuario";
 
     private static DataRepository instance;
     private DataRepository(){
@@ -68,7 +66,7 @@ public class DataRepository {
         final LocalDateTime firstDayOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
 
         activity.getDb().collection(RESERVAS_COLLECTION)
-                .whereEqualTo("usuario", user)
+                .whereEqualTo(USUARIO, user)
                 .get()
                 .addOnSuccessListener(documentReference -> {
                         documentReference.toObjects(Reserva.class).forEach(reserva -> {
@@ -95,7 +93,7 @@ public class DataRepository {
         long startOfTodayEpoch = TimeUtils.getStartOfTodayEpoch();
 
         activity.getDb().collection(RESERVAS_COLLECTION)
-                .whereEqualTo("usuario", user)
+                .whereEqualTo(USUARIO, user)
                 .get()
                 .addOnSuccessListener(documentReference -> {
                     documentReference.toObjects(Reserva.class).forEach(reserva -> {
@@ -146,7 +144,7 @@ public class DataRepository {
                 // Gets the first plaza with a documentId not in the list of plazasIdInThatHours
                 plazasCollection.whereNotIn(FieldPath.documentId(),
                                 plazas.stream().map(String::valueOf).collect(Collectors.toList()))
-                        .whereEqualTo("tipoPlaza", tipoPlaza)
+                        .whereEqualTo(TIPO_PLAZA, tipoPlaza)
                         .limit(1)
                         .get()
                         .addOnSuccessListener(documentReference -> {
@@ -160,4 +158,73 @@ public class DataRepository {
 
         return liveData;
     }
+
+    public LiveData<Integer> getPlazasLibresByTipoPlaza(TipoPlaza tipoPlaza, long horaActual ,MainActivity activity, Callback callback){
+        CollectionReference plazasCollection = activity.getDb().collection(PLAZAS_COLLECTION);
+        CollectionReference reservasCollection = activity.getDb().collection(RESERVAS_COLLECTION);
+
+        LocalDateTime todayLocalDateTime = LocalDateTime.now(TimeUtils.ZONE_ID);
+
+        MutableLiveData<Integer> plazasLibre = new MutableLiveData<>();
+
+        AtomicInteger totalPlazas = new AtomicInteger(0);
+
+        MutableLiveData<List<Long>> plazasIdInThatHoursLiveData = new MutableLiveData<>();
+        List<Long> plazasIdInThatHours = new ArrayList<>();
+
+        // La fecha no se puede comparar en la query, ya que es un string
+        // La hora tampoco se puede comparar ya que es un subdocumento
+        reservasCollection
+                .get()
+                .addOnSuccessListener(documentReference -> {
+                            documentReference.toObjects(Reserva.class).forEach(reserva -> {
+                                LocalDateTime fecha = TimeUtils.convertStringToDateLocalTime(reserva.getFecha());
+                                // Coge las reservas que esten en la hora que se quiere reservar
+                                if (reserva.getHora().getHoraInicio() <= horaActual &&
+                                        horaActual <= reserva.getHora().getHoraFin() &&
+                                        (fecha.getDayOfYear() == todayLocalDateTime.getDayOfYear())){
+                                    plazasIdInThatHours.add(reserva.getPlaza().getId());
+                                }
+                                callback.onSuccess();
+                            });
+                            plazasIdInThatHoursLiveData.setValue(plazasIdInThatHours);
+                        }
+                )
+                .addOnFailureListener(e -> callback.onFailure());
+
+        plazasIdInThatHoursLiveData.observe(activity, plazas -> {
+            if (plazas.isEmpty()){
+                plazasLibre.setValue(0);
+            }else {
+                // Gets the first plaza with a documentId not in the list of plazasIdInThatHours
+                plazasCollection.whereNotIn(FieldPath.documentId(),
+                                plazas.stream().map(String::valueOf).collect(Collectors.toList()))
+                        .whereEqualTo(TIPO_PLAZA, tipoPlaza)
+                        .get()
+                        .addOnSuccessListener(documentReference -> {
+                            documentReference.toObjects(Plaza.class)
+                                    .forEach(plaza -> totalPlazas.getAndIncrement());
+
+                            plazasLibre.setValue(totalPlazas.get());
+                            callback.onSuccess();
+                        }).addOnFailureListener(e -> callback.onFailure());
+
+            }
+        });
+
+        return plazasLibre;
+    }
+
+    public LiveData<Integer> getTotalPlazasByTipoPlaza(TipoPlaza tipoPlaza, MainActivity activity, Callback callback){
+        MutableLiveData<Integer> totalPlazas = new MutableLiveData<>();
+        activity.getDb().collection(PLAZAS_COLLECTION)
+                .whereEqualTo(TIPO_PLAZA, tipoPlaza)
+                .get()
+                .addOnSuccessListener(documentReference -> {
+                    totalPlazas.setValue(documentReference.size());
+                    callback.onSuccess();
+                }).addOnFailureListener(e -> callback.onFailure());
+        return totalPlazas;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.lksnext.ParkingBGomez.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentInicioMainBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
+import com.lksnext.ParkingBGomez.enums.TipoPlaza;
+import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import com.lksnext.ParkingBGomez.view.adapter.ReservaCardAdapter;
 import com.lksnext.ParkingBGomez.view.decoration.ReservaCardDecoration;
@@ -32,6 +35,8 @@ import java.util.List;
 
 public class InicioMainFragment extends Fragment{
 
+    public static final String INICIO_MAIN_FRAGMENT = "InicioMainFragment";
+    public static final String PLAZAS_INTENTALO_DE_NUEVO_MAS_TARDE = "La aplicación no ha podido cargar las plazas libres. Intentalo de nuevo más tarde.";
     private FragmentInicioMainBinding binding;
 
     @Override
@@ -68,6 +73,7 @@ public class InicioMainFragment extends Fragment{
 
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -79,8 +85,14 @@ public class InicioMainFragment extends Fragment{
 
         DataRepository dataRepository = DataRepository.getInstance();
 
+
         if (activity != null) {
             fetchAndSetReservasFromDB(recyclerView, dataRepository, activity);
+
+            fetchAndSetAvailableCarSlots(view, dataRepository, activity);
+            fetchAndSetAvailableElectricCarSlots(view, dataRepository, activity);
+            fetchAndSetAvailableAccessibleCarSlots(view, dataRepository, activity);
+            fetchAndSetMotorCycleSlots(view, dataRepository, activity);
         }
     }
 
@@ -117,12 +129,171 @@ public class InicioMainFragment extends Fragment{
 
             @Override
             public void onFailure() {
-                Log.d("ReservaCardAdapter", "Failure :(");
                 Snackbar.make(view,
                         "La aplicación no ha podido cargar tus proximas reservas. Intentalo de nuevo más tarde.",
                         BaseTransientBottomBar.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void fetchAndSetAvailableCarSlots(@NonNull View view, DataRepository dataRepository, MainActivity activity) {
+        LiveData<Integer> availableCarSlotsNumber = dataRepository.getPlazasLibresByTipoPlaza(TipoPlaza.ESTANDAR, TimeUtils.getNowEpoch() , activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(INICIO_MAIN_FRAGMENT, "Plazas libres for car fetched from db");
+            }
+
+            @Override
+            public void onFailure() {
+                Snackbar.make(view,
+                        PLAZAS_INTENTALO_DE_NUEVO_MAS_TARDE,
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+
+        LiveData<Integer>  totalTipoPlaza = dataRepository.getTotalPlazasByTipoPlaza(TipoPlaza.ESTANDAR, activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(INICIO_MAIN_FRAGMENT, "Total plazas for car fetched from db");
+            }
+
+            @Override
+            public void onFailure() {
+                Snackbar.make(view,
+                        "La aplicación no ha podido cargar las plazas totales. Intentalo de nuevo más tarde.",
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+
+        availableCarSlotsNumber.observe(getViewLifecycleOwner(), availableCarSlots ->
+                totalTipoPlaza.observe(getViewLifecycleOwner(), totalSlots -> {
+                            if (totalSlots != 0){
+                                int availableCarSlotsPercentage = 100 - ((availableCarSlots*100 / totalSlots*100) / 100);
+                                binding.carSlotsAvailableIndicator.setProgressCompat(availableCarSlotsPercentage, true);
+                                binding.carSlotsAvailableText.setText(totalSlots-availableCarSlots + " / " + totalSlots);
+                            }
+                        }
+                ));
+    }
+
+    private void fetchAndSetAvailableElectricCarSlots(@NonNull View view, DataRepository dataRepository, MainActivity activity) {
+        LiveData<Integer> availableElectricCarSlotsNumber = dataRepository.getPlazasLibresByTipoPlaza(TipoPlaza.ELECTRICO, TimeUtils.getNowEpoch() , activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(INICIO_MAIN_FRAGMENT, "Plazas libres for electric car fetched from db");
+            }
+
+            @Override
+            public void onFailure() {
+                Snackbar.make(view,
+                        PLAZAS_INTENTALO_DE_NUEVO_MAS_TARDE,
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+
+        LiveData<Integer>  totalTipoPlaza = dataRepository.getTotalPlazasByTipoPlaza(TipoPlaza.ELECTRICO, activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(INICIO_MAIN_FRAGMENT, "Total plazas for electric car fetched from db");
+            }
+
+            @Override
+            public void onFailure() {
+                Snackbar.make(view,
+                        "La aplicación no ha podido cargar las plazas totales. Intentalo de nuevo más tarde.",
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+
+        availableElectricCarSlotsNumber.observe(getViewLifecycleOwner(), availableCarSlots ->
+                totalTipoPlaza.observe(getViewLifecycleOwner(), totalSlots -> {
+                            if (totalSlots != 0){
+                                int availableCarSlotsPercentage = 100 - ((availableCarSlots*100 / totalSlots*100) / 100);
+                                binding.electricCarSlotsAvailableIndicator.setProgressCompat(availableCarSlotsPercentage, true);
+                                binding.electricCarSlotsAvailableText.setText(totalSlots-availableCarSlots + " / " + totalSlots);
+                            }
+                        }
+                ));
+    }
+
+    private void fetchAndSetAvailableAccessibleCarSlots(@NonNull View view, DataRepository dataRepository, MainActivity activity) {
+        LiveData<Integer> availableAccessibleCarSlotsNumber = dataRepository.getPlazasLibresByTipoPlaza(TipoPlaza.DISCAPACITADO, TimeUtils.getNowEpoch() , activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(INICIO_MAIN_FRAGMENT, "Plazas libres for accessible car fetched from db");
+            }
+
+            @Override
+            public void onFailure() {
+                Snackbar.make(view,
+                        PLAZAS_INTENTALO_DE_NUEVO_MAS_TARDE,
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+
+        LiveData<Integer>  totalTipoPlaza = dataRepository.getTotalPlazasByTipoPlaza(TipoPlaza.DISCAPACITADO, activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(INICIO_MAIN_FRAGMENT, "Total plazas for accessible car fetched from db");
+            }
+
+            @Override
+            public void onFailure() {
+                Snackbar.make(view,
+                        PLAZAS_INTENTALO_DE_NUEVO_MAS_TARDE,
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+
+        availableAccessibleCarSlotsNumber.observe(getViewLifecycleOwner(), availableCarSlots ->
+                totalTipoPlaza.observe(getViewLifecycleOwner(), totalSlots -> {
+                            if (totalSlots != 0){
+                                int availableCarSlotsPercentage = 100 - ((availableCarSlots*100 / totalSlots*100) / 100);
+                                binding.accessibleCarSlotsAvailableIndicator.setProgressCompat(availableCarSlotsPercentage, true);
+                                binding.accessibleCarSlotsAvailableText.setText(totalSlots-availableCarSlots + " / " + totalSlots);
+                            }
+                        }
+                ));
+    }
+
+    private void fetchAndSetMotorCycleSlots(@NonNull View view, DataRepository dataRepository, MainActivity activity) {
+        LiveData<Integer> availableMotorCycleSlotsNumber = dataRepository.getPlazasLibresByTipoPlaza(TipoPlaza.MOTO, TimeUtils.getNowEpoch() , activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(INICIO_MAIN_FRAGMENT, "Plazas libres for MotorCycle fetched from db");
+            }
+
+            @Override
+            public void onFailure() {
+                Snackbar.make(view,
+                        PLAZAS_INTENTALO_DE_NUEVO_MAS_TARDE,
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+
+        LiveData<Integer>  totalTipoPlaza = dataRepository.getTotalPlazasByTipoPlaza(TipoPlaza.MOTO, activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(INICIO_MAIN_FRAGMENT, "Total plazas for car fetched from db");
+            }
+
+            @Override
+            public void onFailure() {
+                Snackbar.make(view,
+                        PLAZAS_INTENTALO_DE_NUEVO_MAS_TARDE,
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+
+        availableMotorCycleSlotsNumber.observe(getViewLifecycleOwner(), availableCarSlots ->
+                totalTipoPlaza.observe(getViewLifecycleOwner(), totalSlots -> {
+                            if (totalSlots != 0){
+                                int availableCarSlotsPercentage = 100 - ((availableCarSlots*100 / totalSlots*100) / 100);
+                                binding.motorcycleSlotsAvailableIndicator.setProgressCompat(availableCarSlotsPercentage, true);
+                                binding.motorcycleSlotsAvailableText.setText(totalSlots-availableCarSlots + " / " + totalSlots);
+                            }
+                        }
+                ));
     }
 
     @Override

@@ -70,4 +70,5 @@
     <string name="donostia_san_sebastian_gipuzkoa">20018 Donostia-San Sebastian, Gipuzkoa</string>
     <string name="navegar">Navegar</string>
     <string name="no_hay_reservas">No hay reservas para los próximos días</string>
+    <string name="plazas_libres_es_estos_momentos">Plazas libres es estos momentos</string>
 </resources>
