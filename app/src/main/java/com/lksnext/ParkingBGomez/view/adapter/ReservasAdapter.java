@@ -62,8 +62,8 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
         if (hora != null) {
             TextView hourInterval = holder.itemView.findViewById(R.id.date_info);
             DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            final Date horaInicioDate = new Date(hora.getHoraInicio());
-            final Date horaFinDate = new Date(hora.getHoraFin());
+            final Date horaInicioDate = new Date(hora.getHoraInicio() * 1000);
+            final Date horaFinDate = new Date(hora.getHoraFin() * 1000);
             final String horaInicioString = df.format(horaInicioDate);
             final String horaFinString = df.format(horaFinDate);
             Log.d("setTimeInfo", horaInicioString + " - " + horaFinString);
