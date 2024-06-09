@@ -113,8 +113,10 @@ public class DataRepository {
                 .get()
                 .addOnSuccessListener(documentReference -> {
                     documentReference.toObjects(Reserva.class).forEach(reserva -> {
-                        long fechaEpoch = TimeUtils.convertLocalDateTimeStringToEpoch(reserva.getFecha());
-                        if (fechaEpoch > nowEpoch && !reservas.contains(reserva)) {
+                        final long horaInicioEpoch = reserva.getHora().getHoraInicio();
+                        final long horaFinEpoch = reserva.getHora().getHoraFin();
+                        if ((nowEpoch >= horaInicioEpoch && nowEpoch <= horaFinEpoch)
+                                && !reservas.contains(reserva)) {
                             reservas.add(reserva);
                         }
                     });
