@@ -60,6 +60,20 @@ public class DataRepository {
                 .addOnFailureListener(e -> callback.onFailure());
     }
 
+    public void deleteReserva(Reserva reserva, MainActivity activity, Callback callback){
+        activity.getDb().collection(RESERVAS_COLLECTION).document(reserva.getUuid())
+                .delete()
+                .addOnSuccessListener(documentReference -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onFailure());
+    }
+
+    public void updateReserva(Reserva reserva, MainActivity activity, Callback callback){
+        activity.getDb().collection(RESERVAS_COLLECTION).document(reserva.getUuid())
+                .set(reserva)
+                .addOnSuccessListener(documentReference -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onFailure());
+    }
+
     public LiveData<Map<LocalDate, List<Reserva>>> getReservasByDayByUser(String user, MainActivity activity, Callback callback){
         MutableLiveData<Map<LocalDate, List<Reserva>>> liveData = new MutableLiveData<>();
         Map<LocalDate, List<Reserva>> reservasByDay = new HashMap<>();

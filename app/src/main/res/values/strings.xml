@@ -71,4 +71,6 @@
     <string name="navegar">Navegar</string>
     <string name="no_hay_reservas">No hay reservas para los próximos días</string>
     <string name="plazas_libres_es_estos_momentos">Plazas libres es estos momentos</string>
+    <string name="cancelar_reserva">Cancelar reserva</string>
+    <string name="editar_reserva">Editar reserva</string>
 </resources>
