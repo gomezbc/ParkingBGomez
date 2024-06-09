@@ -36,7 +36,7 @@ public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
         ReservasAdapter adapter = new ReservasAdapter();
 
         adapter.submitList(reservas);
-        recyclerView.addItemDecoration(new ReservaItemDecoration(15));
+        recyclerView.addItemDecoration(new ReservaItemDecoration(25));
         recyclerView.setAdapter(adapter);
 
         boolean isRecyclerViewEmpty = Objects.requireNonNull(recyclerView.getAdapter())

@@ -88,7 +88,7 @@ public class ReservasMainFragment extends Fragment{
 
         ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay);
 
-        recyclerView.addItemDecoration(new ReservaItemDecoration(20));
+        recyclerView.addItemDecoration(new ReservaItemDecoration(10));
         recyclerView.setAdapter(adapter);
     }
 
