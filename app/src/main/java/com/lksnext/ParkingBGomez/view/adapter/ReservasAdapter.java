@@ -52,13 +52,6 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
         Hora hora = setSelectedHourInterval(reserva);
 
-        if (reserva.getPlaza() == null || reserva.getFecha() == null ||
-                reserva.getHora() == null || reserva.getUsuario() == null) {
-            binding.reservaCard.setVisibility(View.GONE);
-            binding.reservaFallbackCard.setVisibility(View.VISIBLE);
-            return;
-        }
-
         var modalBottomSheet = new ReservaListBottomSheet(reserva, refreshListener);
 
         binding.optionsButton.setOnClickListener(v ->
@@ -114,18 +107,16 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
     @Nullable
     private Hora setSelectedHourInterval(Reserva reserva) {
         Hora hora = reserva.getHora();
-        if (hora != null) {
-            final Duration duration = Duration.between(
-                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
-                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
-            final long minutesToHour = duration.toMinutes() % 60;
+        final Duration duration = Duration.between(
+                TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
+                TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
+        final long minutesToHour = duration.toMinutes() % 60;
 
-            if (minutesToHour == 0L) {
-                binding.textDuration.setText(String.format("%s h%s", duration.toHours(), DIVIDER));
-            } else {
-                binding.textDuration.setText(
-                        String.format("%s,%s h%s", duration.toHours(), minutesToHour, DIVIDER));
-            }
+        if (minutesToHour == 0L) {
+            binding.textDuration.setText(String.format("%s h%s", duration.toHours(), DIVIDER));
+        } else {
+            binding.textDuration.setText(
+                    String.format("%s,%s h%s", duration.toHours(), minutesToHour, DIVIDER));
         }
         return hora;
     }

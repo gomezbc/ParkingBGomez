@@ -68,11 +68,6 @@ public class ReservaCardAdapter extends ListAdapter<Reserva, ReservaCardAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Reserva reserva = getItem(position);
 
-        if (reserva.getPlaza() == null || reserva.getFecha() == null ||
-                reserva.getHora() == null || reserva.getUsuario() == null) {
-            return;
-        }
-
         setCardInfo(reserva);
 
     }
@@ -84,22 +79,20 @@ public class ReservaCardAdapter extends ListAdapter<Reserva, ReservaCardAdapter.
         this.views.chipParkingSlot.setText(String.valueOf(reserva.getPlaza().getId()));
     }
 
-    @Nullable
     private Hora setSelectedHourInterval(Reserva reserva) {
         Hora hora = reserva.getHora();
-        if (hora != null) {
-            final Duration duration = Duration.between(
-                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
-                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
-            final long minutesToHour = duration.toMinutes() % 60;
-            if (minutesToHour == 0L) {
-                views.chipConfirmHourInterval.setVisibility(View.VISIBLE);
-                views.chipSelectedDuration.setText(String.format("%s h", duration.toHours()));
-            } else {
-                views.chipSelectedDuration.setText(
-                        String.format("%s,%s h", duration.toHours(), minutesToHour));
-            }
+        final Duration duration = Duration.between(
+                TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
+                TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
+        final long minutesToHour = duration.toMinutes() % 60;
+        if (minutesToHour == 0L) {
+            views.chipConfirmHourInterval.setVisibility(View.VISIBLE);
+            views.chipSelectedDuration.setText(String.format("%s h", duration.toHours()));
+        } else {
+            views.chipSelectedDuration.setText(
+                    String.format("%s,%s h", duration.toHours(), minutesToHour));
         }
+
         return hora;
     }
 
