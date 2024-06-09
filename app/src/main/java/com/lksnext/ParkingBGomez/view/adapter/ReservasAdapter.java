@@ -2,22 +2,23 @@ package com.lksnext.ParkingBGomez.view.adapter;
 
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.lksnext.ParkingBGomez.R;
+import com.lksnext.ParkingBGomez.databinding.ItemReservaBinding;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.Reserva;
+import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
+import com.lksnext.ParkingBGomez.view.ReservaListBottomSheet;
 import com.lksnext.ParkingBGomez.view.holder.ReservasViewHolder;
 
 import java.time.Duration;
@@ -26,93 +27,106 @@ import java.util.Locale;
 
 public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
-    public ReservasAdapter() {
+    private ItemReservaBinding binding;
+    private static final String DIVIDER = " · ";
+    private final FragmentManager fragmentManager;
+    private final ReservationsRefreshListener refreshListener;
+
+    public ReservasAdapter(@NonNull FragmentManager fragmentManager, ReservationsRefreshListener refreshListener) {
         super(Reserva.DIFF_CALLBACK);
+        this.fragmentManager = fragmentManager;
+        this.refreshListener = refreshListener;
     }
 
 
     @NonNull
     @Override
     public ReservasViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_reserva, parent, false);
-        return new ReservasViewHolder(view);
+        binding = ItemReservaBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ReservasViewHolder(binding.getRoot());
     }
 
     @Override
     public void onBindViewHolder(@NonNull ReservasViewHolder holder, int position) {
         final Reserva reserva = getItem(position);
+        final Hora hora = reserva.getHora();
 
-        Hora hora = setSelectedHourInterval(holder, reserva);
+        binding.reservaCard.setVisibility(View.VISIBLE);
+        binding.reservaFallbackCard.setVisibility(View.GONE);
 
-        if (reserva.getPlaza() == null || reserva.getFecha() == null ||
-                reserva.getHora() == null || reserva.getUsuario() == null) {
-            return;
-        }
+        setOptionsModal(hora, reserva);
 
-        long plaza = reserva.getPlaza().getId();
-        TextView plazaTextView = holder.itemView.findViewById(R.id.text_parking_slot);
-        plazaTextView.setText(String.valueOf(plaza));
-
-        setTipoPlazaInfo(holder, reserva);
-
-        setTimeInfo(holder, hora);
+        setPlazaIdInfo(reserva);
+        setSelectedHourInterval(reserva);
+        setTipoPlazaInfo(reserva);
+        setTimeInfo(hora);
     }
 
-    private static void setTimeInfo(@NonNull ReservasViewHolder holder, Hora hora) {
+    private void setOptionsModal(Hora hora, Reserva reserva) {
+        final long nowEpoch = TimeUtils.getNowEpoch();
+        if (hora.getHoraInicio() >= nowEpoch) {
+            // Show options button if the reservation is in the future
+            var modalBottomSheet = new ReservaListBottomSheet(reserva, refreshListener);
+            binding.optionsButton.setOnClickListener(v ->
+                    modalBottomSheet.show(this.fragmentManager, ReservaListBottomSheet.TAG));
+        }else {
+            // Hide options button if the reservation is in the past
+            binding.optionsButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void setPlazaIdInfo(Reserva reserva) {
+        long plaza = reserva.getPlaza().getId();
+        binding.textParkingSlot.setText(String.format(Locale.getDefault(), "%s%s", DIVIDER, plaza));
+    }
+
+    private void setTimeInfo(Hora hora) {
         if (hora != null) {
-            TextView hourInterval = holder.itemView.findViewById(R.id.date_info);
             DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            final Date horaInicioDate = new Date(hora.getHoraInicio());
-            final Date horaFinDate = new Date(hora.getHoraFin());
+            final Date horaInicioDate = new Date(hora.getHoraInicio() * 1000);
+            final Date horaFinDate = new Date(hora.getHoraFin() * 1000);
             final String horaInicioString = df.format(horaInicioDate);
             final String horaFinString = df.format(horaFinDate);
-            Log.d("setTimeInfo", horaInicioString + " - " + horaFinString);
-            hourInterval.setText(String.format("%s - %s", horaInicioString, horaFinString));
+            binding.dateInfo.setText(String.format("%s - %s%s", horaInicioString, horaFinString, DIVIDER));
         }
     }
 
-    private static void setTipoPlazaInfo(@NonNull ReservasViewHolder holder, Reserva reserva) {
+    private void setTipoPlazaInfo(Reserva reserva) {
         TipoPlaza tipoPlaza = reserva.getPlaza().getTipoPlaza();
-        TextView tipoPlazaTextView = holder.itemView.findViewById(R.id.text_slot_type);
-        ImageView tipoPlazaImageView = holder.itemView.findViewById(R.id.tipo_plaza_icon);
         if (tipoPlaza != null) {
             switch (tipoPlaza){
                 case ESTANDAR:
-                    tipoPlazaTextView.setText(R.string.car);
-                    tipoPlazaImageView.setImageResource(R.drawable.directions_car_fill);
+                    binding.textSlotType.setText(R.string.car);
+                    binding.tipoPlazaIcon.setImageResource(R.drawable.directions_car_fill);
                     break;
                 case ELECTRICO:
-                    tipoPlazaTextView.setText(R.string.electric_car);
-                    tipoPlazaImageView.setImageResource(R.drawable.electric_car_fill);
+                    binding.textSlotType.setText(R.string.electric_car);
+                    binding.tipoPlazaIcon.setImageResource(R.drawable.electric_car_fill);
                     break;
                 case MOTO:
-                    tipoPlazaTextView.setText(R.string.motorcycle);
-                    tipoPlazaImageView.setImageResource(R.drawable.motorcycle_fill);
+                    binding.textSlotType.setText(R.string.motorcycle);
+                    binding.tipoPlazaIcon.setImageResource(R.drawable.motorcycle_fill);
                     break;
                 case DISCAPACITADO:
-                    tipoPlazaTextView.setText(R.string.accessible_car);
-                    tipoPlazaImageView.setImageResource(R.drawable.accessible_forward_fill);
+                    binding.textSlotType.setText(R.string.accessible_car);
+                    binding.tipoPlazaIcon.setImageResource(R.drawable.accessible_forward_fill);
                     break;
             }
         }
     }
 
-    @Nullable
-    private static Hora setSelectedHourInterval(@NonNull ReservasViewHolder holder, Reserva reserva) {
+    private void setSelectedHourInterval(Reserva reserva) {
         Hora hora = reserva.getHora();
-        if (hora != null) {
-            final Duration duration = Duration.between(
-                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
-                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
-            final long minutesToHour = duration.toMinutes() % 60;
-            TextView durationTextView = holder.itemView.findViewById(R.id.text_duration);
-            if (minutesToHour == 0L) {
-                durationTextView.setText(String.format("%s h", duration.toHours()));
-            } else {
-                durationTextView.setText(
-                        String.format("%s,%s h", duration.toHours(), minutesToHour));
-            }
+        final Duration duration = Duration.between(
+                TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
+                TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
+        final long minutesToHour = duration.toMinutes() % 60;
+
+        if (minutesToHour == 0L) {
+            binding.textDuration.setText(String.format("%s h%s", duration.toHours(), DIVIDER));
+        } else {
+            binding.textDuration.setText(
+                    String.format("%s,%s h%s", duration.toHours(), minutesToHour, DIVIDER));
         }
-        return hora;
     }
 }

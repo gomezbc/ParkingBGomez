@@ -115,6 +115,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/reservas_card_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -158,5 +159,259 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/espacios_disponibles_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="16sp"
+            android:layout_marginHorizontal="16dp"
+            android:text="@string/plazas_libres_es_estos_momentos"
+            app:layout_constraintTop_toBottomOf="@id/reservas_card_container"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/espacios_disponibles_label">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/carSlotsAvailableCard"
+                android:layout_width="80dp"
+                android:layout_height="140dp"
+                android:layout_marginEnd="10dp"
+                app:cardElevation="1dp"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/car"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp">
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/carSlotsAvailableIndicator"
+                        style="Widget.Material3.CircularProgressIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        app:indicatorSize="50dp"
+                        app:showAnimationBehavior="inward"
+                        app:trackColor="#66B39DDB"
+                        app:trackCornerRadius="10dp" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/car"
+                        android:src="@drawable/directions_car_fill" />
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                <TextView
+                    android:id="@+id/carSlotsAvailableText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:text=""
+                    android:textSize="14sp" />
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/electricCarSlotsAvailableCard"
+                android:layout_width="80dp"
+                android:layout_height="140dp"
+                android:layout_marginEnd="10dp"
+                app:cardElevation="1dp"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/electric_car"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp">
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/electricCarSlotsAvailableIndicator"
+                        style="Widget.Material3.CircularProgressIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        app:indicatorSize="50dp"
+                        app:showAnimationBehavior="inward"
+                        app:trackColor="#66B39DDB"
+                        app:trackCornerRadius="10dp" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/electric_car"
+                        android:src="@drawable/electric_car_fill" />
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                <TextView
+                    android:id="@+id/electricCarSlotsAvailableText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:text=""
+                    android:textSize="14sp" />
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/accessibleCarSlotsAvailableCard"
+                android:layout_width="80dp"
+                android:layout_height="140dp"
+                android:layout_marginEnd="10dp"
+                app:cardElevation="1dp"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/accessible_car"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp">
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/accessibleCarSlotsAvailableIndicator"
+                        style="Widget.Material3.CircularProgressIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        app:indicatorSize="50dp"
+                        app:showAnimationBehavior="inward"
+                        app:trackColor="#66B39DDB"
+                        app:trackCornerRadius="10dp" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/accessible_car"
+                        android:src="@drawable/accessible_forward_fill" />
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                <TextView
+                    android:id="@+id/accessibleCarSlotsAvailableText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:text=""
+                    android:textSize="14sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/motorcycleSlotsAvailableCard"
+                android:layout_width="80dp"
+                android:layout_height="140dp"
+                app:cardElevation="1dp"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/motorcycle"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp">
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/motorcycleSlotsAvailableIndicator"
+                        style="Widget.Material3.CircularProgressIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        app:indicatorSize="50dp"
+                        app:showAnimationBehavior="inward"
+                        app:trackColor="#66B39DDB"
+                        app:trackCornerRadius="10dp" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/accessible_car"
+                        android:src="@drawable/motorcycle_fill" />
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                <TextView
+                    android:id="@+id/motorcycleSlotsAvailableText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:text=""
+                    android:textSize="14sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/nueva_reserva_extended_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/boton_para_a_adir_nueva_reserva"
+        android:text="@string/nueva_reserva"
+        app:icon="@drawable/baseline_add_24" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

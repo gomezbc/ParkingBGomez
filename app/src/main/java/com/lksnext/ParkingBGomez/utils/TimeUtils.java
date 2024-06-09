@@ -9,14 +9,21 @@ import java.time.ZoneOffset;
 
 public class TimeUtils {
 
-    public static final ZoneOffset ZONE_OFFSET = ZoneOffset.UTC;
+    public static final ZoneId ZONE_ID = ZoneId.systemDefault();
+    public static final ZoneOffset ZONE_OFFSET = ZONE_ID.getRules().getOffset(Instant.now());
 
     private TimeUtils() {
     }
 
     public static long convertLocalTimeToEpoch(LocalTime localTime) {
         LocalDateTime localDateTime = localTime.atDate(LocalDate.now());
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Instant instant = localDateTime.atZone(ZONE_ID).toInstant();
+        return instant.getEpochSecond();
+    }
+
+    public static long convertLocalTimeToEpochWithLocalDate(LocalTime localTime, LocalDate localDate) {
+        LocalDateTime localDateTime = localTime.atDate(localDate);
+        Instant instant = localDateTime.atZone(ZONE_ID).toInstant();
         return instant.getEpochSecond();
     }
 
@@ -26,7 +33,7 @@ public class TimeUtils {
 
     public static LocalDateTime convertEpochTolocalDateTime(long epoch) {
         Instant instant = Instant.ofEpochSecond(epoch);
-        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        return LocalDateTime.ofInstant(instant, ZONE_ID);
     }
 
     public static long convertLocalDateTimeStringToEpoch(String localDateTimeString) {
@@ -37,5 +44,9 @@ public class TimeUtils {
     public static long getStartOfTodayEpoch() {
         LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
         return startOfToday.toEpochSecond(ZONE_OFFSET);
+    }
+
+    public static long getNowEpoch() {
+        return LocalDateTime.now().toEpochSecond(ZONE_OFFSET);
     }
 }

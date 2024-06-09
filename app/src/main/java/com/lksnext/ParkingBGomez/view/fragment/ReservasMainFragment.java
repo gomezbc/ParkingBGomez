@@ -5,18 +5,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
+import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import com.lksnext.ParkingBGomez.view.adapter.ReservasByDayAdapter;
 import com.lksnext.ParkingBGomez.view.decoration.ReservaItemDecoration;
@@ -25,8 +29,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
-public class ReservasMainFragment extends Fragment{
+public class ReservasMainFragment extends Fragment implements ReservationsRefreshListener {
 
     private FragmentReservasMainBinding binding;
 
@@ -36,6 +41,11 @@ public class ReservasMainFragment extends Fragment{
             Bundle savedInstanceState
     ) {
         binding = FragmentReservasMainBinding.inflate(inflater, container, false);
+
+        binding.nuevaReservaExtendedFab.setOnClickListener(l -> {
+            NavController navController = Navigation.findNavController(binding.getRoot());
+            navController.navigate(R.id.action_reservasMainFragment_to_reservarMainFragment);
+        });
 
         return binding.getRoot();
     }
@@ -47,10 +57,11 @@ public class ReservasMainFragment extends Fragment{
         RecyclerView recyclerView = binding.recyclerViewReservas;
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false));
 
-        fetchAndSetReservasFromDB(recyclerView);
+        fetchAndSetReservasFromDB(recyclerView, binding.progressBarReservas);
     }
 
-    private void fetchAndSetReservasFromDB(RecyclerView recyclerView) {
+    private void fetchAndSetReservasFromDB(RecyclerView recyclerView, LinearProgressIndicator progressBar) {
+        progressBar.show();
         MainActivity activity = (MainActivity) getActivity();
 
         DataRepository dataRepository = DataRepository.getInstance();
@@ -61,15 +72,16 @@ public class ReservasMainFragment extends Fragment{
 
             // Is executed when the LiveData object is updated with db data
             liveData.observe(getViewLifecycleOwner(), dbReservasByDay -> {
+                progressBar.hide();
                 if (dbReservasByDay != null) {
-                    setReservasFromDB(recyclerView, dbReservasByDay);
+                    setReservasFromDB(recyclerView, dbReservasByDay, activity);
                 }
             });
         }
     }
 
-    private static void setReservasFromDB(RecyclerView recyclerView, Map<LocalDate,
-            List<Reserva>> dbReservasByDay) {
+    private void setReservasFromDB(RecyclerView recyclerView, Map<LocalDate,
+            List<Reserva>> dbReservasByDay, MainActivity activity) {
 
         // Get the current date
         LocalDate today = LocalDate.now();
@@ -81,9 +93,12 @@ public class ReservasMainFragment extends Fragment{
             date = date.plusDays(1);
         }
 
-        ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay);
+        // Order by date
+        dbReservasByDay = new TreeMap<>(dbReservasByDay).descendingMap();
 
-        recyclerView.addItemDecoration(new ReservaItemDecoration(20));
+        ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay, activity.getSupportFragmentManager(), this);
+
+        recyclerView.addItemDecoration(new ReservaItemDecoration(10));
         recyclerView.setAdapter(adapter);
     }
 
@@ -107,5 +122,10 @@ public class ReservasMainFragment extends Fragment{
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onReservationsRefreshRequested() {
+        fetchAndSetReservasFromDB(binding.recyclerViewReservas, binding.progressBarReservas);
     }
 }

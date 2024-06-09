@@ -10,11 +10,12 @@ public class HourItem{
     private boolean enabled;
     private boolean inMiddle;
 
-    public HourItem(String hour, boolean enabled){
+    public HourItem(@NonNull String hour, boolean enabled){
         this.hour = hour;
         this.enabled = enabled;
     }
 
+    @NonNull
     public String getHour() {
         return hour;
     }

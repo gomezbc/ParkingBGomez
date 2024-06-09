@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -15,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarConfirmBinding;
@@ -42,22 +45,61 @@ public class ReservarConfirm extends Fragment {
 
     private FragmentReservarConfirmBinding binding;
     private MainViewModel mainViewModel;
+    private Plaza plazaToReserve;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentReservarConfirmBinding.inflate(inflater, container, false);
 
-        setCardInfo();
+        // Disable the button until the data is loaded
+        binding.buttonReservarConfirmar.setEnabled(false);
+
+        MainActivity activity = (MainActivity) getActivity();
+
+        DataRepository dataRepository = DataRepository.getInstance();
+
+        setCardInfo(activity, dataRepository);
 
         return binding.getRoot();
     }
 
-    private void setCardInfo() {
+    private void setCardInfo(MainActivity activity, DataRepository dataRepository) {
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        TipoPlaza tipoPlaza = mainViewModel.getSelectedTipoPlaza().getValue();
+
         final Hora hora = setSelectedHourInterval();
+        fetchAndSetPlazaLibre(activity, dataRepository, tipoPlaza, hora);
         setTipoPlazaInfo();
         setSelectedDateInfo(hora);
+    }
+
+    private void fetchAndSetPlazaLibre(MainActivity activity, DataRepository dataRepository, TipoPlaza tipoPlaza, Hora hora) {
+        LiveData<Plaza> plazaLiveData = dataRepository.getPlazaNotReservadaByTipoPlaza(tipoPlaza, hora, activity, new Callback() {
+            @Override
+            public void onSuccess() {
+                binding.buttonReservarConfirmar.setEnabled(true);
+                binding.progressBarConfirmReserva.hide();
+            }
+
+            @Override
+            public void onFailure() {
+                Snackbar.make(binding.getRoot(),
+                        "La aplicación no ha podido cargar plazas libres. Intentalo de nuevo más tarde.",
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+        plazaLiveData.observe(getViewLifecycleOwner(), plaza -> {
+            if (plaza != null) {
+                binding.chipParkingSlot.setText(String.valueOf(plaza.getId()));
+                plazaToReserve = plaza;
+            }else {
+                Snackbar.make(binding.getRoot(),
+                        "No hay plazas disponibles para reservar.",
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+                binding.buttonReservarConfirmar.setEnabled(false);
+            }
+        });
     }
 
     @Nullable
@@ -122,7 +164,7 @@ public class ReservarConfirm extends Fragment {
                 Navigation.findNavController(v)
                         .navigate(R.id.action_reservarConfirm_to_reservarMainFragment));
 
-        binding.buttonReservarContinue.setOnClickListener(v -> {
+        binding.buttonReservarConfirmar.setOnClickListener(v -> {
 
             mainViewModel.setReservarState(ReservarState.RESERVADO);
 
@@ -134,7 +176,7 @@ public class ReservarConfirm extends Fragment {
             Reserva reserva = new Reserva(fechaHoraInicio.toString(),
                     "usuario",
                     UUID.randomUUID().toString(),
-                    new Plaza(1L, mainViewModel.getSelectedTipoPlaza().getValue()),
+                    plazaToReserve,
                     mainViewModel.getSelectedHour().getValue());
 
             MainActivity activity = (MainActivity) getActivity();
@@ -145,14 +187,16 @@ public class ReservarConfirm extends Fragment {
                 dataRepository.saveReserva(reserva, activity, new Callback() {
                     @Override
                     public void onSuccess() {
-                        Log.d("addReserva","DocumentSnapshot added: ");
+                        Log.d("addReserva","Reserva added: " + reserva);
                         Navigation.findNavController(v)
                                 .navigate(R.id.action_reservarConfirm_to_reservarMainFragment_confirmed);
                     }
 
                     @Override
                     public void onFailure() {
-                        Log.d("addReserva","Error adding document: ");
+                        Snackbar.make(v,
+                                "La aplicación no ha podido guardar la reserva. Intentalo de nuevo más tarde.",
+                                BaseTransientBottomBar.LENGTH_LONG).show();
                     }
                 });
             }

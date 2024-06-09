@@ -12,6 +12,7 @@ import com.lksnext.ParkingBGomez.domain.HourItem;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -100,9 +101,10 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         if (selectedHours.size() == 2){
             final LocalTime horaInicio = LocalTime.parse(selectedHours.get(0).getHour());
             final LocalTime horaFin = LocalTime.parse(selectedHours.get(1).getHour());
+            final LocalDate localDate = mainViewModel.getSelectedDate().getValue();
             mainViewModel.setSelectedHour(new Hora(
-                    TimeUtils.convertLocalTimeToEpoch(horaInicio),
-                    TimeUtils.convertLocalTimeToEpoch(horaFin)));
+                    TimeUtils.convertLocalTimeToEpochWithLocalDate(horaInicio, localDate),
+                    TimeUtils.convertLocalTimeToEpochWithLocalDate(horaFin, localDate)));
         }else {
             mainViewModel.setSelectedHour(null);
         }

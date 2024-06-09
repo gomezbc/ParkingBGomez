@@ -16,7 +16,7 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(String fecha, String usuario, String uuid, Plaza plaza, Hora hora) {
+    public Reserva(@NonNull String fecha, @NonNull String usuario, @NonNull String uuid, @NonNull Plaza plaza, @NonNull Hora hora) {
         this.fecha = fecha;
         this.usuario = usuario;
         this.uuid = uuid;
@@ -24,39 +24,44 @@ public class Reserva {
         this.hora = hora;
     }
 
+    @NonNull
     public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(@NonNull String fecha) {
         this.fecha = fecha;
     }
 
+    @NonNull
     public String getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(String usuario) {
+    public void setUsuario(@NonNull String usuario) {
         this.usuario = usuario;
     }
 
+    @NonNull
     public String getUuid() {
         return uuid;
     }
 
+    @NonNull
     public Plaza getPlaza() {
         return plaza;
     }
 
-    public void setPlaza(Plaza plaza) {
+    public void setPlaza(@NonNull Plaza plaza) {
         this.plaza = plaza;
     }
 
+    @NonNull
     public Hora getHora() {
         return hora;
     }
 
-    public void setHora(Hora hora) {
+    public void setHora(@NonNull Hora hora) {
         this.hora = hora;
     }
 
