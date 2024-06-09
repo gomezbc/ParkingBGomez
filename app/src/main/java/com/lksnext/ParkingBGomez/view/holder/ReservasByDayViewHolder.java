@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,8 +21,12 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
-    public ReservasByDayViewHolder(@NonNull View itemView) {
+
+    private final FragmentManager fragmentManager;
+
+    public ReservasByDayViewHolder(@NonNull View itemView, @NonNull FragmentManager fragmentManager) {
         super(itemView);
+        this.fragmentManager = fragmentManager;
     }
 
     public void bind(LocalDate localDate, List<Reserva> reservas) {
@@ -33,7 +38,7 @@ public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
         recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL,false));
         recyclerView.setNestedScrollingEnabled(false);
 
-        ReservasAdapter adapter = new ReservasAdapter();
+        ReservasAdapter adapter = new ReservasAdapter(this.fragmentManager);
 
         adapter.submitList(reservas);
         recyclerView.addItemDecoration(new ReservaItemDecoration(25));

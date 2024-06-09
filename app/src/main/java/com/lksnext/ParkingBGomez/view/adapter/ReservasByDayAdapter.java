@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lksnext.ParkingBGomez.R;
@@ -18,19 +19,18 @@ import java.util.Map;
 public class ReservasByDayAdapter extends RecyclerView.Adapter<ReservasByDayViewHolder> {
 
     private Map<LocalDate, List<Reserva>> reservasByDay;
+    private final FragmentManager fragmentManager;
 
-    public ReservasByDayAdapter() {
-    }
-
-    public ReservasByDayAdapter(Map<LocalDate, List<Reserva>> reservasByDay) {
+    public ReservasByDayAdapter(Map<LocalDate, List<Reserva>> reservasByDay, @NonNull FragmentManager fragmentManager) {
         this.reservasByDay = reservasByDay;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
     @Override
     public ReservasByDayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reserva_day_group, parent, false);
-        return new ReservasByDayViewHolder(view);
+        return new ReservasByDayViewHolder(view, fragmentManager);
     }
 
     @Override

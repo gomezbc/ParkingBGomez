@@ -2,23 +2,22 @@ package com.lksnext.ParkingBGomez.view.adapter;
 
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.lksnext.ParkingBGomez.R;
+import com.lksnext.ParkingBGomez.databinding.ItemReservaBinding;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
+import com.lksnext.ParkingBGomez.view.ReservaListBottomSheet;
 import com.lksnext.ParkingBGomez.view.holder.ReservasViewHolder;
 
 import java.time.Duration;
@@ -27,60 +26,47 @@ import java.util.Locale;
 
 public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
-    private static class Views {
-        private final TextView plazaNumberTextView;
-        private final TextView tipoPlazaTextView;
-        private final ImageView tipoPlazaImageView;
-        private final TextView dateInfoTextView;
-        private final TextView durationTextView;
-        private final LinearLayout reservaCard;
-        private final LinearLayout reservaFallbackCard;
-
-        public Views(ReservasViewHolder holder) {
-            plazaNumberTextView = holder.itemView.findViewById(R.id.text_parking_slot);
-            tipoPlazaTextView = holder.itemView.findViewById(R.id.text_slot_type);
-            tipoPlazaImageView = holder.itemView.findViewById(R.id.tipo_plaza_icon);
-            dateInfoTextView = holder.itemView.findViewById(R.id.date_info);
-            durationTextView = holder.itemView.findViewById(R.id.text_duration);
-            reservaCard = holder.itemView.findViewById(R.id.reservaCard);
-            reservaFallbackCard = holder.itemView.findViewById(R.id.reservaFallbackCard);
-        }
-    }
-
-    private Views views;
+    private ItemReservaBinding binding;
     private static final String DIVIDER = " · ";
+    private final FragmentManager fragmentManager;
 
-    public ReservasAdapter() {
+    public ReservasAdapter(@NonNull FragmentManager fragmentManager) {
         super(Reserva.DIFF_CALLBACK);
+        this.fragmentManager = fragmentManager;
     }
 
 
     @NonNull
     @Override
     public ReservasViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_reserva, parent, false);
-        return new ReservasViewHolder(view);
+        binding = ItemReservaBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ReservasViewHolder(binding.getRoot());
     }
 
     @Override
     public void onBindViewHolder(@NonNull ReservasViewHolder holder, int position) {
-        this.views = new Views(holder);
         final Reserva reserva = getItem(position);
 
         Hora hora = setSelectedHourInterval(reserva);
 
         if (reserva.getPlaza() == null || reserva.getFecha() == null ||
                 reserva.getHora() == null || reserva.getUsuario() == null) {
-            this.views.reservaCard.setVisibility(View.GONE);
-            this.views.reservaFallbackCard.setVisibility(View.VISIBLE);
+            binding.reservaCard.setVisibility(View.GONE);
+            binding.reservaFallbackCard.setVisibility(View.VISIBLE);
             return;
         }
 
-        this.views.reservaCard.setVisibility(View.VISIBLE);
-        this.views.reservaFallbackCard.setVisibility(View.GONE);
+        var modalBottomSheet = new ReservaListBottomSheet(reserva);
+
+        binding.optionsButton.setOnClickListener(v ->
+                modalBottomSheet.show(this.fragmentManager, ReservaListBottomSheet.TAG));
+
+
+        binding.reservaCard.setVisibility(View.VISIBLE);
+        binding.reservaFallbackCard.setVisibility(View.GONE);
 
         long plaza = reserva.getPlaza().getId();
-        this.views.plazaNumberTextView.setText(DIVIDER + plaza);
+        binding.textParkingSlot.setText(String.format(Locale.getDefault(), "%s%s", DIVIDER, plaza));
 
         setTipoPlazaInfo(reserva);
 
@@ -94,7 +80,7 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
             final Date horaFinDate = new Date(hora.getHoraFin() * 1000);
             final String horaInicioString = df.format(horaInicioDate);
             final String horaFinString = df.format(horaFinDate);
-            this.views.dateInfoTextView.setText(String.format("%s - %s%s", horaInicioString, horaFinString, DIVIDER));
+            binding.dateInfo.setText(String.format("%s - %s%s", horaInicioString, horaFinString, DIVIDER));
         }
     }
 
@@ -103,20 +89,20 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
         if (tipoPlaza != null) {
             switch (tipoPlaza){
                 case ESTANDAR:
-                    this.views.tipoPlazaTextView.setText(R.string.car);
-                    this.views.tipoPlazaImageView.setImageResource(R.drawable.directions_car_fill);
+                    binding.textSlotType.setText(R.string.car);
+                    binding.tipoPlazaIcon.setImageResource(R.drawable.directions_car_fill);
                     break;
                 case ELECTRICO:
-                    this.views.tipoPlazaTextView.setText(R.string.electric_car);
-                    this.views.tipoPlazaImageView.setImageResource(R.drawable.electric_car_fill);
+                    binding.textSlotType.setText(R.string.electric_car);
+                    binding.tipoPlazaIcon.setImageResource(R.drawable.electric_car_fill);
                     break;
                 case MOTO:
-                    this.views.tipoPlazaTextView.setText(R.string.motorcycle);
-                    this.views.tipoPlazaImageView.setImageResource(R.drawable.motorcycle_fill);
+                    binding.textSlotType.setText(R.string.motorcycle);
+                    binding.tipoPlazaIcon.setImageResource(R.drawable.motorcycle_fill);
                     break;
                 case DISCAPACITADO:
-                    this.views.tipoPlazaTextView.setText(R.string.accessible_car);
-                    this.views.tipoPlazaImageView.setImageResource(R.drawable.accessible_forward_fill);
+                    binding.textSlotType.setText(R.string.accessible_car);
+                    binding.tipoPlazaIcon.setImageResource(R.drawable.accessible_forward_fill);
                     break;
             }
         }
@@ -132,9 +118,9 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
             final long minutesToHour = duration.toMinutes() % 60;
 
             if (minutesToHour == 0L) {
-                this.views.durationTextView.setText(String.format("%s h%s", duration.toHours(), DIVIDER));
+                binding.textDuration.setText(String.format("%s h%s", duration.toHours(), DIVIDER));
             } else {
-                this.views.durationTextView.setText(
+                binding.textDuration.setText(
                         String.format("%s,%s h%s", duration.toHours(), minutesToHour, DIVIDER));
             }
         }

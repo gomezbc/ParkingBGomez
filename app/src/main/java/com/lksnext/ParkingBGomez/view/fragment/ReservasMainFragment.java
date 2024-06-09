@@ -64,14 +64,14 @@ public class ReservasMainFragment extends Fragment{
             liveData.observe(getViewLifecycleOwner(), dbReservasByDay -> {
                 progressBar.hide();
                 if (dbReservasByDay != null) {
-                    setReservasFromDB(recyclerView, dbReservasByDay);
+                    setReservasFromDB(recyclerView, dbReservasByDay, activity);
                 }
             });
         }
     }
 
-    private static void setReservasFromDB(RecyclerView recyclerView, Map<LocalDate,
-            List<Reserva>> dbReservasByDay) {
+    private void setReservasFromDB(RecyclerView recyclerView, Map<LocalDate,
+            List<Reserva>> dbReservasByDay, MainActivity activity) {
 
         // Get the current date
         LocalDate today = LocalDate.now();
@@ -86,7 +86,7 @@ public class ReservasMainFragment extends Fragment{
         // Order by date
         dbReservasByDay = new TreeMap<>(dbReservasByDay).descendingMap();
 
-        ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay);
+        ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay, activity.getSupportFragmentManager());
 
         recyclerView.addItemDecoration(new ReservaItemDecoration(10));
         recyclerView.setAdapter(adapter);
