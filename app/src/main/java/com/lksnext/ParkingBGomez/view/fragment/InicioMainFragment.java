@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,10 +49,12 @@ public class InicioMainFragment extends Fragment{
 
         binding.verTodasReservas.setOnClickListener(l -> {
             NavController navController = Navigation.findNavController(binding.getRoot());
-            NavOptions navOptions = new NavOptions.Builder()
-                    .setPopUpTo(R.id.inicioMainFragment, true)
-                    .build();
-            navController.navigate(R.id.action_to_reservas_by_ver_todas_text, null, navOptions);
+            navController.navigate(R.id.action_to_reservas_by_ver_todas_text);
+        });
+
+        binding.nuevaReservaExtendedFab.setOnClickListener(l -> {
+            NavController navController = Navigation.findNavController(binding.getRoot());
+            navController.navigate(R.id.action_inicioMainFragment_to_reservarMainFragment);
         });
 
         binding.buttonZuatzuMaps.setOnClickListener(l -> {

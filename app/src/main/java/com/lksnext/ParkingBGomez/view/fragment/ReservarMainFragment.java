@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,11 +62,7 @@ public class ReservarMainFragment extends Fragment{
 
         binding.buttonReservarContinue.setOnClickListener(v -> {
                     NavController navController = Navigation.findNavController(v);
-                    NavOptions navOptions = new NavOptions.Builder()
-                            .setPopUpTo(R.id.reservarMainFragment, true)
-                            .build();
-                    navController.navigate(
-                            R.id.action_reservarMainFragment_to_reservarConfirm, null, navOptions);
+                    navController.navigate(R.id.action_reservarMainFragment_to_reservarConfirm);
                 });
 
         restoreSelectedDateDayChip();
@@ -138,11 +133,8 @@ public class ReservarMainFragment extends Fragment{
             Snackbar.make(view, "Reserva realizada", BaseTransientBottomBar.LENGTH_LONG)
                     .setAction("Ver", v -> {
                                 NavController navController = Navigation.findNavController(v);
-                                NavOptions navOptions = new NavOptions.Builder()
-                                        .setPopUpTo(R.id.reservarMainFragment, true)
-                                        .build();
                                 navController.navigate(
-                                        R.id.action_reservarMainFragment_to_reservasMainFragment, null, navOptions);
+                                        R.id.action_reservarMainFragment_to_reservasMainFragment);
                             })
                     .show();
 

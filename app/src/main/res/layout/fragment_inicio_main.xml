@@ -403,4 +403,15 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/nueva_reserva_extended_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/boton_para_a_adir_nueva_reserva"
+        android:text="@string/nueva_reserva"
+        app:icon="@drawable/baseline_add_24" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
