@@ -49,24 +49,35 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ReservasViewHolder holder, int position) {
         final Reserva reserva = getItem(position);
-
-        Hora hora = setSelectedHourInterval(reserva);
-
-        var modalBottomSheet = new ReservaListBottomSheet(reserva, refreshListener);
-
-        binding.optionsButton.setOnClickListener(v ->
-                modalBottomSheet.show(this.fragmentManager, ReservaListBottomSheet.TAG));
-
+        final Hora hora = reserva.getHora();
 
         binding.reservaCard.setVisibility(View.VISIBLE);
         binding.reservaFallbackCard.setVisibility(View.GONE);
 
+        setOptionsModal(hora, reserva);
+
+        setPlazaIdInfo(reserva);
+        setSelectedHourInterval(reserva);
+        setTipoPlazaInfo(reserva);
+        setTimeInfo(hora);
+    }
+
+    private void setOptionsModal(Hora hora, Reserva reserva) {
+        final long nowEpoch = TimeUtils.getNowEpoch();
+        if (hora.getHoraInicio() >= nowEpoch) {
+            // Show options button if the reservation is in the future
+            var modalBottomSheet = new ReservaListBottomSheet(reserva, refreshListener);
+            binding.optionsButton.setOnClickListener(v ->
+                    modalBottomSheet.show(this.fragmentManager, ReservaListBottomSheet.TAG));
+        }else {
+            // Hide options button if the reservation is in the past
+            binding.optionsButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void setPlazaIdInfo(Reserva reserva) {
         long plaza = reserva.getPlaza().getId();
         binding.textParkingSlot.setText(String.format(Locale.getDefault(), "%s%s", DIVIDER, plaza));
-
-        setTipoPlazaInfo(reserva);
-
-        setTimeInfo(hora);
     }
 
     private void setTimeInfo(Hora hora) {
@@ -104,8 +115,7 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
         }
     }
 
-    @Nullable
-    private Hora setSelectedHourInterval(Reserva reserva) {
+    private void setSelectedHourInterval(Reserva reserva) {
         Hora hora = reserva.getHora();
         final Duration duration = Duration.between(
                 TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
@@ -118,6 +128,5 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
             binding.textDuration.setText(
                     String.format("%s,%s h%s", duration.toHours(), minutesToHour, DIVIDER));
         }
-        return hora;
     }
 }
