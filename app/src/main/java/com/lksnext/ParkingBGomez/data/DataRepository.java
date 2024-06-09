@@ -114,9 +114,7 @@ public class DataRepository {
                 .addOnSuccessListener(documentReference -> {
                     documentReference.toObjects(Reserva.class).forEach(reserva -> {
                         final long horaInicioEpoch = reserva.getHora().getHoraInicio();
-                        final long horaFinEpoch = reserva.getHora().getHoraFin();
-                        if ((nowEpoch >= horaInicioEpoch && nowEpoch <= horaFinEpoch)
-                                && !reservas.contains(reserva)) {
+                        if (nowEpoch <= horaInicioEpoch && !reservas.contains(reserva)) {
                             reservas.add(reserva);
                         }
                     });
