@@ -17,6 +17,7 @@ import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
+import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import com.lksnext.ParkingBGomez.view.adapter.ReservasByDayAdapter;
 import com.lksnext.ParkingBGomez.view.decoration.ReservaItemDecoration;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ReservasMainFragment extends Fragment{
+public class ReservasMainFragment extends Fragment implements ReservationsRefreshListener {
 
     private FragmentReservasMainBinding binding;
 
@@ -52,6 +53,7 @@ public class ReservasMainFragment extends Fragment{
     }
 
     private void fetchAndSetReservasFromDB(RecyclerView recyclerView, LinearProgressIndicator progressBar) {
+        progressBar.show();
         MainActivity activity = (MainActivity) getActivity();
 
         DataRepository dataRepository = DataRepository.getInstance();
@@ -86,7 +88,7 @@ public class ReservasMainFragment extends Fragment{
         // Order by date
         dbReservasByDay = new TreeMap<>(dbReservasByDay).descendingMap();
 
-        ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay, activity.getSupportFragmentManager());
+        ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay, activity.getSupportFragmentManager(), this);
 
         recyclerView.addItemDecoration(new ReservaItemDecoration(10));
         recyclerView.setAdapter(adapter);
@@ -112,5 +114,10 @@ public class ReservasMainFragment extends Fragment{
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onReservationsRefreshRequested() {
+        fetchAndSetReservasFromDB(binding.recyclerViewReservas, binding.progressBarReservas);
     }
 }

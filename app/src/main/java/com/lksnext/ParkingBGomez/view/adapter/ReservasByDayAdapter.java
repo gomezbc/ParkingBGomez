@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.domain.Reserva;
+import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
 import com.lksnext.ParkingBGomez.view.holder.ReservasByDayViewHolder;
 
 import java.time.LocalDate;
@@ -18,19 +19,21 @@ import java.util.Map;
 
 public class ReservasByDayAdapter extends RecyclerView.Adapter<ReservasByDayViewHolder> {
 
-    private Map<LocalDate, List<Reserva>> reservasByDay;
+    private final Map<LocalDate, List<Reserva>> reservasByDay;
     private final FragmentManager fragmentManager;
+    private final ReservationsRefreshListener refreshListener;
 
-    public ReservasByDayAdapter(Map<LocalDate, List<Reserva>> reservasByDay, @NonNull FragmentManager fragmentManager) {
+    public ReservasByDayAdapter(Map<LocalDate, List<Reserva>> reservasByDay, @NonNull FragmentManager fragmentManager, @NonNull ReservationsRefreshListener refreshListener) {
         this.reservasByDay = reservasByDay;
         this.fragmentManager = fragmentManager;
+        this.refreshListener = refreshListener;
     }
 
     @NonNull
     @Override
     public ReservasByDayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reserva_day_group, parent, false);
-        return new ReservasByDayViewHolder(view, fragmentManager);
+        return new ReservasByDayViewHolder(view, fragmentManager, refreshListener);
     }
 
     @Override

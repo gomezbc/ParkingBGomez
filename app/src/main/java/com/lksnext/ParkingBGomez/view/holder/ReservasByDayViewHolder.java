@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.domain.Reserva;
+import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
 import com.lksnext.ParkingBGomez.view.adapter.ReservasAdapter;
 import com.lksnext.ParkingBGomez.view.decoration.ReservaItemDecoration;
 
@@ -23,10 +24,12 @@ import java.util.Objects;
 public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
 
     private final FragmentManager fragmentManager;
+    private final ReservationsRefreshListener refreshListener;
 
-    public ReservasByDayViewHolder(@NonNull View itemView, @NonNull FragmentManager fragmentManager) {
+    public ReservasByDayViewHolder(@NonNull View itemView, @NonNull FragmentManager fragmentManager, @NonNull ReservationsRefreshListener refreshListener) {
         super(itemView);
         this.fragmentManager = fragmentManager;
+        this.refreshListener = refreshListener;
     }
 
     public void bind(LocalDate localDate, List<Reserva> reservas) {
@@ -38,7 +41,7 @@ public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
         recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL,false));
         recyclerView.setNestedScrollingEnabled(false);
 
-        ReservasAdapter adapter = new ReservasAdapter(this.fragmentManager);
+        ReservasAdapter adapter = new ReservasAdapter(this.fragmentManager, refreshListener);
 
         adapter.submitList(reservas);
         recyclerView.addItemDecoration(new ReservaItemDecoration(25));

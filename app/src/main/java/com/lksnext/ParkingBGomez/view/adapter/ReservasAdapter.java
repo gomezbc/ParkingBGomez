@@ -15,6 +15,7 @@ import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.ItemReservaBinding;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.Reserva;
+import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.view.ReservaListBottomSheet;
@@ -29,10 +30,12 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
     private ItemReservaBinding binding;
     private static final String DIVIDER = " · ";
     private final FragmentManager fragmentManager;
+    private final ReservationsRefreshListener refreshListener;
 
-    public ReservasAdapter(@NonNull FragmentManager fragmentManager) {
+    public ReservasAdapter(@NonNull FragmentManager fragmentManager, ReservationsRefreshListener refreshListener) {
         super(Reserva.DIFF_CALLBACK);
         this.fragmentManager = fragmentManager;
+        this.refreshListener = refreshListener;
     }
 
 
@@ -56,7 +59,7 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
             return;
         }
 
-        var modalBottomSheet = new ReservaListBottomSheet(reserva);
+        var modalBottomSheet = new ReservaListBottomSheet(reserva, refreshListener);
 
         binding.optionsButton.setOnClickListener(v ->
                 modalBottomSheet.show(this.fragmentManager, ReservaListBottomSheet.TAG));

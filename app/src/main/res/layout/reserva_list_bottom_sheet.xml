@@ -4,38 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.ReservaListBottomSheet"
     style="@style/Theme.MaterialComponents.BottomSheetDialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="24dp">
 
         <!-- Drag handle for accessibility -->
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:id="@+id/drag_handle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="16dp">
 
             <Button
+                android:id="@+id/reserva_edit_button"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Editar reserva"
+                android:text="@string/editar_reserva"
                 android:textAlignment="viewStart"
                 app:icon="@drawable/round_edit_24" />
 
             <Button
-                style="@style/Widget.Material3.Button.TextButton"
+                android:id="@+id/reserva_delete_button"
+                style="@style/DeleteItemButton.Theme.ParkingBGomez"
+                android:theme="@style/DeleteItemButton.Theme.ParkingBGomez"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cancelar reserva"
+                android:text="@string/cancelar_reserva"
                 android:textAlignment="viewStart"
-                app:icon="@drawable/baseline_delete_forever_24" />
+                android:textColor="?attr/colorTertiary"
+                app:icon="@drawable/baseline_delete_forever_24"
+                app:iconTint="?attr/colorTertiary" />
 
         </LinearLayout>
 
