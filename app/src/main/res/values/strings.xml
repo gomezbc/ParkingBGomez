@@ -69,7 +69,7 @@
     <string name="parque_empresarial_zuatzu">Parque Empresarial Zuatzu</string>
     <string name="donostia_san_sebastian_gipuzkoa">20018 Donostia-San Sebastian, Gipuzkoa</string>
     <string name="navegar">Navegar</string>
-    <string name="no_hay_reservas">No hay reservas para los próximos días</string>
+    <string name="no_hay_reservas">No tienes reservas activas</string>
     <string name="plazas_libres_es_estos_momentos">Plazas libres es estos momentos</string>
     <string name="cancelar_reserva">Cancelar reserva</string>
     <string name="editar_reserva">Editar reserva</string>

@@ -103,10 +103,10 @@ public class DataRepository {
     }
 
 
-    public LiveData<List<Reserva>> getReservasOfUserAfterToday(String user, MainActivity activity, Callback callback){
+    public LiveData<List<Reserva>> getActiveReservasOfUser(String user, MainActivity activity, Callback callback){
         MutableLiveData<List<Reserva>> liveData = new MutableLiveData<>();
         List<Reserva> reservas = new ArrayList<>();
-        long startOfTodayEpoch = TimeUtils.getStartOfTodayEpoch();
+        long nowEpoch = TimeUtils.getNowEpoch();
 
         activity.getDb().collection(RESERVAS_COLLECTION)
                 .whereEqualTo(USUARIO, user)
@@ -114,7 +114,7 @@ public class DataRepository {
                 .addOnSuccessListener(documentReference -> {
                     documentReference.toObjects(Reserva.class).forEach(reserva -> {
                         long fechaEpoch = TimeUtils.convertLocalDateTimeStringToEpoch(reserva.getFecha());
-                        if (fechaEpoch > startOfTodayEpoch && !reservas.contains(reserva)) {
+                        if (fechaEpoch > nowEpoch && !reservas.contains(reserva)) {
                             reservas.add(reserva);
                         }
                     });

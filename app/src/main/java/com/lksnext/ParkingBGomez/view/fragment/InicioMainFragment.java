@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +50,10 @@ public class InicioMainFragment extends Fragment{
 
         binding.verTodasReservas.setOnClickListener(l -> {
             NavController navController = Navigation.findNavController(binding.getRoot());
-            navController.navigate(R.id.action_to_reservas_by_ver_todas_text);
+            NavOptions navOptions = new NavOptions.Builder()
+                    .setPopUpTo(R.id.inicioMainFragment, true)
+                    .build();
+            navController.navigate(R.id.action_to_reservas_by_ver_todas_text, null, navOptions);
         });
 
         binding.buttonZuatzuMaps.setOnClickListener(l -> {
@@ -98,7 +102,7 @@ public class InicioMainFragment extends Fragment{
 
     private void fetchAndSetReservasFromDB(RecyclerView recyclerView, DataRepository dataRepository, MainActivity activity) {
         LiveData<List<Reserva>> liveData =
-                getReservasOfUserAfterToday(recyclerView, dataRepository, activity);
+                getActiveReservasOfUser(recyclerView, dataRepository, activity);
 
         // Is executed when the LiveData object is updated with db data
         liveData.observe(getViewLifecycleOwner(), dbReservasOfUser -> {
@@ -120,8 +124,8 @@ public class InicioMainFragment extends Fragment{
         }
     }
 
-    private static LiveData<List<Reserva>> getReservasOfUserAfterToday(View view, DataRepository dataRepository, MainActivity activity) {
-        return dataRepository.getReservasOfUserAfterToday("usuario", activity, new Callback() {
+    private static LiveData<List<Reserva>> getActiveReservasOfUser(View view, DataRepository dataRepository, MainActivity activity) {
+        return dataRepository.getActiveReservasOfUser("usuario", activity, new Callback() {
             @Override
             public void onSuccess() {
                 Log.d("ReservaCardAdapter", "Reservas of user after today fetched from db");
