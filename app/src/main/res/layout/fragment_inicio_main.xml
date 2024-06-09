@@ -185,17 +185,25 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/carSlotsAvailableCard"
-                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="80dp"
-                android:layout_height="100dp"
+                android:layout_height="140dp"
                 android:layout_marginEnd="10dp"
                 app:cardElevation="1dp"
                 app:strokeWidth="1dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/car"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="48dp">
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/carSlotsAvailableIndicator"
@@ -232,17 +240,25 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/electricCarSlotsAvailableCard"
-                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="80dp"
-                android:layout_height="100dp"
+                android:layout_height="140dp"
                 android:layout_marginEnd="10dp"
                 app:cardElevation="1dp"
                 app:strokeWidth="1dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/electric_car"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="48dp">
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/electricCarSlotsAvailableIndicator"
@@ -279,17 +295,25 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/accessibleCarSlotsAvailableCard"
-                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="80dp"
-                android:layout_height="100dp"
+                android:layout_height="140dp"
                 android:layout_marginEnd="10dp"
                 app:cardElevation="1dp"
                 app:strokeWidth="1dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/accessible_car"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="48dp">
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/accessibleCarSlotsAvailableIndicator"
@@ -325,16 +349,24 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/motorcycleSlotsAvailableCard"
-                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="80dp"
-                android:layout_height="100dp"
+                android:layout_height="140dp"
                 app:cardElevation="1dp"
                 app:strokeWidth="1dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/motorcycle"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
 
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="48dp">
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/motorcycleSlotsAvailableIndicator"
