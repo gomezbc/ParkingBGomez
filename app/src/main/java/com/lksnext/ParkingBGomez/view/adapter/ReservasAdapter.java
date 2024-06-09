@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,29 @@ import java.util.Locale;
 
 public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
+    private static class Views {
+        private final TextView plazaNumberTextView;
+        private final TextView tipoPlazaTextView;
+        private final ImageView tipoPlazaImageView;
+        private final TextView dateInfoTextView;
+        private final TextView durationTextView;
+        private final LinearLayout reservaCard;
+        private final LinearLayout reservaFallbackCard;
+
+        public Views(ReservasViewHolder holder) {
+            plazaNumberTextView = holder.itemView.findViewById(R.id.text_parking_slot);
+            tipoPlazaTextView = holder.itemView.findViewById(R.id.text_slot_type);
+            tipoPlazaImageView = holder.itemView.findViewById(R.id.tipo_plaza_icon);
+            dateInfoTextView = holder.itemView.findViewById(R.id.date_info);
+            durationTextView = holder.itemView.findViewById(R.id.text_duration);
+            reservaCard = holder.itemView.findViewById(R.id.reservaCard);
+            reservaFallbackCard = holder.itemView.findViewById(R.id.reservaFallbackCard);
+        }
+    }
+
+    private Views views;
+    private static final String DIVIDER = " · ";
+
     public ReservasAdapter() {
         super(Reserva.DIFF_CALLBACK);
     }
@@ -40,77 +64,78 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ReservasViewHolder holder, int position) {
+        this.views = new Views(holder);
         final Reserva reserva = getItem(position);
 
-        Hora hora = setSelectedHourInterval(holder, reserva);
+        Hora hora = setSelectedHourInterval(reserva);
 
         if (reserva.getPlaza() == null || reserva.getFecha() == null ||
                 reserva.getHora() == null || reserva.getUsuario() == null) {
+            this.views.reservaCard.setVisibility(View.GONE);
+            this.views.reservaFallbackCard.setVisibility(View.VISIBLE);
             return;
         }
 
+        this.views.reservaCard.setVisibility(View.VISIBLE);
+        this.views.reservaFallbackCard.setVisibility(View.GONE);
+
         long plaza = reserva.getPlaza().getId();
-        TextView plazaTextView = holder.itemView.findViewById(R.id.text_parking_slot);
-        plazaTextView.setText(String.valueOf(plaza));
+        this.views.plazaNumberTextView.setText(DIVIDER + plaza);
 
-        setTipoPlazaInfo(holder, reserva);
+        setTipoPlazaInfo(reserva);
 
-        setTimeInfo(holder, hora);
+        setTimeInfo(hora);
     }
 
-    private static void setTimeInfo(@NonNull ReservasViewHolder holder, Hora hora) {
+    private void setTimeInfo(Hora hora) {
         if (hora != null) {
-            TextView hourInterval = holder.itemView.findViewById(R.id.date_info);
             DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
             final Date horaInicioDate = new Date(hora.getHoraInicio() * 1000);
             final Date horaFinDate = new Date(hora.getHoraFin() * 1000);
             final String horaInicioString = df.format(horaInicioDate);
             final String horaFinString = df.format(horaFinDate);
-            Log.d("setTimeInfo", horaInicioString + " - " + horaFinString);
-            hourInterval.setText(String.format("%s - %s", horaInicioString, horaFinString));
+            this.views.dateInfoTextView.setText(String.format("%s - %s%s", horaInicioString, horaFinString, DIVIDER));
         }
     }
 
-    private static void setTipoPlazaInfo(@NonNull ReservasViewHolder holder, Reserva reserva) {
+    private void setTipoPlazaInfo(Reserva reserva) {
         TipoPlaza tipoPlaza = reserva.getPlaza().getTipoPlaza();
-        TextView tipoPlazaTextView = holder.itemView.findViewById(R.id.text_slot_type);
-        ImageView tipoPlazaImageView = holder.itemView.findViewById(R.id.tipo_plaza_icon);
         if (tipoPlaza != null) {
             switch (tipoPlaza){
                 case ESTANDAR:
-                    tipoPlazaTextView.setText(R.string.car);
-                    tipoPlazaImageView.setImageResource(R.drawable.directions_car_fill);
+                    this.views.tipoPlazaTextView.setText(R.string.car);
+                    this.views.tipoPlazaImageView.setImageResource(R.drawable.directions_car_fill);
                     break;
                 case ELECTRICO:
-                    tipoPlazaTextView.setText(R.string.electric_car);
-                    tipoPlazaImageView.setImageResource(R.drawable.electric_car_fill);
+                    this.views.tipoPlazaTextView.setText(R.string.electric_car);
+                    this.views.tipoPlazaImageView.setImageResource(R.drawable.electric_car_fill);
                     break;
                 case MOTO:
-                    tipoPlazaTextView.setText(R.string.motorcycle);
-                    tipoPlazaImageView.setImageResource(R.drawable.motorcycle_fill);
+                    this.views.tipoPlazaTextView.setText(R.string.motorcycle);
+                    this.views.tipoPlazaImageView.setImageResource(R.drawable.motorcycle_fill);
                     break;
                 case DISCAPACITADO:
-                    tipoPlazaTextView.setText(R.string.accessible_car);
-                    tipoPlazaImageView.setImageResource(R.drawable.accessible_forward_fill);
+                    this.views.tipoPlazaTextView.setText(R.string.accessible_car);
+                    this.views.tipoPlazaImageView.setImageResource(R.drawable.accessible_forward_fill);
                     break;
             }
         }
     }
 
     @Nullable
-    private static Hora setSelectedHourInterval(@NonNull ReservasViewHolder holder, Reserva reserva) {
+    private Hora setSelectedHourInterval(Reserva reserva) {
         Hora hora = reserva.getHora();
         if (hora != null) {
             final Duration duration = Duration.between(
                     TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
                     TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
             final long minutesToHour = duration.toMinutes() % 60;
-            TextView durationTextView = holder.itemView.findViewById(R.id.text_duration);
+
             if (minutesToHour == 0L) {
-                durationTextView.setText(String.format("%s h", duration.toHours()));
+                this.views.durationTextView.setText(String.format("%s h%s", duration.toHours(), DIVIDER));
             } else {
-                durationTextView.setText(
-                        String.format("%s,%s h", duration.toHours(), minutesToHour));
+                this.views.durationTextView.setText(
+                        String.format("%s,%s h%s", duration.toHours(), minutesToHour, DIVIDER));
             }
         }
         return hora;

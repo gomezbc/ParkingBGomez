@@ -36,7 +36,7 @@ public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
         ReservasAdapter adapter = new ReservasAdapter();
 
         adapter.submitList(reservas);
-        recyclerView.addItemDecoration(new ReservaItemDecoration(15));
+        recyclerView.addItemDecoration(new ReservaItemDecoration(25));
         recyclerView.setAdapter(adapter);
 
         boolean isRecyclerViewEmpty = Objects.requireNonNull(recyclerView.getAdapter())
@@ -66,7 +66,7 @@ public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
             String monthName = localDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault());
 
             // Format the date string
-            formattedDate = String.format("%s, %d %s", dayOfWeek, localDate.getDayOfMonth(), monthName);
+            formattedDate = String.format(Locale.getDefault(), "%s, %d %s", dayOfWeek, localDate.getDayOfMonth(), monthName);
         }
 
         dateTextView.setText(formattedDate);
