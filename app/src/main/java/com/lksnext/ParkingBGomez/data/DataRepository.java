@@ -3,8 +3,10 @@ package com.lksnext.ParkingBGomez.data;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.Query;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.Plaza;
@@ -153,24 +155,33 @@ public class DataRepository {
 
         plazasIdInThatHoursLiveData.observe(activity, plazas -> {
             if (plazas.isEmpty()){
-                liveData.setValue(null);
+                getAnyFreePlazaWithQuery(plazasCollection.whereEqualTo(TIPO_PLAZA, tipoPlaza),
+                        liveData,
+                        callback);
             }else {
                 // Gets the first plaza with a documentId not in the list of plazasIdInThatHours
-                plazasCollection.whereNotIn(FieldPath.documentId(),
-                                plazas.stream().map(String::valueOf).collect(Collectors.toList()))
-                        .whereEqualTo(TIPO_PLAZA, tipoPlaza)
-                        .limit(1)
-                        .get()
-                        .addOnSuccessListener(documentReference -> {
-                            if (!documentReference.isEmpty()){
-                                liveData.setValue(documentReference.toObjects(Plaza.class).get(0));
-                            }
-                            callback.onSuccess();
-                        }).addOnFailureListener(e -> callback.onFailure());
+                getAnyFreePlazaWithQuery(
+                        plazasCollection.whereNotIn(FieldPath.documentId(),plazas.stream()
+                                        .map(String::valueOf).collect(Collectors.toList()))
+                        .whereEqualTo(TIPO_PLAZA, tipoPlaza),
+                        liveData,
+                        callback);
             }
         });
 
         return liveData;
+    }
+
+    private static void getAnyFreePlazaWithQuery(Query query, MutableLiveData<Plaza> liveData, Callback callback) {
+        query
+            .limit(1)
+            .get()
+            .addOnSuccessListener(documentReference -> {
+                if (!documentReference.isEmpty()) {
+                    liveData.setValue(documentReference.toObjects(Plaza.class).get(0));
+                }
+                callback.onSuccess();
+            }).addOnFailureListener(e -> callback.onFailure());
     }
 
     public LiveData<Integer> getPlazasLibresByTipoPlaza(TipoPlaza tipoPlaza, long horaActual ,MainActivity activity, Callback callback){
@@ -208,7 +219,14 @@ public class DataRepository {
 
         plazasIdInThatHoursLiveData.observe(activity, plazas -> {
             if (plazas.isEmpty()){
-                plazasLibre.setValue(0);
+                plazasCollection.whereEqualTo(TIPO_PLAZA, tipoPlaza)
+                        .get()
+                        .addOnSuccessListener(documentReference -> {
+                            documentReference.toObjects(Plaza.class)
+                                    .forEach(plaza -> totalPlazas.getAndIncrement());
+                            plazasLibre.setValue(totalPlazas.get());
+                            callback.onSuccess();
+                        }).addOnFailureListener(e -> callback.onFailure());
             }else {
                 // Gets the first plaza with a documentId not in the list of plazasIdInThatHours
                 plazasCollection.whereNotIn(FieldPath.documentId(),
@@ -233,9 +251,10 @@ public class DataRepository {
         MutableLiveData<Integer> totalPlazas = new MutableLiveData<>();
         activity.getDb().collection(PLAZAS_COLLECTION)
                 .whereEqualTo(TIPO_PLAZA, tipoPlaza)
-                .get()
+                .count()
+                .get(AggregateSource.SERVER)
                 .addOnSuccessListener(documentReference -> {
-                    totalPlazas.setValue(documentReference.size());
+                    totalPlazas.setValue((int) documentReference.getCount());
                     callback.onSuccess();
                 }).addOnFailureListener(e -> callback.onFailure());
         return totalPlazas;
