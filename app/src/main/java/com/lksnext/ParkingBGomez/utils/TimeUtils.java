@@ -21,6 +21,12 @@ public class TimeUtils {
         return instant.getEpochSecond();
     }
 
+    public static long convertLocalTimeToEpochWithLocalDate(LocalTime localTime, LocalDate localDate) {
+        LocalDateTime localDateTime = localTime.atDate(localDate);
+        Instant instant = localDateTime.atZone(ZONE_ID).toInstant();
+        return instant.getEpochSecond();
+    }
+
     public static LocalDateTime convertStringToDateLocalTime(String localDateTime) {
         return LocalDateTime.parse(localDateTime);
     }
