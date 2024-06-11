@@ -1,11 +1,14 @@
 package com.lksnext.ParkingBGomez.data;
 
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.Query;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Hora;
@@ -18,10 +21,10 @@ import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,7 @@ public class DataRepository {
     private static final String PLAZAS_COLLECTION = "plazas";
     private static final String TIPO_PLAZA = "tipoPlaza";
     private static final String USUARIO = "usuario";
+    private static final String FECHA = "fecha";
 
     private static DataRepository instance;
     private DataRepository(){
@@ -78,21 +82,23 @@ public class DataRepository {
 
     public LiveData<Map<LocalDate, List<Reserva>>> getReservasByDayByUser(String user, MainActivity activity, Callback callback){
         MutableLiveData<Map<LocalDate, List<Reserva>>> liveData = new MutableLiveData<>();
-        Map<LocalDate, List<Reserva>> reservasByDay = new HashMap<>();
-        final LocalDateTime firstDayOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
+        // TreeMap to Order by date ascending
+        Map<LocalDate, List<Reserva>> reservasByDay = new TreeMap<>();
+        final long firstDayOfMonth =
+                TimeUtils.convertLocalDateTimeToEpoch(LocalDate.now().withDayOfMonth(1).atStartOfDay());
+
+        Timestamp firstTimestampOfTheMonth = new Timestamp(firstDayOfMonth, 0);
 
         activity.getDb().collection(RESERVAS_COLLECTION)
                 .whereEqualTo(USUARIO, user)
+                .whereGreaterThanOrEqualTo(FECHA, firstTimestampOfTheMonth)
                 .get()
                 .addOnSuccessListener(documentReference -> {
                         documentReference.toObjects(Reserva.class).forEach(reserva -> {
-                            final LocalDate date = TimeUtils.convertStringToDateLocalTime(reserva.getFecha()).toLocalDate();
+                            final LocalDate date = TimeUtils.convertTimestampToLocalDateTime(reserva.getFecha()).toLocalDate();
                             reservasByDay.putIfAbsent(date, new ArrayList<>());
                             if (reservasByDay.get(date) != null
-                                    && !Objects.requireNonNull(reservasByDay.get(date)).contains(reserva)
-                                    && TimeUtils.convertStringToDateLocalTime(reserva.getFecha())
-                                    .isAfter(firstDayOfMonth)){
-
+                                    && !Objects.requireNonNull(reservasByDay.get(date)).contains(reserva)){
                                 Objects.requireNonNull(reservasByDay.get(date)).add(reserva);
                             }
                         });
@@ -131,19 +137,31 @@ public class DataRepository {
         MutableLiveData<Plaza> liveData = new MutableLiveData<>();
         LocalDateTime inicioLocalDateTime = TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio());
 
+        // Last epoch of the day
+        long lastEpochOfTheDay =
+                TimeUtils.convertLocalDateTimeToEpoch(inicioLocalDateTime.withHour(23).withMinute(59).withSecond(59));
+        Timestamp lastTimestampOfTheDay = new Timestamp(lastEpochOfTheDay, 0);
+
+        Timestamp horaInicioTimestamp = new Timestamp(hora.getHoraInicio(), 0);
+
         MutableLiveData<List<Long>> plazasIdInThatHoursLiveData = new MutableLiveData<>();
         List<Long> plazasIdInThatHours = new ArrayList<>();
 
-        // La fecha no se puede comparar en la query, ya que es un string
+        // Obtenemos las reservas que esten en la hora que se quiere reservar y el final del día
+        // Si hacemos que la query sea mayor o igual a la hora de inicio o, menor o igual a la hora de fin
+        // tambien nos va a coger las que estan fuera de este día y luego tendremos que volver a filtrar
+        // De las que obtenemos en la query, solo nos interesan las que estan en las horas que se quiere reservar
         reservasCollection
+                .where(Filter.and(Filter.greaterThanOrEqualTo(FECHA, horaInicioTimestamp),
+                        Filter.lessThanOrEqualTo(FECHA, lastTimestampOfTheDay)))
                 .get()
                 .addOnSuccessListener(documentReference -> {
                             documentReference.toObjects(Reserva.class).forEach(reserva -> {
-                                LocalDateTime fecha = TimeUtils.convertStringToDateLocalTime(reserva.getFecha());
-                                // Coge las reservas que esten en la hora que se quiere reservar
-                                if (reserva.getHora().getHoraInicio() <= hora.getHoraInicio() ||
-                                        reserva.getHora().getHoraFin() >= hora.getHoraFin() &&
-                                                (fecha.getDayOfYear() == inicioLocalDateTime.getDayOfYear())){
+                                // Como hemos cogido las reservas entre la hora de inicio y el final del día
+                                // tenemos que filtrar las que coincidan con la hora que se quiere reservar
+                                if ((reserva.getHora().getHoraInicio() <= hora.getHoraInicio() ||
+                                        reserva.getHora().getHoraFin() >= hora.getHoraFin()) &&
+                                        reserva.getPlaza().getTipoPlaza() == tipoPlaza){
                                     plazasIdInThatHours.add(reserva.getPlaza().getId());
                                 }
                                 callback.onSuccess();
@@ -197,13 +215,16 @@ public class DataRepository {
         MutableLiveData<List<Long>> plazasIdInThatHoursLiveData = new MutableLiveData<>();
         List<Long> plazasIdInThatHours = new ArrayList<>();
 
+        Timestamp horaActualTimestamp = new Timestamp(horaActual, 0);
+
         // La fecha no se puede comparar en la query, ya que es un string
         // La hora tampoco se puede comparar ya que es un subdocumento
         reservasCollection
+                .whereLessThanOrEqualTo(FECHA, horaActualTimestamp)
                 .get()
                 .addOnSuccessListener(documentReference -> {
                             documentReference.toObjects(Reserva.class).forEach(reserva -> {
-                                LocalDateTime fecha = TimeUtils.convertStringToDateLocalTime(reserva.getFecha());
+                                LocalDateTime fecha = TimeUtils.convertTimestampToLocalDateTime(reserva.getFecha());
                                 // Coge las reservas que esten en la hora que se quiere reservar
                                 if (reserva.getHora().getHoraInicio() <= horaActual &&
                                         horaActual <= reserva.getHora().getHoraFin() &&

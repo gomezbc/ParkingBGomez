@@ -1,5 +1,7 @@
 package com.lksnext.ParkingBGomez.utils;
 
+import com.google.firebase.Timestamp;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +21,19 @@ public class TimeUtils {
         LocalDateTime localDateTime = localTime.atDate(LocalDate.now());
         Instant instant = localDateTime.atZone(ZONE_ID).toInstant();
         return instant.getEpochSecond();
+    }
+
+    public static long convertLocalDateTimeToEpoch(LocalDateTime localDateTime) {
+        Instant instant = localDateTime.atZone(ZONE_ID).toInstant();
+        return instant.getEpochSecond();
+    }
+
+    public static Timestamp convertLocalDateTimeToTimestamp(LocalDateTime localDateTime) {
+        return new Timestamp(localDateTime.toEpochSecond(ZONE_OFFSET), 0);
+    }
+
+    public static LocalDateTime convertTimestampToLocalDateTime(Timestamp timestamp) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp.getSeconds()), ZONE_ID);
     }
 
     public static long convertLocalTimeToEpochWithLocalDate(LocalTime localTime, LocalDate localDate) {

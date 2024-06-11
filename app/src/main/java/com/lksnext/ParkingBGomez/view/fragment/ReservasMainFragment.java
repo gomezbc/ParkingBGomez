@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
@@ -102,7 +104,7 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
         recyclerView.setAdapter(adapter);
     }
 
-    private static LiveData<Map<LocalDate, List<Reserva>>>
+    private LiveData<Map<LocalDate, List<Reserva>>>
     getReservasByDayByUser(DataRepository dataRepository, MainActivity activity) {
         // Return the LiveData object with the reservas and handle the success and failure cases
         return dataRepository.getReservasByDayByUser("usuario", activity, new Callback() {
@@ -114,6 +116,9 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
             @Override
             public void onFailure() {
                 Log.d("getReservasByDayByUser", "Error getting documents.");
+                Snackbar.make(binding.getRoot(),
+                        "La aplicación no ha podido cargar tus proximas reservas. Intentalo de nuevo más tarde.",
+                        BaseTransientBottomBar.LENGTH_LONG).show();
             }
         });
     }

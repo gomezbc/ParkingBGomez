@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -117,7 +116,7 @@ public class ReservaCardAdapter extends ListAdapter<Reserva, ReservaCardAdapter.
     }
 
     private void setSelectedDateInfo(Hora hora, Reserva reserva) {
-        LocalDate fecha = TimeUtils.convertStringToDateLocalTime(reserva.getFecha()).toLocalDate();
+        LocalDate fecha = TimeUtils.convertTimestampToLocalDateTime(reserva.getFecha()).toLocalDate();
         if (fecha != null && hora != null) {
             final String dia = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
             final String mes = fecha.getMonth().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());

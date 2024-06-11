@@ -173,7 +173,7 @@ public class ReservarConfirm extends Fragment {
 
             LocalDateTime fechaHoraInicio = TimeUtils.convertEpochTolocalDateTime(horaInicioEpoch);
 
-            Reserva reserva = new Reserva(fechaHoraInicio.toString(),
+            Reserva reserva = new Reserva(TimeUtils.convertLocalDateTimeToTimestamp(fechaHoraInicio),
                     "usuario",
                     UUID.randomUUID().toString(),
                     plazaToReserve,

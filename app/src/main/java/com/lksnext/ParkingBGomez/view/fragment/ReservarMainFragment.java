@@ -110,7 +110,8 @@ public class ReservarMainFragment extends Fragment{
                     new HourItem("18:30", true),
                     new HourItem("19:00", true),
                     new HourItem("19:30", true),
-                    new HourItem("20:00", true));
+                    new HourItem("20:00", true),
+                    new HourItem("20:30", true));
             // Update the UI on the UI thread
             requireActivity().runOnUiThread(() -> {
                 if (binding != null) {
