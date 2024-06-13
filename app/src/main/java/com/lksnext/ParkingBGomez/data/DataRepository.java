@@ -1,6 +1,9 @@
 package com.lksnext.ParkingBGomez.data;
 
 
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,6 +15,7 @@ import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.Query;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Hora;
+import com.lksnext.ParkingBGomez.domain.HourItem;
 import com.lksnext.ParkingBGomez.domain.Plaza;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
@@ -20,12 +24,18 @@ import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class DataRepository {
@@ -279,6 +289,75 @@ public class DataRepository {
                     callback.onSuccess();
                 }).addOnFailureListener(e -> callback.onFailure());
         return totalPlazas;
+    }
+
+    public LiveData<List<HourItem>> getAvailableHoursForDateAndTipoPlaza(LocalDate date, TipoPlaza tipoPlaza, MainActivity activity, Callback callback){
+        MutableLiveData<List<HourItem>> liveData = new MutableLiveData<>();
+        List<HourItem> hourItems = new ArrayList<>();
+
+        boolean isToday = date.equals(LocalDate.now());
+
+        LocalTime localTimeNow = TimeUtils.convertEpochTolocalDateTime(TimeUtils.getNowEpoch()).toLocalTime();
+
+        boolean shouldAddAnHour = isToday && localTimeNow.getMinute() >= 30;
+
+        LocalTime todayStartLocalTime =
+                shouldAddAnHour ?
+                        localTimeNow.plusHours(1).withMinute(0).withSecond(0)
+                        : localTimeNow.withMinute(30).withSecond(0);
+
+        LocalTime startOfAvailableHoursLocalTime =
+                isToday ?
+                        todayStartLocalTime
+                        : LocalTime.of(7, 0, 0);
+
+        LocalTime endOfAvailableHoursLocalTime = LocalTime.of(21, 30, 0);
+
+        AtomicInteger completedReads = new AtomicInteger(0);
+        int totalReads = (int) ChronoUnit.MINUTES.between(startOfAvailableHoursLocalTime, endOfAvailableHoursLocalTime) / 30;
+
+
+        getTotalPlazasByTipoPlaza(tipoPlaza, activity, callback).observe(activity, totalPlazas -> {
+            DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            for (LocalTime time = startOfAvailableHoursLocalTime; time.isBefore(endOfAvailableHoursLocalTime); time = time.plusMinutes(30)){
+                long epoch = TimeUtils.convertLocalTimeToEpochWithLocalDate(time, date);
+                Timestamp timestamp = new Timestamp(epoch, 0);
+                activity.getDb().collection(RESERVAS_COLLECTION)
+                    // Reservas que han empezado ha esta hora o antes
+                    .whereLessThanOrEqualTo(FECHA, timestamp)
+                    .get()
+                    .addOnSuccessListener(documentReference -> {
+                        AtomicLong count = new AtomicLong(0);
+                        documentReference.toObjects(Reserva.class).forEach(reserva -> {
+                            if (reserva.getHora().getHoraFin() > epoch){
+                                count.getAndIncrement();
+                            }
+                        });
+                        Date timeToAdd = new Date(epoch * 1000);
+                        String timeString = df.format(timeToAdd);
+
+                        addHourItem(totalPlazas, count, hourItems, timeString);
+
+                        if (completedReads.incrementAndGet() == totalReads) {
+                            Collections.sort(hourItems);
+                            liveData.setValue(hourItems);
+                            callback.onSuccess();
+                        }
+
+                    }).addOnFailureListener(e -> callback.onFailure());
+            }
+        });
+
+
+        return liveData;
+    }
+
+    private static void addHourItem(Integer totalPlazas, AtomicLong count, List<HourItem> hourItems, String timeString) {
+        if (count.get() >= totalPlazas){
+            hourItems.add(new HourItem(timeString, false));
+        } else {
+            hourItems.add(new HourItem(timeString, true));
+        }
     }
 
 }

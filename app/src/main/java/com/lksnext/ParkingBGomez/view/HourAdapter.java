@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
-    private final List<HourItem> hours;
+    private List<HourItem> hours;
     private final MainViewModel mainViewModel;
 
     public HourAdapter(List<HourItem> hours, MainViewModel mainViewModel) {
@@ -28,6 +28,10 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         this.mainViewModel = mainViewModel;
         restoreSelectedHour();
         setHasStableIds(true);
+    }
+
+    public void updateData(List<HourItem> newHours) {
+        this.hours = newHours;
     }
 
     @NonNull
