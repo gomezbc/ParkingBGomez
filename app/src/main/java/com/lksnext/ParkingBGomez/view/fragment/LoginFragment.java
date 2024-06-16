@@ -1,5 +1,7 @@
 package com.lksnext.ParkingBGomez.view.fragment;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,24 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.lksnext.ParkingBGomez.R;
-import com.lksnext.ParkingBGomez.data.login.LoggedInUserView;
-import com.lksnext.ParkingBGomez.data.login.LoginFormState;
-import com.lksnext.ParkingBGomez.data.login.LoginResult;
 import com.lksnext.ParkingBGomez.databinding.FragmentLoginBinding;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import com.lksnext.ParkingBGomez.view.activity.RegisterActivity;
@@ -64,6 +58,7 @@ public class LoginFragment extends Fragment {
                     Intent intent = new Intent(requireActivity(), MainActivity.class);
                     startActivity(intent);
                 } else {
+                    binding.email.setError(getString(R.string.login_failed));
                     showLoginFailed(R.string.login_failed);
                 }
             }
@@ -143,7 +138,7 @@ public class LoginFragment extends Fragment {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         if (getContext() != null && getContext().getApplicationContext() != null) {
-            Snackbar.make(binding.getRoot(), errorString, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(binding.getRoot(), errorString, LENGTH_LONG).show();
         }
     }
 

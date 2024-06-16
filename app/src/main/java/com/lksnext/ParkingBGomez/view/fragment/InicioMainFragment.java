@@ -126,7 +126,7 @@ public class InicioMainFragment extends Fragment{
     }
 
     private static LiveData<List<Reserva>> getActiveReservasOfUser(View view, DataRepository dataRepository, MainActivity activity) {
-        return dataRepository.getActiveReservasOfUser("usuario", activity, new Callback() {
+        return dataRepository.getActiveReservasOfUser(DataRepository.getInstance().getCurrentUser().getUid(), activity, new Callback() {
             @Override
             public void onSuccess() {
                 Log.d("ReservaCardAdapter", "Reservas of user after today fetched from db");

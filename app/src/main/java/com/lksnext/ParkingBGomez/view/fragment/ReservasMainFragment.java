@@ -107,7 +107,7 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
     private LiveData<Map<LocalDate, List<Reserva>>>
     getReservasByDayByUser(DataRepository dataRepository, MainActivity activity) {
         // Return the LiveData object with the reservas and handle the success and failure cases
-        return dataRepository.getReservasByDayByUser("usuario", activity, new Callback() {
+        return dataRepository.getReservasByDayByUser(DataRepository.getInstance().getCurrentUser().getUid(), activity, new Callback() {
             @Override
             public void onSuccess() {
                 Log.d("getReservasByDayByUser", "Success.");
