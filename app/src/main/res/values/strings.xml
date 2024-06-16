@@ -75,4 +75,17 @@
     <string name="editar_reserva">Editar reserva</string>
     <string name="boton_para_a_adir_nueva_reserva">Boton para añadir nueva reserva</string>
     <string name="nueva_reserva">Nueva reserva</string>
+    <string name="prompt_email">Correo electrónico</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Iniciar sesión o registrarse</string>
+    <string name="action_sign_in_short">Iniciar sesión</string>
+    <string name="welcome">"¡Bienvenido!"</string>
+    <string name="invalid_username">Nombre de usuario no válido</string>
+    <string name="invalid_password">La contraseña debe tener más de 5 caracteres</string>
+    <string name="login_failed">"El correo electrónico o contraseña son incorrectos"</string>
+    <string name="bienvenido">Bienvenido</string>
+    <string name="por_favor_inicia_sesion">Por favor, inicia sesión para continuar</string>
+    <string name="forgot_password">¿Olvidó su contraseña?</string>
+    <string name="register">Registrese</string>
+    <string name="no_account">¿No tiene una cuenta?</string>
 </resources>

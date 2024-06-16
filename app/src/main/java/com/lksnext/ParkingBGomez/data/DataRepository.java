@@ -3,15 +3,19 @@ package com.lksnext.ParkingBGomez.data;
 
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.Filter;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Hora;
@@ -34,17 +38,21 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class DataRepository {
 
+    private static FirebaseFirestore db;
+    private static FirebaseAuth mAuth;
     private static final String RESERVAS_COLLECTION = "reservas";
     private static final String PLAZAS_COLLECTION = "plazas";
     private static final String TIPO_PLAZA = "tipoPlaza";
     private static final String USUARIO = "usuario";
     private static final String FECHA = "fecha";
+    private static final String TAG = "DataRepository";
 
     private static DataRepository instance;
     private DataRepository(){
@@ -55,18 +63,34 @@ public class DataRepository {
     public static synchronized DataRepository getInstance(){
         if (instance == null){
             instance = new DataRepository();
+            db = FirebaseFirestore.getInstance();
+            mAuth = FirebaseAuth.getInstance();
         }
         return instance;
     }
 
-    //Petición del login.
-    public void login(String email, String pass, Callback callback){
+    public void login(String email, String password, Callback callback){
         try {
-            //Realizar petición
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener((Executor) this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            callback.onSuccess();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            callback.onFailure();
+                        }
+                    });
             callback.onSuccess();
         } catch (Exception e){
             callback.onFailure();
         }
+    }
+
+    public FirebaseUser getCurrentUser(){
+        return mAuth.getCurrentUser();
     }
 
     public void saveReserva(Reserva reserva, MainActivity activity, Callback callback){
