@@ -2,27 +2,21 @@ package com.lksnext.ParkingBGomez.view.activity;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.lksnext.ParkingBGomez.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-
-    private ActivityMainBinding binding;
-    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        db = FirebaseFirestore.getInstance();
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         NavHostFragment navHostFragment = binding.navHostFragmentContentMain.getFragment();
         assert navHostFragment != null;
@@ -36,8 +30,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @NonNull
-    public FirebaseFirestore getDb() {
-        return db;
-    }
 }

@@ -1,10 +1,12 @@
 package com.lksnext.ParkingBGomez.data;
 
 
+import android.content.Context;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -45,8 +47,8 @@ import java.util.stream.Collectors;
 
 public class DataRepository {
 
-    private static FirebaseFirestore db;
-    private static FirebaseAuth mAuth;
+    private final FirebaseFirestore db;
+    private final FirebaseAuth mAuth;
     private static final String RESERVAS_COLLECTION = "reservas";
     private static final String PLAZAS_COLLECTION = "plazas";
     private static final String TIPO_PLAZA = "tipoPlaza";
@@ -56,15 +58,14 @@ public class DataRepository {
 
     private static DataRepository instance;
     private DataRepository(){
-
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
     }
 
     //Creación de la instancia en caso de que no exista.
     public static synchronized DataRepository getInstance(){
         if (instance == null){
             instance = new DataRepository();
-            db = FirebaseFirestore.getInstance();
-            mAuth = FirebaseAuth.getInstance();
         }
         return instance;
     }
@@ -93,28 +94,28 @@ public class DataRepository {
         return mAuth.getCurrentUser();
     }
 
-    public void saveReserva(Reserva reserva, MainActivity activity, Callback callback){
-        activity.getDb().collection(RESERVAS_COLLECTION).document(reserva.getUuid())
+    public void saveReserva(Reserva reserva, Callback callback){
+        db.collection(RESERVAS_COLLECTION).document(reserva.getUuid())
                 .set(reserva)
                 .addOnSuccessListener(documentReference -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure());
     }
 
-    public void deleteReserva(Reserva reserva, MainActivity activity, Callback callback){
-        activity.getDb().collection(RESERVAS_COLLECTION).document(reserva.getUuid())
+    public void deleteReserva(Reserva reserva, Callback callback){
+        db.collection(RESERVAS_COLLECTION).document(reserva.getUuid())
                 .delete()
                 .addOnSuccessListener(documentReference -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure());
     }
 
-    public void updateReserva(Reserva reserva, MainActivity activity, Callback callback){
-        activity.getDb().collection(RESERVAS_COLLECTION).document(reserva.getUuid())
+    public void updateReserva(Reserva reserva, Callback callback){
+        db.collection(RESERVAS_COLLECTION).document(reserva.getUuid())
                 .set(reserva)
                 .addOnSuccessListener(documentReference -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure());
     }
 
-    public LiveData<Map<LocalDate, List<Reserva>>> getReservasByDayByUser(String user, MainActivity activity, Callback callback){
+    public LiveData<Map<LocalDate, List<Reserva>>> getReservasByDayByUser(String user, Callback callback){
         MutableLiveData<Map<LocalDate, List<Reserva>>> liveData = new MutableLiveData<>();
         // TreeMap to Order by date ascending
         Map<LocalDate, List<Reserva>> reservasByDay = new TreeMap<>();
@@ -123,7 +124,7 @@ public class DataRepository {
 
         Timestamp firstTimestampOfTheMonth = new Timestamp(firstDayOfMonth, 0);
 
-        activity.getDb().collection(RESERVAS_COLLECTION)
+        db.collection(RESERVAS_COLLECTION)
                 .whereEqualTo(USUARIO, user)
                 .whereGreaterThanOrEqualTo(FECHA, firstTimestampOfTheMonth)
                 .get()
@@ -143,12 +144,12 @@ public class DataRepository {
     }
 
 
-    public LiveData<List<Reserva>> getActiveReservasOfUser(String user, MainActivity activity, Callback callback){
+    public LiveData<List<Reserva>> getActiveReservasOfUser(String user, Callback callback){
         MutableLiveData<List<Reserva>> liveData = new MutableLiveData<>();
         List<Reserva> reservas = new ArrayList<>();
         long nowEpoch = TimeUtils.getNowEpoch();
 
-        activity.getDb().collection(RESERVAS_COLLECTION)
+        db.collection(RESERVAS_COLLECTION)
                 .whereEqualTo(USUARIO, user)
                 .get()
                 .addOnSuccessListener(documentReference -> {
@@ -164,9 +165,9 @@ public class DataRepository {
         return liveData;
     }
 
-    public LiveData<Plaza> getPlazaNotReservadaByTipoPlaza(TipoPlaza tipoPlaza, Hora hora, MainActivity activity, Callback callback){
-        CollectionReference plazasCollection = activity.getDb().collection(PLAZAS_COLLECTION);
-        CollectionReference reservasCollection = activity.getDb().collection(RESERVAS_COLLECTION);
+    public LiveData<Plaza> getPlazaNotReservadaByTipoPlaza(Context context, TipoPlaza tipoPlaza, Hora hora, Callback callback){
+        CollectionReference plazasCollection = db.collection(PLAZAS_COLLECTION);
+        CollectionReference reservasCollection = db.collection(RESERVAS_COLLECTION);
 
         MutableLiveData<Plaza> liveData = new MutableLiveData<>();
         LocalDateTime inicioLocalDateTime = TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio());
@@ -205,7 +206,7 @@ public class DataRepository {
                         )
                 .addOnFailureListener(e -> callback.onFailure());
 
-        plazasIdInThatHoursLiveData.observe(activity, plazas -> {
+        plazasIdInThatHoursLiveData.observe((LifecycleOwner) context, plazas -> {
             if (plazas.isEmpty()){
                 getAnyFreePlazaWithQuery(plazasCollection.whereEqualTo(TIPO_PLAZA, tipoPlaza),
                         liveData,
@@ -236,9 +237,9 @@ public class DataRepository {
             }).addOnFailureListener(e -> callback.onFailure());
     }
 
-    public LiveData<Integer> getPlazasLibresByTipoPlaza(TipoPlaza tipoPlaza, long horaActual ,MainActivity activity, Callback callback){
-        CollectionReference plazasCollection = activity.getDb().collection(PLAZAS_COLLECTION);
-        CollectionReference reservasCollection = activity.getDb().collection(RESERVAS_COLLECTION);
+    public LiveData<Integer> getPlazasLibresByTipoPlaza(TipoPlaza tipoPlaza, long horaActual, Context context, Callback callback){
+        CollectionReference plazasCollection = db.collection(PLAZAS_COLLECTION);
+        CollectionReference reservasCollection = db.collection(RESERVAS_COLLECTION);
 
         LocalDateTime todayLocalDateTime = LocalDateTime.now(TimeUtils.ZONE_ID);
 
@@ -272,7 +273,7 @@ public class DataRepository {
                 )
                 .addOnFailureListener(e -> callback.onFailure());
 
-        plazasIdInThatHoursLiveData.observe(activity, plazas -> {
+        plazasIdInThatHoursLiveData.observe((LifecycleOwner) context, plazas -> {
             if (plazas.isEmpty()){
                 plazasCollection.whereEqualTo(TIPO_PLAZA, tipoPlaza)
                         .get()
@@ -302,9 +303,9 @@ public class DataRepository {
         return plazasLibre;
     }
 
-    public LiveData<Integer> getTotalPlazasByTipoPlaza(TipoPlaza tipoPlaza, MainActivity activity, Callback callback){
+    public LiveData<Integer> getTotalPlazasByTipoPlaza(TipoPlaza tipoPlaza, Callback callback){
         MutableLiveData<Integer> totalPlazas = new MutableLiveData<>();
-        activity.getDb().collection(PLAZAS_COLLECTION)
+        db.collection(PLAZAS_COLLECTION)
                 .whereEqualTo(TIPO_PLAZA, tipoPlaza)
                 .count()
                 .get(AggregateSource.SERVER)
@@ -341,12 +342,12 @@ public class DataRepository {
         int totalReads = (int) ChronoUnit.MINUTES.between(startOfAvailableHoursLocalTime, endOfAvailableHoursLocalTime) / 30;
 
 
-        getTotalPlazasByTipoPlaza(tipoPlaza, activity, callback).observe(activity, totalPlazas -> {
+        getTotalPlazasByTipoPlaza(tipoPlaza, callback).observe(activity, totalPlazas -> {
             DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
             for (LocalTime time = startOfAvailableHoursLocalTime; time.isBefore(endOfAvailableHoursLocalTime); time = time.plusMinutes(30)){
                 long epoch = TimeUtils.convertLocalTimeToEpochWithLocalDate(time, date);
                 Timestamp timestamp = new Timestamp(epoch, 0);
-                activity.getDb().collection(RESERVAS_COLLECTION)
+                db.collection(RESERVAS_COLLECTION)
                     // Reservas que han empezado ha esta hora o antes
                     .whereLessThanOrEqualTo(FECHA, timestamp)
                     .get()

@@ -70,7 +70,7 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
 
         if (activity != null) {
             LiveData<Map<LocalDate, List<Reserva>>> liveData =
-                    getReservasByDayByUser(dataRepository, activity);
+                    getReservasByDayByUser(dataRepository);
 
             // Is executed when the LiveData object is updated with db data
             liveData.observe(getViewLifecycleOwner(), dbReservasByDay -> {
@@ -105,9 +105,9 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
     }
 
     private LiveData<Map<LocalDate, List<Reserva>>>
-    getReservasByDayByUser(DataRepository dataRepository, MainActivity activity) {
+    getReservasByDayByUser(DataRepository dataRepository) {
         // Return the LiveData object with the reservas and handle the success and failure cases
-        return dataRepository.getReservasByDayByUser(DataRepository.getInstance().getCurrentUser().getUid(), activity, new Callback() {
+        return dataRepository.getReservasByDayByUser(DataRepository.getInstance().getCurrentUser().getUid(), new Callback() {
             @Override
             public void onSuccess() {
                 Log.d("getReservasByDayByUser", "Success.");
