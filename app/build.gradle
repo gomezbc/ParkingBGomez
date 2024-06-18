@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     id "org.sonarqube" version "5.0.0.4638"
     id 'com.google.gms.google-services'
+    alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
 }
 
 sonar {
@@ -58,6 +59,7 @@ dependencies {
     implementation libs.firebase.analytics
     implementation libs.firebase.firestore
     implementation libs.firebase.auth
+    implementation libs.play.services.maps
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -65,4 +67,19 @@ dependencies {
     implementation platform(libs.firebase.bom)
     debugImplementation libs.leakcanary.android
     androidTestImplementation libs.core.testing
+}
+
+secrets {
+    // Optionally specify a different file name containing your secrets.
+    // The plugin defaults to "local.properties"
+    propertiesFileName = "secrets.properties"
+
+    // A properties file containing default secret values. This file can be
+    // checked in version control.
+    defaultPropertiesFileName = "local.defaults.properties"
+
+    // Configure which keys should be ignored by the plugin by providing regular expressions.
+    // "sdk.dir" is ignored by default.
+    ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
+    ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
 }
