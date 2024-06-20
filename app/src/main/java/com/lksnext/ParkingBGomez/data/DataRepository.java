@@ -40,7 +40,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
-import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -73,21 +72,20 @@ public class DataRepository {
     public void login(String email, String password, Callback callback){
         try {
             mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener((Executor) this, task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            callback.onSuccess();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            callback.onFailure();
-                        }
+                    .addOnSuccessListener(authResult -> {
+                        Log.d(TAG, "Login correcto");
+                        callback.onSuccess();
+                    }).addOnFailureListener(e -> {
+                        Log.e(TAG, "Error al hacer login", e);
+                        callback.onFailure();
                     });
-            callback.onSuccess();
         } catch (Exception e){
             callback.onFailure();
         }
+    }
+
+    public void logout(){
+        mAuth.signOut();
     }
 
     public FirebaseUser getCurrentUser(){
