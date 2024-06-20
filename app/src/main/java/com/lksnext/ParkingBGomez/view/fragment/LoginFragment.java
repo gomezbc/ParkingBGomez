@@ -24,9 +24,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.lksnext.ParkingBGomez.R;
+import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentLoginBinding;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
-import com.lksnext.ParkingBGomez.view.activity.RegisterActivity;
 import com.lksnext.ParkingBGomez.viewmodel.LoginViewModel;
 
 import java.util.Objects;
@@ -54,11 +54,9 @@ public class LoginFragment extends Fragment {
         }
 
         //Acciones a realizar cuando el usuario clica el boton de crear cuenta (se cambia de pantalla)
-        binding.registerText.setOnClickListener(v -> {
-            Intent intent = new Intent(requireActivity(), RegisterActivity.class);
-            startActivity(intent);
-            requireActivity().finish();
-        });
+        binding.registerText.setOnClickListener(v ->
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_loginFragment_to_signUpFragment));
 
         binding.forgotPassword.setOnClickListener(v ->
                 NavHostFragment.findNavController(this)
@@ -96,6 +94,29 @@ public class LoginFragment extends Fragment {
 
         setLoginResultListener();
 
+        setAfterTextChangedListener(emailEditText, passwordEditText);
+        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String email = Objects.requireNonNull(binding.email.getText()).toString();
+                String password = Objects.requireNonNull(binding.password.getText()).toString();
+                loginViewModel.loginUser(email, password);
+            }
+            return false;
+        });
+
+        loginButton.setOnClickListener(v -> {
+                    String email = Objects.requireNonNull(binding.email.getText()).toString();
+                    String password = Objects.requireNonNull(binding.password.getText()).toString();
+                    binding.login.setEnabled(false);
+                    if (loginProgressBar != null) {
+                        loginProgressBar.setVisibility(View.VISIBLE);
+                        loginProgressBar.setIndeterminate(true);
+                    }
+                    loginViewModel.loginUser(email, password);
+        });
+    }
+
+    private void setAfterTextChangedListener(TextInputEditText emailEditText, TextInputEditText passwordEditText) {
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -116,25 +137,6 @@ public class LoginFragment extends Fragment {
         };
         emailEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                String email = Objects.requireNonNull(binding.email.getText()).toString();
-                String password = Objects.requireNonNull(binding.password.getText()).toString();
-                loginViewModel.loginUser(email, password);
-            }
-            return false;
-        });
-
-        loginButton.setOnClickListener(v -> {
-                    String email = Objects.requireNonNull(binding.email.getText()).toString();
-                    String password = Objects.requireNonNull(binding.password.getText()).toString();
-                    binding.login.setEnabled(false);
-                    if (loginProgressBar != null) {
-                        loginProgressBar.setVisibility(View.VISIBLE);
-                        loginProgressBar.setIndeterminate(true);
-                    }
-                    loginViewModel.loginUser(email, password);
-        });
     }
 
     private void setLoginFormStateListener(Button loginButton, TextInputEditText emailEditText, TextInputEditText passwordEditText) {

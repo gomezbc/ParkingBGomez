@@ -72,14 +72,29 @@ public class DataRepository {
     public void login(String email, String password, Callback callback){
         try {
             mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnSuccessListener(authResult -> {
-                        Log.d(TAG, "Login correcto");
+                    .addOnSuccessListener( unused -> {
+                        Log.d(TAG, "signInWithEmail:success");
                         callback.onSuccess();
                     }).addOnFailureListener(e -> {
-                        Log.e(TAG, "Error al hacer login", e);
+                        Log.w(TAG, "signInWithEmail:failure", e);
                         callback.onFailure();
                     });
-            callback.onSuccess();
+        } catch (Exception e){
+            Log.e(TAG, "signInWithEmail:failure", e);
+            callback.onFailure();
+        }
+    }
+
+    public void signUp(String email, String password, Callback callback){
+        try {
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnSuccessListener( unused -> {
+                        Log.d(TAG, "createUserWithEmail:success");
+                        callback.onSuccess();
+                    }).addOnFailureListener(e -> {
+                        Log.w(TAG, "createUserWithEmail:failure", e);
+                        callback.onFailure();
+                    });
         } catch (Exception e){
             callback.onFailure();
         }

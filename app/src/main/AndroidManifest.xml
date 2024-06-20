@@ -16,11 +16,7 @@ xmlns:tools="http://schemas.android.com/tools">
         android:name="com.google.android.geo.API_KEY"
         android:value="${MAPS_API_KEY}" />
     <profileable android:shell="true" />
-
-    <activity
-        android:name=".view.activity.RegisterActivity"
-        android:theme="@style/Theme.ParkingBGomez"
-        android:exported="false" />
+    
     <activity
         android:name=".view.activity.LoginActivity"
         android:exported="true"

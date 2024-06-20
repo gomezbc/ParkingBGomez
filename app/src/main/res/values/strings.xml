@@ -96,4 +96,6 @@
     <string name="login">Iniciar sesión</string>
     <string name="reset_password_email_text">Tu solicitud para restablecer la contraseña ha sido procesada. Pronto recibirás instrucciones por correo electrónico. Por favor, revisa tu bandeja de entrada.</string>
     <string name="finish">Finalizar</string>
+    <string name="create_account">Crea tu cuenta</string>
+    <string name="create_account_btn">Crear cuenta</string>
 </resources>
