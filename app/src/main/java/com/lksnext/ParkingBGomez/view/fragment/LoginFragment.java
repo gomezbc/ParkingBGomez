@@ -11,15 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.FragmentLoginBinding;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
@@ -32,6 +36,7 @@ public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
     private LoginViewModel loginViewModel;
+    private LinearProgressIndicator loginProgressBar;
 
     @Nullable
     @Override
@@ -42,10 +47,17 @@ public class LoginFragment extends Fragment {
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
+        NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
+
+        if (navHostFragment != null) {
+            loginProgressBar = navHostFragment.requireView().getRootView().findViewById(R.id.progress_bar_login);
+        }
+
         //Acciones a realizar cuando el usuario clica el boton de crear cuenta (se cambia de pantalla)
         binding.registerText.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), RegisterActivity.class);
             startActivity(intent);
+            requireActivity().finish();
         });
 
         //Observamos la variable logged, la cual nos informara cuando el usuario intente hacer login y se
@@ -57,6 +69,7 @@ public class LoginFragment extends Fragment {
                     loginViewModel.setLoginProgress(100);
                     Intent intent = new Intent(requireActivity(), MainActivity.class);
                     startActivity(intent);
+                    requireActivity().finish();
                 } else {
                     binding.email.setError(getString(R.string.login_failed));
                     showLoginFailed(R.string.login_failed);
@@ -75,30 +88,9 @@ public class LoginFragment extends Fragment {
         final TextInputEditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
 
-        loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), loginFormState -> {
-            if (loginFormState == null) {
-                return;
-            }
-            loginButton.setEnabled(loginFormState.isDataValid());
-            if (loginFormState.getUsernameError() != null) {
-                emailEditText.setError(getString(loginFormState.getUsernameError()));
-            }
-            if (loginFormState.getPasswordError() != null) {
-                passwordEditText.setError(getString(loginFormState.getPasswordError()));
-            }
-        });
+        setLoginFormStateListener(loginButton, emailEditText, passwordEditText);
 
-        loginViewModel.getLoginResult().observe(getViewLifecycleOwner(), loginResult -> {
-            if (loginResult == null) {
-                return;
-            }
-            if (loginResult.getError() != null) {
-                showLoginFailed(loginResult.getError());
-            }
-            if (loginResult.getSuccess() != null) {
-                showLoginFailed(loginResult.getError());
-            }
-        });
+        setLoginResultListener();
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
@@ -132,8 +124,53 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(v -> {
                     String email = Objects.requireNonNull(binding.email.getText()).toString();
                     String password = Objects.requireNonNull(binding.password.getText()).toString();
+                    binding.login.setEnabled(false);
+                    if (loginProgressBar != null) {
+                        loginProgressBar.setVisibility(View.VISIBLE);
+                        loginProgressBar.setIndeterminate(true);
+                    }
                     loginViewModel.loginUser(email, password);
-                });
+        });
+    }
+
+    private void setLoginFormStateListener(Button loginButton, TextInputEditText emailEditText, TextInputEditText passwordEditText) {
+        loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), loginFormState -> {
+            if (loginFormState == null) {
+                return;
+            }
+            if (loginFormState.isDataValid()){
+                binding.passwordLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+                loginButton.setEnabled(true);
+            }
+            if (loginFormState.getUsernameError() != null) {
+                emailEditText.setError(getString(loginFormState.getUsernameError()));
+            }
+            if (loginFormState.getPasswordError() != null) {
+                passwordEditText.setError(getString(loginFormState.getPasswordError()));
+                binding.passwordLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            }
+        });
+    }
+
+    private void setLoginResultListener() {
+        loginViewModel.getLoginResult().observe(getViewLifecycleOwner(), loginResult -> {
+            binding.login.setEnabled(true);
+            if (loginResult == null) {
+                return;
+            }
+            if (loginResult.getError() != null) {
+                if (loginProgressBar != null) {
+                    loginProgressBar.setVisibility(View.INVISIBLE);
+                    loginProgressBar.setProgress(0);
+                    loginProgressBar.setIndeterminate(false);
+                }
+                showLoginFailed(loginResult.getError());
+            }
+            if (loginResult.getSuccess() != null && loginProgressBar != null) {
+                loginProgressBar.setProgress(100);
+                loginProgressBar.setIndeterminate(false);
+            }
+        });
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
