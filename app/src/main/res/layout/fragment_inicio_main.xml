@@ -186,8 +186,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/espacios_disponibles_label">
 
-                <com.google.android.material.card.MaterialCardView
+                <FrameLayout
                     android:id="@+id/carSlotsAvailableCard"
+                    style=""
                     android:layout_width="80dp"
                     android:layout_height="140dp"
                     android:layout_marginEnd="10dp"
@@ -239,9 +240,9 @@
                         android:textSize="14sp" />
 
 
-                </com.google.android.material.card.MaterialCardView>
+                </FrameLayout>
 
-                <com.google.android.material.card.MaterialCardView
+                <FrameLayout
                     android:id="@+id/electricCarSlotsAvailableCard"
                     android:layout_width="80dp"
                     android:layout_height="140dp"
@@ -294,9 +295,9 @@
                         android:textSize="14sp" />
 
 
-                </com.google.android.material.card.MaterialCardView>
+                </FrameLayout>
 
-                <com.google.android.material.card.MaterialCardView
+                <FrameLayout
                     android:id="@+id/accessibleCarSlotsAvailableCard"
                     android:layout_width="80dp"
                     android:layout_height="140dp"
@@ -348,9 +349,9 @@
                         android:text=""
                         android:textSize="14sp" />
 
-                </com.google.android.material.card.MaterialCardView>
+                </FrameLayout>
 
-                <com.google.android.material.card.MaterialCardView
+                <FrameLayout
                     android:id="@+id/motorcycleSlotsAvailableCard"
                     android:layout_width="80dp"
                     android:layout_height="140dp"
@@ -401,7 +402,7 @@
                         android:text=""
                         android:textSize="14sp" />
 
-                </com.google.android.material.card.MaterialCardView>
+                </FrameLayout>
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
