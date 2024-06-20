@@ -88,6 +88,8 @@
     <string name="forgot_password">¿Olvidó su contraseña?</string>
     <string name="register">Registrese</string>
     <string name="no_account">¿No tiene una cuenta?</string>
+    <string name="user_avatar">Avatar del usuario</string>
+    <string name="logout">Cerrar sesión</string>
     <string name="reset_password">Restablecer contraseña</string>
     <string name="please_insert_email">Por favor introduzca su correo electrónico</string>
     <string name="already_have_account">¿Ya tiene una cuenta?</string>

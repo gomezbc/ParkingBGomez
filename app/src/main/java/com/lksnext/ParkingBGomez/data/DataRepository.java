@@ -96,23 +96,26 @@ public class DataRepository {
                         callback.onFailure();
                     });
         } catch (Exception e){
-            Log.e(TAG, "createUserWithEmail:failure", e);
             callback.onFailure();
         }
+    }
+
+    public void logout(){
+        mAuth.signOut();
     }
 
     public void resetPassword(String email, Callback callback){
         try {
             mAuth.sendPasswordResetEmail(email)
                     .addOnSuccessListener( unused -> {
-                        Log.d(TAG, "resetPassword:success");
+                        Log.d(TAG, "signInWithEmail:success");
                         callback.onSuccess();
                     }).addOnFailureListener(e -> {
-                        Log.w(TAG, "resetPassword:failure", e);
+                        Log.w(TAG, "signInWithEmail:failure", e);
                         callback.onFailure();
                     });
         } catch (Exception e){
-            Log.w(TAG, "resetPassword:exception", e);
+            Log.w(TAG, "signInWithEmail:exception", e);
             callback.onFailure();
         }
     }
