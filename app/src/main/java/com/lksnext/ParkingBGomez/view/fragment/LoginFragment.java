@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,6 +50,7 @@ public class LoginFragment extends Fragment {
 
         if (navHostFragment != null) {
             loginProgressBar = navHostFragment.requireView().getRootView().findViewById(R.id.progress_bar_login);
+            loginProgressBar.setProgress(10, true);
         }
 
         //Acciones a realizar cuando el usuario clica el boton de crear cuenta (se cambia de pantalla)
@@ -59,6 +59,10 @@ public class LoginFragment extends Fragment {
             startActivity(intent);
             requireActivity().finish();
         });
+
+        binding.forgotPassword.setOnClickListener(v ->
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_loginFragment_to_resetPasswordFragment));
 
         //Observamos la variable logged, la cual nos informara cuando el usuario intente hacer login y se
         //cambia de pantalla en caso de login correcto

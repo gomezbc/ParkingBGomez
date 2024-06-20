@@ -90,6 +90,22 @@ public class DataRepository {
         }
     }
 
+    public void resetPassword(String email, Callback callback){
+        try {
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnSuccessListener( unused -> {
+                        Log.d(TAG, "signInWithEmail:success");
+                        callback.onSuccess();
+                    }).addOnFailureListener(e -> {
+                        Log.w(TAG, "signInWithEmail:failure", e);
+                        callback.onFailure();
+                    });
+        } catch (Exception e){
+            Log.w(TAG, "signInWithEmail:exception", e);
+            callback.onFailure();
+        }
+    }
+
     public FirebaseUser getCurrentUser(){
         return mAuth.getCurrentUser();
     }

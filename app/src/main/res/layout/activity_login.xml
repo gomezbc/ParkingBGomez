@@ -15,7 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:indeterminate="false"
-            android:visibility="invisible" />
+            android:visibility="visible"
+            android:progress="10"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
