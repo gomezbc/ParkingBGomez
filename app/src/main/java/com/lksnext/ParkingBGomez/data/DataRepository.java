@@ -79,6 +79,7 @@ public class DataRepository {
                         Log.e(TAG, "Error al hacer login", e);
                         callback.onFailure();
                     });
+            callback.onSuccess();
         } catch (Exception e){
             callback.onFailure();
         }
@@ -86,6 +87,22 @@ public class DataRepository {
 
     public void logout(){
         mAuth.signOut();
+    }
+
+    public void resetPassword(String email, Callback callback){
+        try {
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnSuccessListener( unused -> {
+                        Log.d(TAG, "signInWithEmail:success");
+                        callback.onSuccess();
+                    }).addOnFailureListener(e -> {
+                        Log.w(TAG, "signInWithEmail:failure", e);
+                        callback.onFailure();
+                    });
+        } catch (Exception e){
+            Log.w(TAG, "signInWithEmail:exception", e);
+            callback.onFailure();
+        }
     }
 
     public FirebaseUser getCurrentUser(){

@@ -14,11 +14,11 @@ import com.lksnext.ParkingBGomez.data.login.LoginFormState;
 
 public class LoginViewModel extends ViewModel {
 
-    private MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
-    private MutableLiveData<Integer> loginProgress = new MutableLiveData<>(0);
+    private final MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
+    private final MutableLiveData<Integer> loginProgress = new MutableLiveData<>(0);
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    private final MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
 
     public LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;
