@@ -441,21 +441,36 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/select_horario"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/linear_horarios"
+                app:layout_constraintBottom_toTopOf="@+id/reservas_info_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/materialDivider_2" />
+
+            <TextView
+                android:id="@+id/reservas_info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/max_hours_text"
+                app:drawableStartCompat="@drawable/baseline_info_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/select_horario_text" />
 
             <LinearLayout
                 android:id="@+id/linear_horarios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/select_horario_text">
+                app:layout_constraintTop_toBottomOf="@+id/reservas_info_text">
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/progress_indicator_horarios"
