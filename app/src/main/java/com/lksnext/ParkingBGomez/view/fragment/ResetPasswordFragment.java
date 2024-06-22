@@ -41,6 +41,10 @@ public class ResetPasswordFragment extends Fragment{
             }
         }
 
+        binding.loginText.setOnClickListener(v ->
+                NavHostFragment.findNavController(ResetPasswordFragment.this)
+                    .navigate(R.id.action_resetPasswordFragment_to_loginFragment));
+
         binding.email.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.passwordResetContinueButton.performClick();

@@ -24,6 +24,11 @@
         <action
             android:id="@+id/action_resetPasswordFragment_to_resetPasswordFinishFragment"
             app:destination="@id/resetPasswordFinishFragment" />
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/resetPasswordFinishFragment"
@@ -32,7 +37,9 @@
         tools:layout="@layout/fragment_reset_password_finish" >
         <action
             android:id="@+id/action_resetPasswordFinishFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -41,6 +48,7 @@
         tools:layout="@layout/fragment_sign_up" >
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment" />
     </fragment>
 </navigation>

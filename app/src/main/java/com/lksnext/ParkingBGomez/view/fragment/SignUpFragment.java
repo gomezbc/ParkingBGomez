@@ -49,6 +49,10 @@ public class SignUpFragment extends Fragment {
             }
         }
 
+        binding.loginText.setOnClickListener(v ->
+                NavHostFragment.findNavController(SignUpFragment.this)
+                        .navigate(R.id.action_signUpFragment_to_loginFragment));
+
         binding.signUpButton.setOnClickListener(v -> {
             if (loginProgressBar != null) {
                 loginProgressBar.setIndeterminate(true);
