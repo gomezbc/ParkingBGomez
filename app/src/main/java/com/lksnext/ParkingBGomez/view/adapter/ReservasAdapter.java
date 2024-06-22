@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.ItemReservaBinding;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.Reserva;
@@ -22,13 +20,15 @@ import com.lksnext.ParkingBGomez.view.ReservaListBottomSheet;
 import com.lksnext.ParkingBGomez.view.holder.ReservasViewHolder;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.Date;
 import java.util.Locale;
 
 public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
 
     private ItemReservaBinding binding;
-    private static final String DIVIDER = " · ";
     private final FragmentManager fragmentManager;
     private final ReservationsRefreshListener refreshListener;
 
@@ -49,46 +49,42 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ReservasViewHolder holder, int position) {
         final Reserva reserva = getItem(position);
-        final Hora hora = reserva.getHora();
 
-        binding.reservaCard.setVisibility(View.VISIBLE);
-        binding.reservaFallbackCard.setVisibility(View.GONE);
-
-        setOptionsModal(hora, reserva);
+        setOptionsModal(reserva);
 
         setPlazaIdInfo(reserva);
         setSelectedHourInterval(reserva);
         setTipoPlazaInfo(reserva);
-        setTimeInfo(hora);
+        setTimeInfo(reserva);
     }
 
-    private void setOptionsModal(Hora hora, Reserva reserva) {
-        final long nowEpoch = TimeUtils.getNowEpoch();
-        if (hora.getHoraInicio() >= nowEpoch) {
-            // Show options button if the reservation is in the future
-            var modalBottomSheet = new ReservaListBottomSheet(reserva, refreshListener);
-            binding.optionsButton.setOnClickListener(v ->
-                    modalBottomSheet.show(this.fragmentManager, ReservaListBottomSheet.TAG));
-        }else {
-            // Hide options button if the reservation is in the past
-            binding.optionsButton.setVisibility(View.GONE);
-        }
+    private void setOptionsModal(Reserva reserva) {
+        var modalBottomSheet = new ReservaListBottomSheet(reserva, refreshListener);
+        binding.reservaItemCardView.setOnClickListener(v ->
+                modalBottomSheet.show(this.fragmentManager, ReservaListBottomSheet.TAG));
     }
 
     private void setPlazaIdInfo(Reserva reserva) {
         long plaza = reserva.getPlaza().getId();
-        binding.textParkingSlot.setText(String.format(Locale.getDefault(), "%s%s", DIVIDER, plaza));
+        binding.chipParkingSlot.setText(String.valueOf(plaza));
     }
 
-    private void setTimeInfo(Hora hora) {
-        if (hora != null) {
-            DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            final Date horaInicioDate = new Date(hora.getHoraInicio() * 1000);
-            final Date horaFinDate = new Date(hora.getHoraFin() * 1000);
-            final String horaInicioString = df.format(horaInicioDate);
-            final String horaFinString = df.format(horaFinDate);
-            binding.dateInfo.setText(String.format("%s - %s%s", horaInicioString, horaFinString, DIVIDER));
-        }
+    private void setTimeInfo(Reserva reserva) {
+        final Hora hora = reserva.getHora();
+        DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        final Date horaInicioDate = new Date(hora.getHoraInicio() * 1000);
+        final Date horaFinDate = new Date(hora.getHoraFin() * 1000);
+        final String horaInicioString = df.format(horaInicioDate);
+        final String horaFinString = df.format(horaFinDate);
+
+        LocalDateTime localDateTime = TimeUtils.convertTimestampToLocalDateTime(reserva.getFecha());
+        LocalDate localDate = localDateTime.toLocalDate();
+
+        final String dia = localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
+        final String mes = localDate.getMonth().getDisplayName(TextStyle.FULL, java.util.Locale.getDefault());
+
+        binding.confirmHourInterval.setText(String.format("%s %s %s %s - %s",
+                dia, localDate.getDayOfMonth(), mes, horaInicioString, horaFinString));
     }
 
     private void setTipoPlazaInfo(Reserva reserva) {
@@ -96,20 +92,16 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
         if (tipoPlaza != null) {
             switch (tipoPlaza){
                 case ESTANDAR:
-                    binding.textSlotType.setText(R.string.car);
-                    binding.tipoPlazaIcon.setImageResource(R.drawable.directions_car_fill);
+                    binding.chipCar.setVisibility(View.VISIBLE);
                     break;
                 case ELECTRICO:
-                    binding.textSlotType.setText(R.string.electric_car);
-                    binding.tipoPlazaIcon.setImageResource(R.drawable.electric_car_fill);
+                    binding.chipElectricCar.setVisibility(View.VISIBLE);
                     break;
                 case MOTO:
-                    binding.textSlotType.setText(R.string.motorcycle);
-                    binding.tipoPlazaIcon.setImageResource(R.drawable.motorcycle_fill);
+                    binding.chipMotorcycle.setVisibility(View.VISIBLE);
                     break;
                 case DISCAPACITADO:
-                    binding.textSlotType.setText(R.string.accessible_car);
-                    binding.tipoPlazaIcon.setImageResource(R.drawable.accessible_forward_fill);
+                    binding.chipAccessibleCar.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -123,10 +115,10 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
         final long minutesToHour = duration.toMinutes() % 60;
 
         if (minutesToHour == 0L) {
-            binding.textDuration.setText(String.format("%s h%s", duration.toHours(), DIVIDER));
+            binding.chipSelectedDuration.setText(String.format(Locale.getDefault(), "%s h", duration.toHours()));
         } else {
-            binding.textDuration.setText(
-                    String.format("%s,%s h%s", duration.toHours(), minutesToHour, DIVIDER));
+            binding.chipSelectedDuration.setText(
+                    String.format(Locale.getDefault(), "%s,%s h", duration.toHours(), minutesToHour));
         }
     }
 }

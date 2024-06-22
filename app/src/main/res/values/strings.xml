@@ -102,4 +102,5 @@
     <string name="sign_in_with_google">Continúa con Google</string>
     <string name="info_label">Info label</string>
     <string name="max_hours_text">Máximo 8 horas por reserva</string>
+    <string name="card_more_info">Haz clic en un elemento para más información</string>
 </resources>

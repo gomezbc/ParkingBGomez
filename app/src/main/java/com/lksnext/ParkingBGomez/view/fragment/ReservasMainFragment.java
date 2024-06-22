@@ -100,7 +100,7 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
 
         ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay, activity.getSupportFragmentManager(), this);
 
-        recyclerView.addItemDecoration(new ReservaItemDecoration(10));
+        recyclerView.addItemDecoration(new ReservaItemDecoration(6));
         recyclerView.setAdapter(adapter);
     }
 

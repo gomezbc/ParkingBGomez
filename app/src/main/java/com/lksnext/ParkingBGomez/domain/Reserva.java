@@ -74,6 +74,8 @@ public class Reserva {
         return Objects.equals(fecha, reserva.fecha) && Objects.equals(usuario, reserva.usuario) && Objects.equals(uuid, reserva.uuid) && Objects.equals(plaza, reserva.plaza) && Objects.equals(hora, reserva.hora);
     }
 
+
+
     @Override
     public int hashCode() {
         return Objects.hash(fecha, usuario, uuid, plaza, hora);
@@ -105,4 +107,15 @@ public class Reserva {
                     return oldItem.equals(newItem);
                 }
             };
+
+    public int compareTo(Reserva reserva) {
+        if (this.hora.compareTo(reserva.hora) == 0) {
+            return 0;
+        } else if (this.hora.compareTo(reserva.hora) > 0) {
+            return -1;
+        } else if (this.hora.compareTo(reserva.hora) < 0) {
+            return 1;
+        }
+        return 0;
+    }
 }

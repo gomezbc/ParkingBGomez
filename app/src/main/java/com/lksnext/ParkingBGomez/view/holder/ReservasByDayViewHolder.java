@@ -42,9 +42,9 @@ public class ReservasByDayViewHolder extends RecyclerView.ViewHolder {
         recyclerView.setNestedScrollingEnabled(false);
 
         ReservasAdapter adapter = new ReservasAdapter(this.fragmentManager, refreshListener);
-
+        reservas.sort(Reserva::compareTo);
         adapter.submitList(reservas);
-        recyclerView.addItemDecoration(new ReservaItemDecoration(25));
+        recyclerView.addItemDecoration(new ReservaItemDecoration(20));
         recyclerView.setAdapter(adapter);
 
         boolean isRecyclerViewEmpty = Objects.requireNonNull(recyclerView.getAdapter())
