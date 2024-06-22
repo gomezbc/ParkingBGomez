@@ -12,6 +12,7 @@ import com.lksnext.ParkingBGomez.domain.HourItem;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
-    private final List<HourItem> hours;
+    private List<HourItem> hours;
     private final MainViewModel mainViewModel;
 
     public HourAdapter(List<HourItem> hours, MainViewModel mainViewModel) {
@@ -27,6 +28,10 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         this.mainViewModel = mainViewModel;
         restoreSelectedHour();
         setHasStableIds(true);
+    }
+
+    public void updateData(List<HourItem> newHours) {
+        this.hours = newHours;
     }
 
     @NonNull
@@ -100,9 +105,10 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         if (selectedHours.size() == 2){
             final LocalTime horaInicio = LocalTime.parse(selectedHours.get(0).getHour());
             final LocalTime horaFin = LocalTime.parse(selectedHours.get(1).getHour());
+            final LocalDate localDate = mainViewModel.getSelectedDate().getValue();
             mainViewModel.setSelectedHour(new Hora(
-                    TimeUtils.convertLocalTimeToEpoch(horaInicio),
-                    TimeUtils.convertLocalTimeToEpoch(horaFin)));
+                    TimeUtils.convertLocalTimeToEpochWithLocalDate(horaInicio, localDate),
+                    TimeUtils.convertLocalTimeToEpochWithLocalDate(horaFin, localDate)));
         }else {
             mainViewModel.setSelectedHour(null);
         }
@@ -175,13 +181,18 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         Optional<HourItem> isDisabledInTheMiddle = subList.stream()
                 .filter(h -> !h.isEnabled())
                 .findAny();
+        int heightHoursFromSelectedPosition = newSelectedPosition + 17;
+        if (heightHoursFromSelectedPosition > hours.size()){
+            heightHoursFromSelectedPosition = hours.size();
+        }
         if (isDisabledInTheMiddle.isPresent()) {
             // Si hay un deshabilitado en medio poner en middle todos los anteriores hasta el deshabilitado
             final int disabledPosition = hours.indexOf(isDisabledInTheMiddle.get());
-            setItemsInRangeAsInMiddle(newSelectedPosition + 1, disabledPosition);
+            setItemsInRangeAsInMiddle(newSelectedPosition + 1,
+                    Math.min(disabledPosition, heightHoursFromSelectedPosition));
         }else {
             // Si no hay ninguno deshabilitado en medio poner en middle todos los siguientes
-            setItemsInRangeAsInMiddle(newSelectedPosition + 1, hours.size());
+            setItemsInRangeAsInMiddle(newSelectedPosition + 1, heightHoursFromSelectedPosition);
         }
         if (positionAsSelected){
             setPositionAsSelected(newSelectedPosition);
@@ -194,7 +205,9 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
     }
 
     private void handleExistingSelection(int newSelectedPosition, int previousSelectedPosition, int selectedCount) {
-        if (newSelectedPosition > previousSelectedPosition && selectedCount < 2) {
+        // Si no es en middle, entonces es superior a las 8 horas y debe manejarse como una nueva selección
+        HourItem newSelectedHourItem = hours.get(newSelectedPosition);
+        if (newSelectedHourItem.isInMiddle() && newSelectedPosition > previousSelectedPosition && selectedCount < 2) {
             handleAfterPreviousSelection(newSelectedPosition, previousSelectedPosition);
         }else {
             // Si el nuevo seleccionado es anterior al anterior seleccionado o si ya hay 2 seleccionados

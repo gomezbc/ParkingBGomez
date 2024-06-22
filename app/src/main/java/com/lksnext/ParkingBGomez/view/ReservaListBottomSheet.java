@@ -16,7 +16,6 @@ import com.lksnext.ParkingBGomez.databinding.ReservaListBottomSheetBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
-import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 
 public class ReservaListBottomSheet extends BottomSheetDialogFragment {
 
@@ -43,9 +42,7 @@ public class ReservaListBottomSheet extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.reservaDeleteButton.setOnClickListener(v -> {
-            MainActivity activity = (MainActivity) requireActivity();
-            DataRepository dataRepository = DataRepository.getInstance();
-            dataRepository.deleteReserva(reserva, activity, new Callback() {
+            DataRepository.getInstance().deleteReserva(reserva, new Callback() {
                 @Override
                 public void onSuccess() {
                     Snackbar.make(view, "Reserva eliminada", BaseTransientBottomBar.LENGTH_SHORT).show();

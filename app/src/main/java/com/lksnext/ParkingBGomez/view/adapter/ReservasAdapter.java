@@ -49,31 +49,35 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ReservasViewHolder holder, int position) {
         final Reserva reserva = getItem(position);
-
-        Hora hora = setSelectedHourInterval(reserva);
-
-        if (reserva.getPlaza() == null || reserva.getFecha() == null ||
-                reserva.getHora() == null || reserva.getUsuario() == null) {
-            binding.reservaCard.setVisibility(View.GONE);
-            binding.reservaFallbackCard.setVisibility(View.VISIBLE);
-            return;
-        }
-
-        var modalBottomSheet = new ReservaListBottomSheet(reserva, refreshListener);
-
-        binding.optionsButton.setOnClickListener(v ->
-                modalBottomSheet.show(this.fragmentManager, ReservaListBottomSheet.TAG));
-
+        final Hora hora = reserva.getHora();
 
         binding.reservaCard.setVisibility(View.VISIBLE);
         binding.reservaFallbackCard.setVisibility(View.GONE);
 
+        setOptionsModal(hora, reserva);
+
+        setPlazaIdInfo(reserva);
+        setSelectedHourInterval(reserva);
+        setTipoPlazaInfo(reserva);
+        setTimeInfo(hora);
+    }
+
+    private void setOptionsModal(Hora hora, Reserva reserva) {
+        final long nowEpoch = TimeUtils.getNowEpoch();
+        if (hora.getHoraInicio() >= nowEpoch) {
+            // Show options button if the reservation is in the future
+            var modalBottomSheet = new ReservaListBottomSheet(reserva, refreshListener);
+            binding.optionsButton.setOnClickListener(v ->
+                    modalBottomSheet.show(this.fragmentManager, ReservaListBottomSheet.TAG));
+        }else {
+            // Hide options button if the reservation is in the past
+            binding.optionsButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void setPlazaIdInfo(Reserva reserva) {
         long plaza = reserva.getPlaza().getId();
         binding.textParkingSlot.setText(String.format(Locale.getDefault(), "%s%s", DIVIDER, plaza));
-
-        setTipoPlazaInfo(reserva);
-
-        setTimeInfo(hora);
     }
 
     private void setTimeInfo(Hora hora) {
@@ -111,22 +115,18 @@ public class ReservasAdapter extends ListAdapter<Reserva, ReservasViewHolder> {
         }
     }
 
-    @Nullable
-    private Hora setSelectedHourInterval(Reserva reserva) {
+    private void setSelectedHourInterval(Reserva reserva) {
         Hora hora = reserva.getHora();
-        if (hora != null) {
-            final Duration duration = Duration.between(
-                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
-                    TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
-            final long minutesToHour = duration.toMinutes() % 60;
+        final Duration duration = Duration.between(
+                TimeUtils.convertEpochTolocalDateTime(hora.getHoraInicio()),
+                TimeUtils.convertEpochTolocalDateTime(hora.getHoraFin()));
+        final long minutesToHour = duration.toMinutes() % 60;
 
-            if (minutesToHour == 0L) {
-                binding.textDuration.setText(String.format("%s h%s", duration.toHours(), DIVIDER));
-            } else {
-                binding.textDuration.setText(
-                        String.format("%s,%s h%s", duration.toHours(), minutesToHour, DIVIDER));
-            }
+        if (minutesToHour == 0L) {
+            binding.textDuration.setText(String.format("%s h%s", duration.toHours(), DIVIDER));
+        } else {
+            binding.textDuration.setText(
+                    String.format("%s,%s h%s", duration.toHours(), minutesToHour, DIVIDER));
         }
-        return hora;
     }
 }

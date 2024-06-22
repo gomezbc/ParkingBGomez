@@ -2,19 +2,21 @@ package com.lksnext.ParkingBGomez.domain;
 
 import androidx.annotation.NonNull;
 
+import java.time.LocalTime;
 import java.util.Objects;
 
-public class HourItem{
+public class HourItem implements Comparable<HourItem> {
     private String hour;
     private boolean selected;
     private boolean enabled;
     private boolean inMiddle;
 
-    public HourItem(String hour, boolean enabled){
+    public HourItem(@NonNull String hour, boolean enabled){
         this.hour = hour;
         this.enabled = enabled;
     }
 
+    @NonNull
     public String getHour() {
         return hour;
     }
@@ -53,6 +55,13 @@ public class HourItem{
         if (o == null || getClass() != o.getClass()) return false;
         HourItem hourItem = (HourItem) o;
         return Objects.equals(hour, hourItem.hour);
+    }
+
+    @Override
+    public int compareTo(HourItem other) {
+        final LocalTime thisHour = LocalTime.parse(this.hour);
+        final LocalTime otherHour = LocalTime.parse(other.hour);
+        return thisHour.compareTo(otherHour);
     }
 
     @Override

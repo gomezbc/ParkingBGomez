@@ -9,10 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
@@ -39,6 +44,11 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
     ) {
         binding = FragmentReservasMainBinding.inflate(inflater, container, false);
 
+        binding.nuevaReservaExtendedFab.setOnClickListener(l -> {
+            NavController navController = Navigation.findNavController(binding.getRoot());
+            navController.navigate(R.id.action_reservasMainFragment_to_reservarMainFragment);
+        });
+
         return binding.getRoot();
     }
 
@@ -60,7 +70,7 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
 
         if (activity != null) {
             LiveData<Map<LocalDate, List<Reserva>>> liveData =
-                    getReservasByDayByUser(dataRepository, activity);
+                    getReservasByDayByUser(dataRepository);
 
             // Is executed when the LiveData object is updated with db data
             liveData.observe(getViewLifecycleOwner(), dbReservasByDay -> {
@@ -94,10 +104,10 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
         recyclerView.setAdapter(adapter);
     }
 
-    private static LiveData<Map<LocalDate, List<Reserva>>>
-    getReservasByDayByUser(DataRepository dataRepository, MainActivity activity) {
+    private LiveData<Map<LocalDate, List<Reserva>>>
+    getReservasByDayByUser(DataRepository dataRepository) {
         // Return the LiveData object with the reservas and handle the success and failure cases
-        return dataRepository.getReservasByDayByUser("usuario", activity, new Callback() {
+        return dataRepository.getReservasByDayByUser(DataRepository.getInstance().getCurrentUser().getUid(), new Callback() {
             @Override
             public void onSuccess() {
                 Log.d("getReservasByDayByUser", "Success.");
@@ -106,6 +116,9 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
             @Override
             public void onFailure() {
                 Log.d("getReservasByDayByUser", "Error getting documents.");
+                Snackbar.make(binding.getRoot(),
+                        "La aplicación no ha podido cargar tus proximas reservas. Intentalo de nuevo más tarde.",
+                        BaseTransientBottomBar.LENGTH_LONG).show();
             }
         });
     }

@@ -1,35 +1,49 @@
 [versions]
-agp = "8.3.2"
+agp = "8.5.0"
 coreTesting = "2.2.0"
-firebaseBom = "33.0.0"
+credentials = "1.2.2"
+firebaseBom = "33.1.0"
+googleid = "<latest version>"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-appcompat = "1.6.1"
+appcompat = "1.7.0"
+kotlinxCoroutinesCore = "1.7.3"
 leakcanaryAndroid = "2.14"
-material = "1.11.0"
+material = "1.12.0"
 constraintlayout = "2.1.4"
-materialVersion = "1.11.0"
+materialVersion = "1.12.0"
 navigationFragment = "2.7.7"
 navigationUi = "2.7.7"
 gridlayout = "1.0.0"
-firebasePerf = "21.0.0"
+firebasePerf = "21.0.1"
 gradle = "8.1.0"
-googleServices = "4.4.1"
+googleServices = "4.4.2"
 perfPlugin = "1.4.2"
-firebaseCrashlytics = "19.0.0"
-firebaseCrashlyticsGradle = "3.0.0"
-firebaseAnalytics = "22.0.0"
-googleGmsGoogleServices = "4.4.1"
+firebaseCrashlytics = "19.0.1"
+firebaseCrashlyticsGradle = "3.0.1"
+firebaseAnalytics = "22.0.1"
+googleGmsGoogleServices = "4.4.2"
 firebaseFirestore = "25.0.0"
+firebaseAuth = "23.0.0"
+googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
+playServicesAuth = "21.2.0"
+playServicesMaps = "18.2.0"
+kotlin = "2.0.0"
+coreKtx = "1.13.1"
 
 [libraries]
 core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
+credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
+credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -45,8 +59,14 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 googleGmsGoogleServices = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+googleAndroidLibrariesMapsplatformSecretsGradlePlugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "googleAndroidLibrariesMapsplatformSecretsGradlePlugin" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 

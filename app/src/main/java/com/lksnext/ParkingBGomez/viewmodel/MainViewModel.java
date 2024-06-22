@@ -8,9 +8,9 @@ import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.enums.BottomNavState;
 import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
+import com.lksnext.ParkingBGomez.utils.TimeUtils;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Objects;
 
 public class MainViewModel extends ViewModel {
@@ -18,7 +18,7 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<BottomNavState> bottomNavState =
             new MutableLiveData<>(BottomNavState.HOME);
     private final MutableLiveData<LocalDate> selectedDate =
-            new MutableLiveData<>(LocalDate.now(ZoneId.systemDefault()));
+            new MutableLiveData<>(LocalDate.now(TimeUtils.ZONE_ID));
     private final MutableLiveData<Integer> selectedDateDayChip =
             new MutableLiveData<>();
     private final MutableLiveData<TipoPlaza> selectedTipoPlaza =

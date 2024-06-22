@@ -3,11 +3,13 @@ package com.lksnext.ParkingBGomez.domain;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Objects;
 
 public class Reserva {
 
-    private String fecha;
+    private Timestamp fecha;
     private String usuario;
     private String uuid;
     private Plaza plaza;
@@ -16,7 +18,7 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(String fecha, String usuario, String uuid, Plaza plaza, Hora hora) {
+    public Reserva(Timestamp fecha, @NonNull String usuario, @NonNull String uuid, @NonNull Plaza plaza, @NonNull Hora hora) {
         this.fecha = fecha;
         this.usuario = usuario;
         this.uuid = uuid;
@@ -24,39 +26,43 @@ public class Reserva {
         this.hora = hora;
     }
 
-    public String getFecha() {
+    public Timestamp getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(@NonNull Timestamp fecha) {
         this.fecha = fecha;
     }
 
+    @NonNull
     public String getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(String usuario) {
+    public void setUsuario(@NonNull String usuario) {
         this.usuario = usuario;
     }
 
+    @NonNull
     public String getUuid() {
         return uuid;
     }
 
+    @NonNull
     public Plaza getPlaza() {
         return plaza;
     }
 
-    public void setPlaza(Plaza plaza) {
+    public void setPlaza(@NonNull Plaza plaza) {
         this.plaza = plaza;
     }
 
+    @NonNull
     public Hora getHora() {
         return hora;
     }
 
-    public void setHora(Hora hora) {
+    public void setHora(@NonNull Hora hora) {
         this.hora = hora;
     }
 
