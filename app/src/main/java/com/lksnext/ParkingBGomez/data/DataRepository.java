@@ -377,7 +377,7 @@ public class DataRepository {
 
         LocalTime startOfAvailableHoursLocalTime =
                 isToday ?
-                        todayStartLocalTime
+                        todayStartLocalTime.minusMinutes(30) // Para permitir reservar la hora actual
                         : LocalTime.of(7, 0, 0);
 
         LocalTime endOfAvailableHoursLocalTime = LocalTime.of(21, 30, 0);
@@ -385,15 +385,16 @@ public class DataRepository {
         AtomicInteger completedReads = new AtomicInteger(0);
         int totalReads = (int) ChronoUnit.MINUTES.between(startOfAvailableHoursLocalTime, endOfAvailableHoursLocalTime) / 30;
 
-
         getTotalPlazasByTipoPlaza(tipoPlaza, callback).observe(activity, totalPlazas -> {
             DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
             for (LocalTime time = startOfAvailableHoursLocalTime; time.isBefore(endOfAvailableHoursLocalTime); time = time.plusMinutes(30)){
                 long epoch = TimeUtils.convertLocalTimeToEpochWithLocalDate(time, date);
+                Timestamp startOfTheDayTimeStamp = new Timestamp(TimeUtils.getStartOfTodayEpoch(), 0);
                 Timestamp timestamp = new Timestamp(epoch, 0);
+                // Reservas de hoy que han empezado ha esta hora o antes
                 db.collection(RESERVAS_COLLECTION)
-                    // Reservas que han empezado ha esta hora o antes
-                    .whereLessThanOrEqualTo(FECHA, timestamp)
+                    .where(Filter.and(Filter.greaterThanOrEqualTo(FECHA, startOfTheDayTimeStamp),
+                        Filter.lessThanOrEqualTo(FECHA, timestamp)))
                     .get()
                     .addOnSuccessListener(documentReference -> {
                         AtomicLong count = new AtomicLong(0);

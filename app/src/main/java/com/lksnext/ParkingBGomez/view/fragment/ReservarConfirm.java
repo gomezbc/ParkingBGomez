@@ -163,8 +163,6 @@ public class ReservarConfirm extends Fragment {
 
         binding.buttonReservarConfirmar.setOnClickListener(v -> {
 
-            mainViewModel.setReservarState(ReservarState.RESERVADO);
-
             long horaInicioEpoch =
                     Objects.requireNonNull(mainViewModel.getSelectedHour().getValue()).getHoraInicio();
 
@@ -180,6 +178,8 @@ public class ReservarConfirm extends Fragment {
                 @Override
                 public void onSuccess() {
                     Log.d("addReserva","Reserva added: " + reserva);
+                    mainViewModel.setReservarState(ReservarState.RESERVADO);
+                    mainViewModel.setSelectedHour(null);
                     Navigation.findNavController(v)
                             .navigate(R.id.action_reservarConfirm_to_reservarMainFragment_confirmed);
                 }

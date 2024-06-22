@@ -98,7 +98,6 @@ public class ReservarMainFragment extends Fragment{
 
             @Override
             public void onFailure() {
-                binding.progressIndicatorHorarios.hide();
                 Snackbar.make(binding.getRoot(), "Error al cargar los horarios. Intentalo de nuevo más tarde", BaseTransientBottomBar.LENGTH_LONG).show();
             }
         });
@@ -110,9 +109,14 @@ public class ReservarMainFragment extends Fragment{
                 HourAdapter adapter = new HourAdapter(hours, mainViewModel);
                 recyclerView.setAdapter(adapter);
                 recyclerView.addItemDecoration(new HourItemDecoration(20, 5));
+                binding.buttonReservarContinue.setEnabled(false);
                 binding.progressIndicatorHorarios.hide();
                 binding.progressIndicatorHorarios.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
+                // If the layout is reset and the user had selected an hour, enable the button
+                if (mainViewModel.getSelectedHour().getValue() != null){
+                    binding.buttonReservarContinue.setEnabled(true);
+                }
             }
         });
     }
