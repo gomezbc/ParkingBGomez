@@ -12,7 +12,12 @@
           "package_name": "com.lksnext.ParkingBGomez"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "316056691670-rfk3d8t4e3k8vj3vppebcjtiujguggmf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAJIJ_tGv_eaeYs5lDIv7hjy_Vj1amf_g0"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316056691670-rfk3d8t4e3k8vj3vppebcjtiujguggmf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

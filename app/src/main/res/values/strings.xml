@@ -83,6 +83,7 @@
     <string name="invalid_username">Email no válido</string>
     <string name="invalid_password">La contraseña debe tener más de 5 caracteres</string>
     <string name="login_failed">"El correo electrónico o contraseña son incorrectos"</string>
+    <string name="login_failed_google">"No pudimos verificar tu identidad. Inténtalo más tarde"</string>
     <string name="bienvenido">Bienvenido</string>
     <string name="por_favor_inicia_sesion">Por favor, inicia sesión para continuar</string>
     <string name="forgot_password">¿Olvidó su contraseña?</string>
@@ -98,4 +99,5 @@
     <string name="finish">Finalizar</string>
     <string name="create_account">Crea tu cuenta</string>
     <string name="create_account_btn">Crear cuenta</string>
+    <string name="sign_in_with_google">Continúa con Google</string>
 </resources>

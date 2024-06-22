@@ -3,6 +3,7 @@ plugins {
     id "org.sonarqube" version "5.0.0.4638"
     id 'com.google.gms.google-services'
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
 sonar {
@@ -46,6 +47,9 @@ android {
     buildFeatures {
         viewBinding true
     }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
@@ -60,6 +64,13 @@ dependencies {
     implementation libs.firebase.firestore
     implementation libs.firebase.auth
     implementation libs.play.services.maps
+    implementation libs.play.services.auth
+    implementation libs.credentials
+    implementation libs.credentials.play.services.auth
+    implementation libs.googleid
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.core.ktx
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

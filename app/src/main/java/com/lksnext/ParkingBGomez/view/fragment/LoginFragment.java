@@ -11,14 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.credentials.CredentialManager;
+import androidx.credentials.GetPasswordOption;
+import androidx.credentials.GetPublicKeyCredentialOption;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -26,6 +31,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentLoginBinding;
+import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import com.lksnext.ParkingBGomez.viewmodel.LoginViewModel;
 
@@ -50,7 +56,7 @@ public class LoginFragment extends Fragment {
 
         if (navHostFragment != null) {
             loginProgressBar = navHostFragment.requireView().getRootView().findViewById(R.id.progress_bar_login);
-            loginProgressBar.setProgress(10, true);
+            loginProgressBar.setProgress(0, true);
         }
 
         //Acciones a realizar cuando el usuario clica el boton de crear cuenta (se cambia de pantalla)
@@ -62,13 +68,38 @@ public class LoginFragment extends Fragment {
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_loginFragment_to_resetPasswordFragment));
 
+        binding.signInGoogleChip.setOnClickListener(v -> {
+                    if (loginProgressBar != null) {
+                        loginProgressBar.setIndeterminate(true);
+                    }
+                    loginViewModel.signInWithGoogle(requireActivity(), new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            if (loginProgressBar != null) {
+                                loginProgressBar.setIndeterminate(false);
+                                loginProgressBar.setProgress(100, true);
+                            }
+                            loginViewModel.setLogged(true);
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(requireActivity(), R.string.login_failed_google, Toast.LENGTH_SHORT).show();
+                            if (loginProgressBar != null) {
+                                loginProgressBar.setIndeterminate(false);
+                                loginProgressBar.setProgress(0, true);
+                            }
+                        }
+                    });
+                });
+
+
         //Observamos la variable logged, la cual nos informara cuando el usuario intente hacer login y se
         //cambia de pantalla en caso de login correcto
         loginViewModel.isLogged().observe(requireActivity(), logged -> {
             if (logged != null) {
                 if (logged) {
                     //Login Correcto
-                    loginViewModel.setLoginProgress(100);
                     Intent intent = new Intent(requireActivity(), MainActivity.class);
                     startActivity(intent);
                     requireActivity().finish();

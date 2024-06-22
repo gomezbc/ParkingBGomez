@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.AggregateSource;
@@ -85,6 +86,17 @@ public class DataRepository {
         }
     }
 
+    public void signInWithCredential(AuthCredential credential, Callback callback){
+        mAuth.signInWithCredential(credential)
+                .addOnSuccessListener( unused -> {
+                    Log.d(TAG, "signInWithCredential:success");
+                    callback.onSuccess();
+                }).addOnFailureListener(e -> {
+                    Log.w(TAG, "signInWithCredential:failure", e);
+                    callback.onFailure();
+                });
+    }
+
     public void signUp(String email, String password, Callback callback){
         try {
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -108,10 +120,10 @@ public class DataRepository {
         try {
             mAuth.sendPasswordResetEmail(email)
                     .addOnSuccessListener( unused -> {
-                        Log.d(TAG, "signInWithEmail:success");
+                        Log.d(TAG, "resetPassword:success");
                         callback.onSuccess();
                     }).addOnFailureListener(e -> {
-                        Log.w(TAG, "signInWithEmail:failure", e);
+                        Log.w(TAG, "resetPassword:failure", e);
                         callback.onFailure();
                     });
         } catch (Exception e){
@@ -121,7 +133,9 @@ public class DataRepository {
     }
 
     public FirebaseUser getCurrentUser(){
-        return mAuth.getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
+        Log.d(TAG, "getCurrentUser: " + user);
+        return user;
     }
 
     public void saveReserva(Reserva reserva, Callback callback){
