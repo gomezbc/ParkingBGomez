@@ -20,6 +20,7 @@ import androidx.credentials.CredentialManager;
 import androidx.credentials.GetPasswordOption;
 import androidx.credentials.GetPublicKeyCredentialOption;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -96,10 +97,16 @@ public class LoginFragment extends Fragment {
 
         //Observamos la variable logged, la cual nos informara cuando el usuario intente hacer login y se
         //cambia de pantalla en caso de login correcto
-        loginViewModel.isLogged().observe(requireActivity(), logged -> {
+        LiveData<Boolean> isLogged = loginViewModel.isLogged();
+        isLogged.observe(requireActivity(), logged -> {
             if (logged != null) {
                 if (logged) {
                     //Login Correcto
+                    // Remove all observers to avoid memory leaks
+                    isLogged.removeObservers(requireActivity());
+                    loginViewModel.getLoginResult().removeObservers(getViewLifecycleOwner());
+                    loginViewModel.getSignUpResult().removeObservers(getViewLifecycleOwner());
+                    loginViewModel.getLoginFormState().removeObservers(getViewLifecycleOwner());
                     Intent intent = new Intent(requireActivity(), MainActivity.class);
                     startActivity(intent);
                     requireActivity().finish();

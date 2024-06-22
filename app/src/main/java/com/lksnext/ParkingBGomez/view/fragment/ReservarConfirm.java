@@ -72,7 +72,7 @@ public class ReservarConfirm extends Fragment {
     }
 
     private void fetchAndSetPlazaLibre(DataRepository dataRepository, TipoPlaza tipoPlaza, Hora hora) {
-        LiveData<Plaza> plazaLiveData = dataRepository.getPlazaNotReservadaByTipoPlaza(binding.getRoot().getContext(), tipoPlaza, hora, new Callback() {
+        LiveData<Plaza> plazaLiveData = dataRepository.getPlazaNotReservadaByTipoPlaza(getViewLifecycleOwner(), tipoPlaza, hora, new Callback() {
             @Override
             public void onSuccess() {
                 binding.buttonReservarConfirmar.setEnabled(true);
@@ -96,6 +96,7 @@ public class ReservarConfirm extends Fragment {
                         BaseTransientBottomBar.LENGTH_LONG).show();
                 binding.buttonReservarConfirmar.setEnabled(false);
             }
+            plazaLiveData.removeObservers(getViewLifecycleOwner());
         });
     }
 

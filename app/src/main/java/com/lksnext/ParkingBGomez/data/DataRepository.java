@@ -1,7 +1,6 @@
 package com.lksnext.ParkingBGomez.data;
 
 
-import android.content.Context;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.util.Log;
@@ -27,7 +26,6 @@ import com.lksnext.ParkingBGomez.domain.Plaza;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
-import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -209,7 +207,7 @@ public class DataRepository {
         return liveData;
     }
 
-    public LiveData<Plaza> getPlazaNotReservadaByTipoPlaza(Context context, TipoPlaza tipoPlaza, Hora hora, Callback callback){
+    public LiveData<Plaza> getPlazaNotReservadaByTipoPlaza(LifecycleOwner lifecycleOwner, TipoPlaza tipoPlaza, Hora hora, Callback callback){
         CollectionReference plazasCollection = db.collection(PLAZAS_COLLECTION);
         CollectionReference reservasCollection = db.collection(RESERVAS_COLLECTION);
 
@@ -250,7 +248,7 @@ public class DataRepository {
                         )
                 .addOnFailureListener(e -> callback.onFailure());
 
-        plazasIdInThatHoursLiveData.observe((LifecycleOwner) context, plazas -> {
+        plazasIdInThatHoursLiveData.observe(lifecycleOwner, plazas -> {
             if (plazas.isEmpty()){
                 getAnyFreePlazaWithQuery(plazasCollection.whereEqualTo(TIPO_PLAZA, tipoPlaza),
                         liveData,
@@ -264,8 +262,8 @@ public class DataRepository {
                         liveData,
                         callback);
             }
+            plazasIdInThatHoursLiveData.removeObservers(lifecycleOwner);
         });
-
         return liveData;
     }
 
@@ -281,7 +279,7 @@ public class DataRepository {
             }).addOnFailureListener(e -> callback.onFailure());
     }
 
-    public LiveData<Integer> getPlazasLibresByTipoPlaza(TipoPlaza tipoPlaza, long horaActual, Context context, Callback callback){
+    public LiveData<Integer> getPlazasLibresByTipoPlaza(TipoPlaza tipoPlaza, long horaActual, LifecycleOwner lifecycleOwner, Callback callback){
         CollectionReference plazasCollection = db.collection(PLAZAS_COLLECTION);
         CollectionReference reservasCollection = db.collection(RESERVAS_COLLECTION);
 
@@ -317,7 +315,7 @@ public class DataRepository {
                 )
                 .addOnFailureListener(e -> callback.onFailure());
 
-        plazasIdInThatHoursLiveData.observe((LifecycleOwner) context, plazas -> {
+        plazasIdInThatHoursLiveData.observe(lifecycleOwner, plazas -> {
             if (plazas.isEmpty()){
                 plazasCollection.whereEqualTo(TIPO_PLAZA, tipoPlaza)
                         .get()
@@ -342,6 +340,7 @@ public class DataRepository {
                         }).addOnFailureListener(e -> callback.onFailure());
 
             }
+            plazasIdInThatHoursLiveData.removeObservers(lifecycleOwner);
         });
 
         return plazasLibre;
@@ -360,7 +359,7 @@ public class DataRepository {
         return totalPlazas;
     }
 
-    public LiveData<List<HourItem>> getAvailableHoursForDateAndTipoPlaza(LocalDate date, TipoPlaza tipoPlaza, MainActivity activity, Callback callback){
+    public LiveData<List<HourItem>> getAvailableHoursForDateAndTipoPlaza(LocalDate date, TipoPlaza tipoPlaza, LifecycleOwner lifecycleOwner, Callback callback){
         MutableLiveData<List<HourItem>> liveData = new MutableLiveData<>();
         List<HourItem> hourItems = new ArrayList<>();
 
@@ -385,7 +384,9 @@ public class DataRepository {
         AtomicInteger completedReads = new AtomicInteger(0);
         int totalReads = (int) ChronoUnit.MINUTES.between(startOfAvailableHoursLocalTime, endOfAvailableHoursLocalTime) / 30;
 
-        getTotalPlazasByTipoPlaza(tipoPlaza, callback).observe(activity, totalPlazas -> {
+        LiveData<Integer> totalPlazasByTipoPlaza = getTotalPlazasByTipoPlaza(tipoPlaza, callback);
+
+        totalPlazasByTipoPlaza.observe(lifecycleOwner, totalPlazas -> {
             DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
             for (LocalTime time = startOfAvailableHoursLocalTime; time.isBefore(endOfAvailableHoursLocalTime); time = time.plusMinutes(30)){
                 long epoch = TimeUtils.convertLocalTimeToEpochWithLocalDate(time, date);
@@ -416,6 +417,7 @@ public class DataRepository {
 
                     }).addOnFailureListener(e -> callback.onFailure());
             }
+            totalPlazasByTipoPlaza.removeObservers(lifecycleOwner);
         });
 
 
