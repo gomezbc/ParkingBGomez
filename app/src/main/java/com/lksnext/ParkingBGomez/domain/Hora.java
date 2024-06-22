@@ -53,4 +53,8 @@ public class Hora {
                 ", horaFin=" + horaFin +
                 '}';
     }
+
+    public int compareTo(Hora hora) {
+        return Long.compare(this.horaInicio, hora.horaInicio);
+    }
 }
