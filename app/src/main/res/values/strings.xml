@@ -107,4 +107,5 @@
     <string name="error_loading_reservas">Error al cargar la reserva. Intentalo de nuevo más tarde</string>
     <string name="cambiar_reserva">Cambiar reserva</string>
     <string name="reserva_anterior">Reserva anterior</string>
+    <string name="no_possible_label">No se puede ni editar ni cancelar una reserva que ya ha pasado</string>
 </resources>

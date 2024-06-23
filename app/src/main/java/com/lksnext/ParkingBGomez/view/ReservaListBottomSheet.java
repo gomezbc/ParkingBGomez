@@ -18,6 +18,7 @@ import com.lksnext.ParkingBGomez.databinding.ReservaListBottomSheetBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
+import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.view.fragment.ReservasMainFragmentDirections;
 
 public class ReservaListBottomSheet extends BottomSheetDialogFragment {
@@ -37,6 +38,16 @@ public class ReservaListBottomSheet extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = ReservaListBottomSheetBinding.inflate(inflater, container, false);
+
+        long nowEpoch = TimeUtils.getNowEpoch();
+        long reservaEpoch = reserva.getFecha().getSeconds();
+
+        if (nowEpoch >= reservaEpoch) {
+            binding.reservaInfoText.setVisibility(View.VISIBLE);
+            binding.reservaEditButton.setEnabled(false);
+            binding.reservaDeleteButton.setEnabled(false);
+        }
+
         return binding.getRoot();
     }
 
@@ -45,12 +56,11 @@ public class ReservaListBottomSheet extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.reservaEditButton.setOnClickListener(v -> {
-            dismiss();
             ReservasMainFragmentDirections.ActionReservasMainFragmentToModifyReservaMainFragment action =
                     ReservasMainFragmentDirections.actionReservasMainFragmentToModifyReservaMainFragment(reserva.getUuid());
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(action);
-
+            dismiss();
         });
 
         binding.reservaDeleteButton.setOnClickListener(v -> {
