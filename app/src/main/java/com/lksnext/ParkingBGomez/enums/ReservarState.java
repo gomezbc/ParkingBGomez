@@ -4,5 +4,6 @@ public enum ReservarState {
     RESERVAR,
     CONFIRMAR,
     RESERVADO,
+    MODIFICAR,
     ERROR
 }

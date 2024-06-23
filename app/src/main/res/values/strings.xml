@@ -73,6 +73,7 @@
     <string name="plazas_libres_es_estos_momentos">Plazas libres es estos momentos</string>
     <string name="cancelar_reserva">Cancelar reserva</string>
     <string name="editar_reserva">Editar reserva</string>
+    <string name="modify_reserva">Modifica tu reserva</string>
     <string name="boton_para_a_adir_nueva_reserva">Boton para añadir nueva reserva</string>
     <string name="nueva_reserva">Nueva reserva</string>
     <string name="prompt_email">Correo electrónico</string>
@@ -102,5 +103,6 @@
     <string name="sign_in_with_google">Continúa con Google</string>
     <string name="info_label">Info label</string>
     <string name="max_hours_text">Máximo 8 horas por reserva</string>
-    <string name="card_more_info">Haz clic en un elemento para más información</string>
+    <string name="card_more_info">Haz clic en una reserva para más información</string>
+    <string name="error_loading_reservas">Error al cargar la reserva. Intentalo de nuevo más tarde</string>
 </resources>
