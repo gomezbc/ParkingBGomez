@@ -9,11 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -45,8 +44,8 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
         binding = FragmentReservasMainBinding.inflate(inflater, container, false);
 
         binding.nuevaReservaExtendedFab.setOnClickListener(l -> {
-            NavController navController = Navigation.findNavController(binding.getRoot());
-            navController.navigate(R.id.action_reservasMainFragment_to_reservarMainFragment);
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation);
+            bottomNavigationView.setSelectedItemId(R.id.reservarMainFragment);
         });
 
         return binding.getRoot();

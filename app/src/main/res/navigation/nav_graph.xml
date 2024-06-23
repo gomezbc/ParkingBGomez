@@ -30,28 +30,12 @@
         android:id="@+id/inicioMainFragment"
         android:name="com.lksnext.ParkingBGomez.view.fragment.InicioMainFragment"
         android:label="fragment_inicio_main"
-        tools:layout="@layout/fragment_inicio_main" >
-        <action
-            android:id="@+id/action_to_reservas_by_ver_todas_text"
-            app:destination="@id/reservasMainFragment"
-            app:popUpTo="@id/inicioMainFragment"
-            app:popUpToInclusive="false" />
-        <action
-            android:id="@+id/action_inicioMainFragment_to_reservarMainFragment"
-            app:destination="@id/reservarMainFragment"
-            app:popUpTo="@id/inicioMainFragment"
-            app:popUpToInclusive="false" />
-    </fragment>
+        tools:layout="@layout/fragment_inicio_main" />
     <fragment
         android:id="@+id/reservasMainFragment"
         android:name="com.lksnext.ParkingBGomez.view.fragment.ReservasMainFragment"
         android:label="fragment_reservas_main"
-        tools:layout="@layout/fragment_reservas_main" >
-        <action
-            android:id="@+id/action_reservasMainFragment_to_reservarMainFragment"
-            app:destination="@id/reservarMainFragment"
-            app:popUpTo="@id/reservasMainFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_reservas_main" />
     <fragment
         android:id="@+id/reservarConfirm"
         android:name="com.lksnext.ParkingBGomez.view.fragment.ReservarConfirm"
