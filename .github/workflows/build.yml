@@ -47,6 +47,12 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+
+      - name: Set secrets.properties file
+        run: |
+            touch ./secrets.properties
+            echo ${{ secrets.SONAR_TOKEN }} > ./secrets.properties
+          
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
