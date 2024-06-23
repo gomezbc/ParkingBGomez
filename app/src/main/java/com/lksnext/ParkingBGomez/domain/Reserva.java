@@ -3,11 +3,13 @@ package com.lksnext.ParkingBGomez.domain;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Objects;
 
 public class Reserva {
 
-    private String fecha;
+    private Timestamp fecha;
     private String usuario;
     private String uuid;
     private Plaza plaza;
@@ -16,7 +18,7 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(@NonNull String fecha, @NonNull String usuario, @NonNull String uuid, @NonNull Plaza plaza, @NonNull Hora hora) {
+    public Reserva(Timestamp fecha, @NonNull String usuario, @NonNull String uuid, @NonNull Plaza plaza, @NonNull Hora hora) {
         this.fecha = fecha;
         this.usuario = usuario;
         this.uuid = uuid;
@@ -24,12 +26,11 @@ public class Reserva {
         this.hora = hora;
     }
 
-    @NonNull
-    public String getFecha() {
+    public Timestamp getFecha() {
         return fecha;
     }
 
-    public void setFecha(@NonNull String fecha) {
+    public void setFecha(@NonNull Timestamp fecha) {
         this.fecha = fecha;
     }
 
@@ -73,6 +74,8 @@ public class Reserva {
         return Objects.equals(fecha, reserva.fecha) && Objects.equals(usuario, reserva.usuario) && Objects.equals(uuid, reserva.uuid) && Objects.equals(plaza, reserva.plaza) && Objects.equals(hora, reserva.hora);
     }
 
+
+
     @Override
     public int hashCode() {
         return Objects.hash(fecha, usuario, uuid, plaza, hora);
@@ -104,4 +107,15 @@ public class Reserva {
                     return oldItem.equals(newItem);
                 }
             };
+
+    public int compareTo(Reserva reserva) {
+        if (this.hora.compareTo(reserva.hora) == 0) {
+            return 0;
+        } else if (this.hora.compareTo(reserva.hora) > 0) {
+            return -1;
+        } else if (this.hora.compareTo(reserva.hora) < 0) {
+            return 1;
+        }
+        return 0;
+    }
 }

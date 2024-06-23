@@ -9,21 +9,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
+import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import com.lksnext.ParkingBGomez.view.adapter.ReservasByDayAdapter;
 import com.lksnext.ParkingBGomez.view.decoration.ReservaItemDecoration;
+import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,9 +46,17 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
     ) {
         binding = FragmentReservasMainBinding.inflate(inflater, container, false);
 
+        MainViewModel mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        // To handle when the user goes back to the fragment
+        Log.d("ReservasMainFragment", "onCreateView: " + mainViewModel.getReservarState().getValue());
+        if (mainViewModel.getReservarState().getValue() == ReservarState.MODIFICAR) {
+            mainViewModel.setSelectedHour(null);
+            mainViewModel.setReservarState(ReservarState.RESERVAR);
+        }
+
         binding.nuevaReservaExtendedFab.setOnClickListener(l -> {
-            NavController navController = Navigation.findNavController(binding.getRoot());
-            navController.navigate(R.id.action_reservasMainFragment_to_reservarMainFragment);
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation);
+            bottomNavigationView.setSelectedItemId(R.id.reservarMainFragment);
         });
 
         return binding.getRoot();
@@ -68,7 +80,7 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
 
         if (activity != null) {
             LiveData<Map<LocalDate, List<Reserva>>> liveData =
-                    getReservasByDayByUser(dataRepository, activity);
+                    getReservasByDayByUser(dataRepository);
 
             // Is executed when the LiveData object is updated with db data
             liveData.observe(getViewLifecycleOwner(), dbReservasByDay -> {
@@ -98,14 +110,14 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
 
         ReservasByDayAdapter adapter = new ReservasByDayAdapter(dbReservasByDay, activity.getSupportFragmentManager(), this);
 
-        recyclerView.addItemDecoration(new ReservaItemDecoration(10));
+        recyclerView.addItemDecoration(new ReservaItemDecoration(6));
         recyclerView.setAdapter(adapter);
     }
 
-    private static LiveData<Map<LocalDate, List<Reserva>>>
-    getReservasByDayByUser(DataRepository dataRepository, MainActivity activity) {
+    private LiveData<Map<LocalDate, List<Reserva>>>
+    getReservasByDayByUser(DataRepository dataRepository) {
         // Return the LiveData object with the reservas and handle the success and failure cases
-        return dataRepository.getReservasByDayByUser("usuario", activity, new Callback() {
+        return dataRepository.getReservasByDayByUser(DataRepository.getInstance().getCurrentUser().getUid(), new Callback() {
             @Override
             public void onSuccess() {
                 Log.d("getReservasByDayByUser", "Success.");
@@ -114,6 +126,9 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
             @Override
             public void onFailure() {
                 Log.d("getReservasByDayByUser", "Error getting documents.");
+                Snackbar.make(binding.getRoot(),
+                        "La aplicación no ha podido cargar tus proximas reservas. Intentalo de nuevo más tarde.",
+                        BaseTransientBottomBar.LENGTH_LONG).show();
             }
         });
     }

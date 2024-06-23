@@ -12,14 +12,10 @@
         tools:layout="@layout/fragment_reservar_main" >
         <action
             android:id="@+id/action_reservarMainFragment_to_reservarConfirm"
-            app:destination="@id/reservarConfirm"
-            app:popUpTo="@id/inicioMainFragment"
-            app:popUpToInclusive="false" />
+            app:destination="@id/reservarConfirm" />
         <action
             android:id="@+id/action_reservarMainFragment_to_reservasMainFragment"
-            app:destination="@id/reservasMainFragment"
-            app:popUpTo="@id/reservarMainFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/reservasMainFragment" />
     </fragment>
     <fragment
         android:id="@+id/cuentaMainFragment"
@@ -30,40 +26,39 @@
         android:id="@+id/inicioMainFragment"
         android:name="com.lksnext.ParkingBGomez.view.fragment.InicioMainFragment"
         android:label="fragment_inicio_main"
-        tools:layout="@layout/fragment_inicio_main" >
-        <action
-            android:id="@+id/action_to_reservas_by_ver_todas_text"
-            app:destination="@id/reservasMainFragment"
-            app:popUpTo="@id/inicioMainFragment"
-            app:popUpToInclusive="false" />
-        <action
-            android:id="@+id/action_inicioMainFragment_to_reservarMainFragment"
-            app:destination="@id/reservarMainFragment"
-            app:popUpTo="@id/inicioMainFragment"
-            app:popUpToInclusive="false" />
-    </fragment>
+        tools:layout="@layout/fragment_inicio_main" />
     <fragment
         android:id="@+id/reservasMainFragment"
         android:name="com.lksnext.ParkingBGomez.view.fragment.ReservasMainFragment"
         android:label="fragment_reservas_main"
         tools:layout="@layout/fragment_reservas_main" >
         <action
-            android:id="@+id/action_reservasMainFragment_to_reservarMainFragment"
-            app:destination="@id/reservarMainFragment"
-            app:popUpTo="@id/reservasMainFragment" />
+            android:id="@+id/action_reservasMainFragment_to_modifyReservaMainFragment"
+            app:destination="@id/modifyReservaMainFragment" />
     </fragment>
     <fragment
         android:id="@+id/reservarConfirm"
         android:name="com.lksnext.ParkingBGomez.view.fragment.ReservarConfirm"
         android:label="fragment_reservar_confirm"
-        tools:layout="@layout/fragment_reservar_confirm" >
+        tools:layout="@layout/fragment_reservar_confirm" />
+    <fragment
+        android:id="@+id/modifyReservaMainFragment"
+        android:name="com.lksnext.ParkingBGomez.view.fragment.ModifyReservaMainFragment"
+        android:label="fragment_modify_reserva_main"
+        tools:layout="@layout/fragment_modify_reserva_main" >
+        <argument
+            android:name="reservaUuid"
+            app:argType="string" />
         <action
-            android:id="@+id/action_reservarConfirm_to_reservarMainFragment"
-            app:destination="@id/reservarMainFragment" />
-        <action
-            android:id="@+id/action_reservarConfirm_to_reservarMainFragment_confirmed"
-            app:destination="@id/reservarMainFragment"
-            app:popUpTo="@id/inicioMainFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_modifyReservaMainFragment_to_modifyReservarConfirm"
+            app:destination="@id/modifyReservarConfirm" />
+    </fragment>
+    <fragment
+        android:id="@+id/modifyReservarConfirm"
+        android:name="com.lksnext.ParkingBGomez.view.fragment.ModifyReservarConfirm"
+        android:label="ModifyReservarConfirm" >
+        <argument
+            android:name="reservaToModifyUuid"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -24,7 +24,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="16dp">
+            android:paddingTop="36dp">
+
+            <TextView
+                android:id="@+id/reserva_info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="8dp"
+                android:text="@string/no_possible_label"
+                android:visibility="gone"
+                app:drawableStartCompat="@drawable/baseline_info_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/select_horario_text" />
 
             <Button
                 android:id="@+id/reserva_edit_button"
@@ -38,12 +52,12 @@
             <Button
                 android:id="@+id/reserva_delete_button"
                 style="@style/DeleteItemButton.Theme.ParkingBGomez"
-                android:theme="@style/DeleteItemButton.Theme.ParkingBGomez"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/cancelar_reserva"
                 android:textAlignment="viewStart"
                 android:textColor="?attr/colorTertiary"
+                android:theme="@style/DeleteItemButton.Theme.ParkingBGomez"
                 app:icon="@drawable/baseline_delete_forever_24"
                 app:iconTint="?attr/colorTertiary" />
 
