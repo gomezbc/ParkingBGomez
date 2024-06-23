@@ -26,6 +26,12 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<Hora> selectedHour = new MutableLiveData<>(null);
     private final MutableLiveData<ReservarState> reservarState =
             new MutableLiveData<>(ReservarState.RESERVAR);
+    private final MutableLiveData<LocalDate> newSelectedDate =
+            new MutableLiveData<>(LocalDate.now(TimeUtils.ZONE_ID));
+    private final MutableLiveData<Integer> newSelectedDateDayChip =
+            new MutableLiveData<>();
+    private final MutableLiveData<TipoPlaza> newSelectedTipoPlaza =
+            new MutableLiveData<>(TipoPlaza.ESTANDAR);
 
     public MutableLiveData<BottomNavState> getBottomNavState() {
         return bottomNavState;
@@ -83,5 +89,31 @@ public class MainViewModel extends ViewModel {
 
     public void setReservarState(ReservarState state) {
         reservarState.setValue(state);
+    }
+
+    public MutableLiveData<LocalDate> getNewSelectedDate() {
+        return newSelectedDate;
+    }
+
+    public MutableLiveData<Integer> getNewSelectedDateDayChip() {
+        return newSelectedDateDayChip;
+    }
+
+    public MutableLiveData<TipoPlaza> getNewSelectedTipoPlaza() {
+        return newSelectedTipoPlaza;
+    }
+
+    public void setNewSelectedDateDay(int selectedDateDay) {
+        final LocalDate newLocalDate = Objects.requireNonNull(newSelectedDate.getValue())
+                .withDayOfMonth(selectedDateDay);
+        newSelectedDate.setValue(newLocalDate);
+    }
+
+    public void setNewSelectedDateDayChip(int newSelectedDateDayChip) {
+        this.newSelectedDateDayChip.setValue(newSelectedDateDayChip);
+    }
+
+    public void setNewSelectedTipoPlaza(TipoPlaza tipoPlaza) {
+        newSelectedTipoPlaza.setValue(tipoPlaza);
     }
 }

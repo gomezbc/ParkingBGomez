@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.ModifyReservaMainFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_reservar_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/baseline_close_24"
+            app:title="@string/modify_reserva" />
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_select_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/select_date"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/date_picker"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/date_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/materialDivider_1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_select_day">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/date_chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/day1"
+                        style="@style/Widget.Material3.Chip.Filter.Elevated"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:enabled="false"
+                        android:fontFamily="@font/roboto"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:checkedIconVisible="false"
+                        app:chipCornerRadius="100dp"
+                        app:chipEndPadding="2dp"
+                        app:chipMinTouchTargetSize="0dp"
+                        app:chipStartPadding="2dp"
+                        app:chipStrokeWidth="0dp"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:textEndPadding="6dp"
+                        app:textStartPadding="6dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/day2"
+                        style="@style/Widget.Material3.Chip.Filter.Elevated"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:enabled="false"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/roboto"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:checkedIconVisible="false"
+                        app:chipCornerRadius="100dp"
+                        app:chipEndPadding="2dp"
+                        app:chipMinTouchTargetSize="12dp"
+                        app:chipStartPadding="2dp"
+                        app:chipStrokeWidth="0dp"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintLeft_toRightOf="@+id/day1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:textEndPadding="6dp"
+                        app:textStartPadding="6dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/day3"
+                        style="@style/Widget.Material3.Chip.Filter.Elevated"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="10dp"
+                        android:enabled="false"
+                        android:fontFamily="@font/roboto"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:checkedIconVisible="false"
+                        app:chipCornerRadius="100dp"
+                        app:chipEndPadding="2dp"
+                        app:chipMinTouchTargetSize="0dp"
+                        app:chipStartPadding="2dp"
+                        app:chipStrokeWidth="0dp"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintLeft_toRightOf="@+id/day2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:textEndPadding="6dp"
+                        app:textStartPadding="6dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/day4"
+                        style="@style/Widget.Material3.Chip.Filter.Elevated"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/roboto"
+                        android:enabled="false"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:checkedIconVisible="false"
+                        app:chipCornerRadius="100dp"
+                        app:chipEndPadding="2dp"
+                        app:chipMinTouchTargetSize="0dp"
+                        app:chipStartPadding="2dp"
+                        app:chipStrokeWidth="0dp"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintLeft_toRightOf="@+id/day3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:textEndPadding="6dp"
+                        app:textStartPadding="6dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/day5"
+                        style="@style/Widget.Material3.Chip.Filter.Elevated"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/roboto"
+                        android:insetTop="0dp"
+                        android:enabled="false"
+                        android:insetBottom="0dp"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:checkedIconVisible="false"
+                        app:chipCornerRadius="100dp"
+                        app:chipEndPadding="2dp"
+                        app:chipMinTouchTargetSize="0dp"
+                        app:chipStartPadding="2dp"
+                        app:chipStrokeWidth="0dp"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintLeft_toRightOf="@+id/day4"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:textEndPadding="6dp"
+                        app:textStartPadding="6dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/day6"
+                        style="@style/Widget.Material3.Chip.Filter.Elevated"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/roboto"
+                        android:insetTop="0dp"
+                        android:enabled="false"
+                        android:insetBottom="0dp"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:checkedIconVisible="false"
+                        app:chipCornerRadius="100dp"
+                        app:chipEndPadding="2dp"
+                        app:chipMinTouchTargetSize="0dp"
+                        app:chipStartPadding="2dp"
+                        app:chipStrokeWidth="0dp"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintLeft_toRightOf="@+id/day5"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:textEndPadding="6dp"
+                        app:textStartPadding="6dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/day7"
+                        style="@style/Widget.Material3.Chip.Filter.Elevated"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/roboto"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:enabled="false"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:checkedIconVisible="false"
+                        app:chipCornerRadius="100dp"
+                        app:chipEndPadding="2dp"
+                        app:chipMinTouchTargetSize="0dp"
+                        app:chipStartPadding="2dp"
+                        app:chipStrokeWidth="0dp"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintLeft_toRightOf="@+id/day6"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:textEndPadding="6dp"
+                        app:textStartPadding="6dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/date_chip_group">
+
+                    <TextView
+                        android:id="@+id/textView_day1"
+                        android:layout_width="36dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="L"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView_day2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/textView_day2"
+                        android:layout_width="36dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="M"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView_day3"
+                        app:layout_constraintStart_toEndOf="@id/textView_day1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/textView_day3"
+                        android:layout_width="36dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="M"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView_day4"
+                        app:layout_constraintStart_toEndOf="@id/textView_day2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/textView_day4"
+                        android:layout_width="36dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="J"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView_day5"
+                        app:layout_constraintStart_toEndOf="@id/textView_day3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/textView_day5"
+                        android:layout_width="36dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="V"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView_day6"
+                        app:layout_constraintStart_toEndOf="@id/textView_day4"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/textView_day6"
+                        android:layout_width="36dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="S"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView_day7"
+                        app:layout_constraintStart_toEndOf="@id/textView_day5"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/textView_day7"
+                        android:layout_width="36dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="D"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/textView_day6"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/materialDivider_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/date_picker"
+                app:layout_constraintTop_toBottomOf="@+id/date_picker" />
+
+            <TextView
+                android:id="@+id/select_slot_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/select_slot_text"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/chipGroup"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialDivider_1" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/select_slot_text"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_car"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/car"
+                    android:enabled="false"
+                    app:checkedIcon="@drawable/directions_car_fill"
+                    app:chipIcon="@drawable/directions_car_fill"
+                    app:chipIconVisible="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_accessible_car"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/accessible_car"
+                    android:enabled="false"
+                    app:checkedIcon="@drawable/accessible_forward_fill"
+                    app:chipIcon="@drawable/accessible_forward_fill"
+                    app:chipIconVisible="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_motorcycle"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/motorcycle"
+                    android:enabled="false"
+                    app:checkedIcon="@drawable/motorcycle_fill"
+                    app:chipIcon="@drawable/motorcycle_fill"
+                    app:chipIconVisible="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_electric_car"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/electric_car"
+                    android:enabled="false"
+                    app:checkedIcon="@drawable/electric_car_fill"
+                    app:chipIcon="@drawable/electric_car_fill"
+                    app:chipIconVisible="true" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/materialDivider_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/select_horario_text"
+                app:layout_constraintEnd_toEndOf="@id/chipGroup"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+
+            <TextView
+                android:id="@+id/select_horario_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/select_horario"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/reservas_info_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/materialDivider_2" />
+
+            <TextView
+                android:id="@+id/reservas_info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/max_hours_text"
+                app:drawableStartCompat="@drawable/baseline_info_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/select_horario_text" />
+
+            <LinearLayout
+                android:id="@+id/linear_horarios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reservas_info_text">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progress_indicator_horarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal|top"
+                    android:indeterminate="true" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/button_reservar_continue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/continue_label"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linear_horarios" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

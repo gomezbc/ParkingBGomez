@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -18,7 +19,6 @@ import android.view.ViewGroup;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarConfirmBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
@@ -158,9 +158,10 @@ public class ReservarConfirm extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.toolbarReservarConfirm.setNavigationOnClickListener(v ->
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_reservarConfirm_to_reservarMainFragment));
+        binding.toolbarReservarConfirm.setNavigationOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigateUp();
+        });
 
         binding.buttonReservarConfirmar.setOnClickListener(v -> {
 
@@ -181,8 +182,8 @@ public class ReservarConfirm extends Fragment {
                     Log.d("addReserva","Reserva added: " + reserva);
                     mainViewModel.setReservarState(ReservarState.RESERVADO);
                     mainViewModel.setSelectedHour(null);
-                    Navigation.findNavController(v)
-                            .navigate(R.id.action_reservarConfirm_to_reservarMainFragment_confirmed);
+                    NavController navController = Navigation.findNavController(v);
+                    navController.navigateUp();
                 }
 
                 @Override

@@ -1,9 +1,20 @@
+buildscript {
+    repositories {
+        google()
+    }
+    dependencies {
+        def nav_version = "2.7.7"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+    }
+}
+
 plugins {
     alias(libs.plugins.androidApplication)
     id "org.sonarqube" version "5.0.0.4638"
     id 'com.google.gms.google-services'
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id 'androidx.navigation.safeargs'
 }
 
 sonar {

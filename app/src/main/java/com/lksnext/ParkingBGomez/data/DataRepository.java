@@ -136,6 +136,19 @@ public class DataRepository {
         return user;
     }
 
+    public LiveData<Reserva> getReservaByUuid(String uuid, Callback callback){
+        MutableLiveData<Reserva> liveData = new MutableLiveData<>();
+        db.collection(RESERVAS_COLLECTION).document(uuid)
+                .get()
+                .addOnSuccessListener(documentReference -> {
+                    if (documentReference.exists()){
+                        liveData.setValue(documentReference.toObject(Reserva.class));
+                    }
+                    callback.onSuccess();
+                }).addOnFailureListener(e -> callback.onFailure());
+        return liveData;
+    }
+
     public void saveReserva(Reserva reserva, Callback callback){
         db.collection(RESERVAS_COLLECTION).document(reserva.getUuid())
                 .set(reserva)

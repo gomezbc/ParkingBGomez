@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,29 +23,30 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
-import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
+import com.lksnext.ParkingBGomez.databinding.FragmentModifyReservaMainBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.HourItem;
-import com.lksnext.ParkingBGomez.enums.BottomNavState;
+import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
+import com.lksnext.ParkingBGomez.utils.TimeUtils;
 import com.lksnext.ParkingBGomez.view.HourAdapter;
 import com.lksnext.ParkingBGomez.view.HourItemDecoration;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
-import java.util.List;
-import java.util.ArrayList;
 
-public class ReservarMainFragment extends Fragment{
+public class ModifyReservaMainFragment extends Fragment{
 
-    private FragmentReservarMainBinding binding;
+    private FragmentModifyReservaMainBinding binding;
     private MainViewModel mainViewModel;
     private final List<Integer> dayChipId = new ArrayList<>(Arrays.asList(R.id.day1, R.id.day2,
             R.id.day3, R.id.day4, R.id.day5, R.id.day6, R.id.day7));
@@ -53,45 +56,98 @@ public class ReservarMainFragment extends Fragment{
     private final List<Integer> tipoPlazaChipId = new ArrayList<>(Arrays.asList(R.id.chip_car,
             R.id.chip_electric_car, R.id.chip_motorcycle, R.id.chip_accessible_car));
 
-    private static final String LOG_TAG = "ReservarMainFragment";
-
+    private static final String LOG_TAG = "ModifyReservaMainFragment";
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentReservarMainBinding.inflate(inflater, container, false);
+        binding = FragmentModifyReservaMainBinding.inflate(inflater, container, false);
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        binding.buttonReservarContinue.setOnClickListener(v -> {
-                    NavController navController = Navigation.findNavController(v);
-                    navController.navigate(R.id.action_reservarMainFragment_to_reservarConfirm);
-                });
-
-        if (mainViewModel.getReservarState().getValue() == ReservarState.MODIFICAR) {
-            mainViewModel.setSelectedHour(null);
-            mainViewModel.setReservarState(ReservarState.RESERVAR);
-        }
-
-        restoreSelectedDateDayChip();
-        restoreSelectedTipoPlaza();
+        mainViewModel.setReservarState(ReservarState.MODIFICAR);
 
         setDayChip();
         setDayText();
-
         setTipoPlazaChipsListener();
 
-        loadAvailableHours();
+        String reservaUuid = ModifyReservaMainFragmentArgs.fromBundle(getArguments()).getReservaUuid();
+
+        LiveData<Reserva> reservaLiveData = DataRepository.getInstance().getReservaByUuid(reservaUuid, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(LOG_TAG, "onSuccess: getReserva");
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(binding.getRoot().getContext(), R.string.error_loading_reservas, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        binding.buttonReservarContinue.setOnClickListener(v -> {
+            ModifyReservaMainFragmentDirections.ActionModifyReservaMainFragmentToModifyReservarConfirm action =
+                    ModifyReservaMainFragmentDirections.actionModifyReservaMainFragmentToModifyReservarConfirm(reservaUuid);
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(action);
+        });
+
+        binding.toolbarReservarConfirm.setNavigationOnClickListener(v -> {
+            mainViewModel.setSelectedHour(null);
+            NavController navController = Navigation.findNavController(v);
+            navController.navigateUp();
+        });
+
+        reservaLiveData.observe(getViewLifecycleOwner(), reserva -> {
+            if (reserva != null) {
+                enableChips();
+                setNewReservaState(reserva);
+                restoreSelectedDateDayChip();
+                restoreSelectedTipoPlaza();
+                loadAvailableHours();
+            }
+            reservaLiveData.removeObservers(getViewLifecycleOwner());
+        });
 
         return binding.getRoot();
+    }
+
+    private void setNewReservaState(Reserva reserva) {
+        LocalDate selectedDate =
+                TimeUtils.convertTimestampToLocalDateTime(reserva.getFecha()).toLocalDate();
+        mainViewModel.setNewSelectedDateDay(selectedDate.getDayOfMonth());
+        mainViewModel.setNewSelectedTipoPlaza(reserva.getPlaza().getTipoPlaza());
+        mainViewModel.setSelectedHour(reserva.getHora());
+        int[] chipId = {R.id.day1};
+        dayChipId.forEach(id -> {
+            final Chip chip = binding.datePicker.findViewById(id);
+            if ((int) chip.getTag() == selectedDate.getDayOfMonth()) {
+                chipId[0] = id;
+            }
+        });
+        mainViewModel.setNewSelectedDateDayChip(chipId[0]);
+    }
+
+    private void enableChips() {
+        binding.day1.setEnabled(true);
+        binding.day2.setEnabled(true);
+        binding.day3.setEnabled(true);
+        binding.day4.setEnabled(true);
+        binding.day5.setEnabled(true);
+        binding.day6.setEnabled(true);
+        binding.day7.setEnabled(true);
+        binding.chipCar.setEnabled(true);
+        binding.chipElectricCar.setEnabled(true);
+        binding.chipMotorcycle.setEnabled(true);
+        binding.chipAccessibleCar.setEnabled(true);
     }
 
     private void loadAvailableHours() {
         DataRepository dataRepository = DataRepository.getInstance();
 
-        TipoPlaza tipoPlaza = mainViewModel.getSelectedTipoPlaza().getValue();
-        LocalDate selectedDate = mainViewModel.getSelectedDate().getValue();
+        TipoPlaza tipoPlaza = mainViewModel.getNewSelectedTipoPlaza().getValue();
+        LocalDate selectedDate = mainViewModel.getNewSelectedDate().getValue();
 
         LiveData<List<HourItem>> listLiveData = dataRepository.getAvailableHoursForDateAndTipoPlaza(selectedDate, tipoPlaza, getViewLifecycleOwner(), new Callback() {
             @Override
@@ -112,14 +168,9 @@ public class ReservarMainFragment extends Fragment{
                 HourAdapter adapter = new HourAdapter(hours, mainViewModel);
                 recyclerView.setAdapter(adapter);
                 recyclerView.addItemDecoration(new HourItemDecoration(20, 5));
-                binding.buttonReservarContinue.setEnabled(false);
                 binding.progressIndicatorHorarios.hide();
                 binding.progressIndicatorHorarios.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
-                // If the layout is reset and the user had selected an hour, enable the button
-                if (mainViewModel.getSelectedHour().getValue() != null){
-                    binding.buttonReservarContinue.setEnabled(true);
-                }
             }
             listLiveData.removeObservers(getViewLifecycleOwner());
         });
@@ -128,20 +179,6 @@ public class ReservarMainFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ReservarState state = mainViewModel.getReservarState().getValue();
-        if (state == ReservarState.RESERVADO){
-            Snackbar.make(view, "Reserva realizada", BaseTransientBottomBar.LENGTH_LONG)
-                    .setAction("Ver", v -> {
-                                NavController navController = Navigation.findNavController(v);
-                                navController.navigate(
-                                        R.id.action_reservarMainFragment_to_reservasMainFragment);
-                            })
-                    .show();
-
-            mainViewModel.setReservarState(ReservarState.RESERVAR);
-            mainViewModel.setBottomNavState(BottomNavState.RESERVAS);
-        }
 
         mainViewModel.getSelectedHour().observe(getViewLifecycleOwner(),hour ->
             // This observer is used to enable the continue button when an hour is selected
@@ -183,8 +220,8 @@ public class ReservarMainFragment extends Fragment{
         chip.setOnClickListener(v -> {
             final Chip  clickedChip = (Chip) v;
             // Update LiveData values
-            mainViewModel.setSelectedDateDay((Integer) clickedChip.getTag());
-            mainViewModel.setSelectedDateDayChip(clickedChip.getId());
+            mainViewModel.setNewSelectedDateDay((Integer) clickedChip.getTag());
+            mainViewModel.setNewSelectedDateDayChip(clickedChip.getId());
 
             // Reset the selected hour
             mainViewModel.setSelectedHour(null);
@@ -192,10 +229,9 @@ public class ReservarMainFragment extends Fragment{
             // Disable the continue button until an hour is selected
             binding.buttonReservarContinue.setEnabled(false);
 
-            DataRepository dataRepository = DataRepository.getInstance();
-            TipoPlaza tipoPlaza = mainViewModel.getSelectedTipoPlaza().getValue();
-            LocalDate selectedDate = mainViewModel.getSelectedDate().getValue();
-            reloadAvailableHoursForDateAndTipoPlaza(dataRepository, selectedDate, tipoPlaza);
+            TipoPlaza tipoPlaza = mainViewModel.getNewSelectedTipoPlaza().getValue();
+            LocalDate selectedDate = mainViewModel.getNewSelectedDate().getValue();
+            reloadAvailableHoursForDateAndTipoPlaza(selectedDate, tipoPlaza);
         });
     }
 
@@ -218,16 +254,17 @@ public class ReservarMainFragment extends Fragment{
     }
 
     private void restoreSelectedDateDayChip() {
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         // Set the initial selected date day chip
-        if (mainViewModel.getSelectedDateDayChip().getValue() == null){
-            mainViewModel.setSelectedDateDayChip(R.id.day1);
+        if (mainViewModel.getNewSelectedDateDayChip().getValue() == null){
+            mainViewModel.setNewSelectedDateDayChip(R.id.day1);
         }
-        final Chip selectedChip = binding.datePicker.findViewById(mainViewModel.getSelectedDateDayChip().getValue());
+        final Chip selectedChip = binding.datePicker.findViewById(mainViewModel.getNewSelectedDateDayChip().getValue());
         selectedChip.setChecked(true);
     }
 
     private void restoreSelectedTipoPlaza() {
-        final TipoPlaza tipoPlaza = mainViewModel.getSelectedTipoPlaza().getValue();
+        final TipoPlaza tipoPlaza = mainViewModel.getNewSelectedTipoPlaza().getValue();
         switch (Objects.requireNonNull(tipoPlaza)){
             case ESTANDAR:
                 binding.chipCar.setChecked(true);
@@ -245,8 +282,6 @@ public class ReservarMainFragment extends Fragment{
     }
 
     private void setTipoPlazaChipsListener() {
-        DataRepository dataRepository = DataRepository.getInstance();
-
         tipoPlazaChipId.forEach(chipId -> {
             final Chip chip = binding.chipGroup.findViewById(chipId);
             chip.setOnClickListener(v -> {
@@ -256,30 +291,30 @@ public class ReservarMainFragment extends Fragment{
                 // Reset the selected hour
                 mainViewModel.setSelectedHour(null);
 
-                LocalDate selectedDate = mainViewModel.getSelectedDate().getValue();
+                LocalDate selectedDate = mainViewModel.getNewSelectedDate().getValue();
                 final Chip clickedChip = (Chip) v;
                 final int id = clickedChip.getId();
                 if (id == R.id.chip_car) {
-                    mainViewModel.setSelectedTipoPlaza(TipoPlaza.ESTANDAR);
+                    mainViewModel.setNewSelectedTipoPlaza(TipoPlaza.ESTANDAR);
                 } else if (id == R.id.chip_electric_car) {
-                    mainViewModel.setSelectedTipoPlaza(TipoPlaza.ELECTRICO);
+                    mainViewModel.setNewSelectedTipoPlaza(TipoPlaza.ELECTRICO);
                 } else if (id == R.id.chip_motorcycle) {
-                    mainViewModel.setSelectedTipoPlaza(TipoPlaza.MOTO);
+                    mainViewModel.setNewSelectedTipoPlaza(TipoPlaza.MOTO);
                 } else if (id == R.id.chip_accessible_car) {
-                    mainViewModel.setSelectedTipoPlaza(TipoPlaza.DISCAPACITADO);
+                    mainViewModel.setNewSelectedTipoPlaza(TipoPlaza.DISCAPACITADO);
                 }
-                TipoPlaza tipoPlaza = mainViewModel.getSelectedTipoPlaza().getValue();
-                reloadAvailableHoursForDateAndTipoPlaza(dataRepository, selectedDate, tipoPlaza);
+                TipoPlaza tipoPlaza = mainViewModel.getNewSelectedTipoPlaza().getValue();
+                reloadAvailableHoursForDateAndTipoPlaza(selectedDate, tipoPlaza);
             });
         });
     }
 
-    private void reloadAvailableHoursForDateAndTipoPlaza(DataRepository dataRepository, LocalDate date, TipoPlaza tipoPlaza) {
+    private void reloadAvailableHoursForDateAndTipoPlaza(LocalDate date, TipoPlaza tipoPlaza) {
         Log.d(LOG_TAG, "reloadAvailableHoursForDateAndTipoPlaza: " + date + " " + tipoPlaza);
         binding.progressIndicatorHorarios.show();
         binding.progressIndicatorHorarios.setVisibility(View.VISIBLE);
         binding.recyclerView.setVisibility(View.GONE);
-        LiveData<List<HourItem>> listLiveData = dataRepository.getAvailableHoursForDateAndTipoPlaza(date, tipoPlaza, getViewLifecycleOwner(), new Callback() {
+        LiveData<List<HourItem>> listLiveData = DataRepository.getInstance().getAvailableHoursForDateAndTipoPlaza(date, tipoPlaza, getViewLifecycleOwner(), new Callback() {
             @Override
             public void onSuccess() {
                 Log.d(LOG_TAG, "reloadAvailableHoursForDateAndTipoPlaza: onSuccess");

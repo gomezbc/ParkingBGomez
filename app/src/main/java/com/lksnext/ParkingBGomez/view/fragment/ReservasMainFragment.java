@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,9 +23,11 @@ import com.lksnext.ParkingBGomez.databinding.FragmentReservasMainBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
+import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 import com.lksnext.ParkingBGomez.view.adapter.ReservasByDayAdapter;
 import com.lksnext.ParkingBGomez.view.decoration.ReservaItemDecoration;
+import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,6 +45,14 @@ public class ReservasMainFragment extends Fragment implements ReservationsRefres
             Bundle savedInstanceState
     ) {
         binding = FragmentReservasMainBinding.inflate(inflater, container, false);
+
+        MainViewModel mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        // To handle when the user goes back to the fragment
+        Log.d("ReservasMainFragment", "onCreateView: " + mainViewModel.getReservarState().getValue());
+        if (mainViewModel.getReservarState().getValue() == ReservarState.MODIFICAR) {
+            mainViewModel.setSelectedHour(null);
+            mainViewModel.setReservarState(ReservarState.RESERVAR);
+        }
 
         binding.nuevaReservaExtendedFab.setOnClickListener(l -> {
             BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation);
