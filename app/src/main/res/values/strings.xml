@@ -105,4 +105,6 @@
     <string name="max_hours_text">Máximo 8 horas por reserva</string>
     <string name="card_more_info">Haz clic en una reserva para más información</string>
     <string name="error_loading_reservas">Error al cargar la reserva. Intentalo de nuevo más tarde</string>
+    <string name="cambiar_reserva">Cambiar reserva</string>
+    <string name="reserva_anterior">Reserva anterior</string>
 </resources>
