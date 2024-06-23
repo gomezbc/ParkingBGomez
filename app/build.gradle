@@ -11,7 +11,7 @@ buildscript {
 plugins {
     alias(libs.plugins.androidApplication)
     id "org.sonarqube" version "5.0.0.4638"
-    id 'com.google.gms.google-services'
+    alias(libs.plugins.googleGmsGoogleServices)
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id 'androidx.navigation.safeargs'
@@ -85,7 +85,6 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
-    implementation libs.material.v1110
     implementation platform(libs.firebase.bom)
     debugImplementation libs.leakcanary.android
     androidTestImplementation libs.core.testing
