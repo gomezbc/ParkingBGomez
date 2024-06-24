@@ -297,7 +297,7 @@ public class ReservarMainFragment extends Fragment{
                 HourAdapter adapter = (HourAdapter) binding.recyclerView.getAdapter();
                 if (adapter != null){
                     adapter.updateData(hours);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemRangeChanged(0, hours.size());
                     binding.progressIndicatorHorarios.hide();
                     binding.progressIndicatorHorarios.setVisibility(View.GONE);
                     binding.recyclerView.setVisibility(View.VISIBLE);

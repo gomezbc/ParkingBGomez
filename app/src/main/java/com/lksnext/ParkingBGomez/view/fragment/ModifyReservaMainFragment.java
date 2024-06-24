@@ -248,7 +248,7 @@ public class ModifyReservaMainFragment extends Fragment{
                     Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
             assert dayOfWeek != null;
             // Set the text to the first letter of the day of the week
-            text.setText(dayOfWeek.substring(0, 1).toUpperCase());
+            text.setText(dayOfWeek.substring(0, 1).toUpperCase(Locale.getDefault()));
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
@@ -332,7 +332,7 @@ public class ModifyReservaMainFragment extends Fragment{
                 HourAdapter adapter = (HourAdapter) binding.recyclerView.getAdapter();
                 if (adapter != null){
                     adapter.updateData(hours);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemRangeChanged(0, hours.size());
                     binding.progressIndicatorHorarios.hide();
                     binding.progressIndicatorHorarios.setVisibility(View.GONE);
                     binding.recyclerView.setVisibility(View.VISIBLE);

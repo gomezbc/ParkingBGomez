@@ -89,7 +89,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Viernes 15 mar 8:00 - 12:30"
                             android:textAppearance="?attr/textAppearanceBodyMedium"
                             android:textColor="?android:attr/textColorSecondary" />
 
@@ -173,7 +172,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:clickable="false"
-                            android:text="-"
+                            android:text="@string/slot_loading_helper"
                             app:chipIcon="@drawable/local_parking_24"
                             app:chipIconVisible="true" />
                     </LinearLayout>
@@ -232,7 +231,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Viernes 15 mar 8:00 - 12:30"
                             android:textAppearance="?attr/textAppearanceBodyMedium"
                             android:textColor="?android:attr/textColorSecondary" />
 
@@ -316,7 +314,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:clickable="false"
-                            android:text="-"
+                            android:text="@string/slot_loading_helper"
                             app:chipIcon="@drawable/local_parking_24"
                             app:chipIconVisible="true" />
                     </LinearLayout>
