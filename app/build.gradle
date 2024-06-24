@@ -21,6 +21,7 @@ sonar {
     properties {
         property "sonar.projectKey", "gomezbc_ParkingBGomez_59f23139-bdb3-486b-bf31-22b7e57e6af4"
         property "sonar.projectName", "ParkingBGomez"
+        property "sonar.junit.reportPaths", "build/reports/androidTests"
     }
 }
 
