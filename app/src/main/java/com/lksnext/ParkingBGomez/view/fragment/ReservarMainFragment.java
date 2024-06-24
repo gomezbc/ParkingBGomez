@@ -24,7 +24,6 @@ import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentReservarMainBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.HourItem;
-import com.lksnext.ParkingBGomez.enums.BottomNavState;
 import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.view.HourAdapter;
@@ -140,7 +139,6 @@ public class ReservarMainFragment extends Fragment{
                     .show();
 
             mainViewModel.setReservarState(ReservarState.RESERVAR);
-            mainViewModel.setBottomNavState(BottomNavState.RESERVAS);
         }
 
         mainViewModel.getSelectedHour().observe(getViewLifecycleOwner(),hour ->

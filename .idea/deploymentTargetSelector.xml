@@ -5,10 +5,16 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testAddReserva()">
+      <SelectionState runConfigName="MainViewModelTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MainViewModelTest">
+      <SelectionState runConfigName="DataRepositoryTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testLogin_Success()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testSignUp_Success()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

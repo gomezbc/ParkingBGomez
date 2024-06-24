@@ -45,8 +45,6 @@ import java.util.stream.Collectors;
 
 public class DataRepository {
 
-    private final FirebaseFirestore db;
-    private final FirebaseAuth mAuth;
     private static final String RESERVAS_COLLECTION = "reservas";
     private static final String PLAZAS_COLLECTION = "plazas";
     private static final String TIPO_PLAZA = "tipoPlaza";
@@ -54,10 +52,18 @@ public class DataRepository {
     private static final String FECHA = "fecha";
     private static final String TAG = "DataRepository";
 
+    private final FirebaseFirestore db;
+    private final FirebaseAuth mAuth;
     private static DataRepository instance;
+
     private DataRepository(){
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+    }
+
+    public DataRepository(FirebaseFirestore db, FirebaseAuth mAuth) {
+        this.db = db;
+        this.mAuth = mAuth;
     }
 
     //Creación de la instancia en caso de que no exista.

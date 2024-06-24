@@ -43,6 +43,10 @@ public class Reserva {
         this.usuario = usuario;
     }
 
+    public void setUuid(@NonNull String uuid) {
+        this.uuid = uuid;
+    }
+
     @NonNull
     public String getUuid() {
         return uuid;
