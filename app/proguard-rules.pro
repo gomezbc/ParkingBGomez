@@ -24,3 +24,7 @@
 -keep class androidx.credentials.playservices.** {
   *;
 }
+
+-keepclassmembers class com.lksnext.ParkingBGomez.domain.* {
+   public <init>();
+}
