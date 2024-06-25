@@ -5,15 +5,18 @@ plugins {
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id 'androidx.navigation.safeargs'
-    id 'jacoco'
 }
+
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlinx.kover'
+
 
 sonar {
     properties {
         property "sonar.projectKey", "gomezbc_ParkingBGomez_59f23139-bdb3-486b-bf31-22b7e57e6af4"
         property "sonar.projectName", "ParkingBGomez"
         property "sonar.junit.reportPaths", "build/reports/test-results"
-        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/kover/report.xml"
         property "sonar.androidLint.reportPaths", "build/reports/lint-results.xml"
     }
 }
@@ -67,32 +70,6 @@ android {
 
 }
 
-
-
-tasks.withType(Test) {
-    jacoco.includeNoLocationClasses = true
-    jacoco.excludes = ['jdk.internal.*']
-}
-
-tasks.register("jacocoTestReport", JacocoReport) {
-    dependsOn = ['testDebugUnitTest']
-
-    reports {
-        xml.required.set(true)
-        xml.outputLocation.set(file("$project.layout.buildDirectory/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"))
-        html.required.set(true)
-    }
-
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-
-    def debugTree = fileTree(dir: "$project.layout.buildDirectory/intermediates/javac/debug", excludes: fileFilter)
-    def mainSrc = "$project.projectDir/src/main/java"
-
-    additionalSourceDirs.from = files(mainSrc)
-    sourceDirectories.setFrom(files([mainSrc]))
-    classDirectories.setFrom(files([debugTree]))
-    executionData.setFrom(files("$project.layout.buildDirectory/jacoco/testDebugeUnitTest.exec"))
-}
 
 dependencies {
     implementation libs.appcompat

@@ -6,6 +6,7 @@ buildscript {
     }
     dependencies {
         classpath libs.org.jacoco.core
+        classpath 'org.jetbrains.kotlinx:kover-gradle-plugin:0.8.1'
     }
 }
 
@@ -15,4 +16,5 @@ plugins {
     id 'androidx.navigation.safeargs' version '2.7.7' apply false
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
+    id 'org.jetbrains.kotlinx.kover' version '0.8.1' apply false
 }
