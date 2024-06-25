@@ -5,7 +5,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath libs.gradle // Ensure this matches your Android Gradle Plugin version
         classpath libs.org.jacoco.core
     }
 }

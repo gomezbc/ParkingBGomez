@@ -4,7 +4,6 @@ coreTesting = "2.2.0"
 credentials = "1.2.2"
 firebaseBom = "33.1.1"
 googleid = "1.1.0"
-gradle = "gradle-8.7"
 hamcrest = "2.2"
 junit = "4.13.2"
 junitVersion = "1.2.0"
@@ -36,7 +35,6 @@ credentials = { module = "androidx.credentials:credentials", version.ref = "cred
 credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "hamcrest" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
