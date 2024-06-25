@@ -1,4 +1,15 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath libs.gradle // Ensure this matches your Android Gradle Plugin version
+        classpath libs.org.jacoco.core
+    }
+}
+
 plugins {
     alias(libs.plugins.androidApplication) apply false
     id 'com.google.gms.google-services' version '4.4.2' apply false

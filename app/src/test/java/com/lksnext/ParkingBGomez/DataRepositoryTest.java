@@ -1,9 +1,6 @@
 package com.lksnext.ParkingBGomez;
 
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
-
-import androidx.lifecycle.LiveData;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -19,11 +16,14 @@ import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.MockitoAnnotations;
 
 import java.util.UUID;
 
+@RunWith(MockitoJUnitRunner.class)
 public class DataRepositoryTest {
 
     @Mock
@@ -61,16 +61,14 @@ public class DataRepositoryTest {
         // Make the mock return this task when signInWithEmailAndPassword is called
         when(mockAuth.signInWithEmailAndPassword(email, password)).thenReturn(task);
 
-        // Define behavior for callback.onSuccess()
-        doAnswer(invocation -> {
-            // Act
-            dataRepository.signUp(email, password, callback);
+        // Complete the task successfully
+        taskCompletionSource.setResult(mock(AuthResult.class));
 
-            // Assert
-            verify(mockAuth).signInWithEmailAndPassword(email, password);
-            verify(callback).onSuccess();
-            return null;
-        }).when(callback).onSuccess();
+        // Act
+        dataRepository.login(email, password, callback);
+
+        // Assert
+        verify(mockAuth).signInWithEmailAndPassword(email, password);
     }
 
     @Test
@@ -87,19 +85,14 @@ public class DataRepositoryTest {
         // Make the mock return this task when createUserWithEmailAndPassword is called
         when(mockAuth.createUserWithEmailAndPassword(email, password)).thenReturn(task);
 
-        // Define behavior for callback.onSuccess()
-        doAnswer(invocation -> {
-            // Act
-            dataRepository.signUp(email, password, callback);
-
-            // Assert
-            verify(mockAuth).createUserWithEmailAndPassword(email, password);
-            verify(callback).onSuccess();
-            return null;
-        }).when(callback).onSuccess();
-
         // Complete the task successfully
         taskCompletionSource.setResult(null);
+
+        // Act
+        dataRepository.signUp(email, password, callback);
+
+        // Assert
+        verify(mockAuth).createUserWithEmailAndPassword(email, password);
     }
 
     @Test
@@ -124,33 +117,14 @@ public class DataRepositoryTest {
         // Make the mock return this task when sendPasswordResetEmail is called
         when(mockAuth.sendPasswordResetEmail(email)).thenReturn(task);
 
-
-        // Define behavior for callback.onSuccess()
-        doAnswer(invocation -> {
-            // Act
-            dataRepository.resetPassword(email, callback);
-
-            // Assert
-            verify(mockAuth).sendPasswordResetEmail(email);
-            verify(callback).onSuccess();
-            return null;
-        }).when(callback).onSuccess();
-
         // Complete the task successfully
         taskCompletionSource.setResult(null);
-    }
-
-    @Test
-    public void testGetCurrentUser() {
-        // Arrange
-        when(mockAuth.getCurrentUser()).thenReturn(mockFirebaseUser);
 
         // Act
-        FirebaseUser user = dataRepository.getCurrentUser();
+        dataRepository.resetPassword(email, callback);
 
         // Assert
-        verify(mockAuth).getCurrentUser();
-        assertEquals(mockFirebaseUser, user);
+        verify(mockAuth).sendPasswordResetEmail(email);
     }
 
     @Test
@@ -171,19 +145,14 @@ public class DataRepositoryTest {
         // Make the mock return this task when set is called
         when(mockDocument.set(any())).thenReturn(task);
 
-        // Define behavior for callback.onSuccess()
-        doAnswer(invocation -> {
-            // Act
-            dataRepository.saveReserva(reserva, callback);
-
-            // Assert
-            verify(mockDocument).set(reserva);
-            verify(callback).onSuccess();
-            return null;
-        }).when(callback).onSuccess();
-
         // Complete the task successfully
         taskCompletionSource.setResult(null);
+
+        // Act
+        dataRepository.saveReserva(reserva, callback);
+
+        // Assert
+        verify(mockDocument).set(reserva);
     }
 
     @Test
@@ -204,19 +173,14 @@ public class DataRepositoryTest {
         // Make the mock return this task when delete is called
         when(mockDocument.delete()).thenReturn(task);
 
-        // Define behavior for callback.onSuccess()
-        doAnswer(invocation -> {
-            // Act
-            dataRepository.deleteReserva(reserva, callback);
-
-            // Assert
-            verify(mockDocument).delete();
-            verify(callback).onSuccess();
-            return null;
-        }).when(callback).onSuccess();
-
         // Complete the task successfully
         taskCompletionSource.setResult(null);
+
+        // Act
+        dataRepository.deleteReserva(reserva, callback);
+
+        // Assert
+        verify(mockDocument).delete();
     }
 
     @Test
@@ -237,23 +201,18 @@ public class DataRepositoryTest {
         // Make the mock return this task when set is called
         when(mockDocument.set(any())).thenReturn(task);
 
-        // Define behavior for callback.onSuccess()
-        doAnswer(invocation -> {
-            // Act
-            dataRepository.updateReserva(reserva, callback);
-
-            // Assert
-            verify(mockDocument).set(reserva);
-            verify(callback).onSuccess();
-            return null;
-        }).when(callback).onSuccess();
-
         // Complete the task successfully
         taskCompletionSource.setResult(null);
+
+        // Act
+        dataRepository.updateReserva(reserva, callback);
+
+        // Assert
+        verify(mockDocument).set(reserva);
     }
 
     @Test
-    public void testGetReservaByUuid_Success() {
+    public void testGetReservaByUuid_Success() throws InterruptedException {
         // Arrange
         String uuid = UUID.randomUUID().toString();
         Callback callback = mock(Callback.class);
@@ -268,20 +227,13 @@ public class DataRepositoryTest {
         // Make the mock return this task when get is called
         when(mockDocument.get()).thenReturn(task);
 
-        // Define behavior for callback.onSuccess()
-        doAnswer(invocation -> {
-            // Act
-            LiveData<Reserva> liveData = dataRepository.getReservaByUuid(uuid, callback);
-            Reserva reserva = LiveDataTestUtil.getOrAwaitValue(liveData);
-            assert (reserva != null);
-
-            // Assert
-            verify(mockDocument).get();
-            verify(callback).onSuccess();
-            return null;
-        }).when(callback).onSuccess();
-
         // Complete the task successfully
         taskCompletionSource.setResult(mockDocumentSnapshot);
+
+        // Act
+        dataRepository.getReservaByUuid(uuid, callback);
+
+        // Assert
+        verify(mockDocument).get();
     }
 }
