@@ -53,10 +53,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: ./gradlew build :app:koverXmlReport sonar --info
-       
-       # Run Build Project
-      - name: Build gradle project
-        run: ./gradlew build
 
         # Create APK Debug
       - name: Build apk debug project (APK) - ${{ env.main_project_module }} module
