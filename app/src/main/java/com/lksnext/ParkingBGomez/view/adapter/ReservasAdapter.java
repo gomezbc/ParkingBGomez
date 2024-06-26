@@ -16,7 +16,7 @@ import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
-import com.lksnext.ParkingBGomez.view.ReservaListBottomSheet;
+import com.lksnext.ParkingBGomez.view.fragment.ReservaListBottomSheet;
 import com.lksnext.ParkingBGomez.view.holder.ReservasViewHolder;
 
 import java.time.Duration;

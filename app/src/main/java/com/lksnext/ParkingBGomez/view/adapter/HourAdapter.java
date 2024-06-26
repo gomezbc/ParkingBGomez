@@ -1,4 +1,4 @@
-package com.lksnext.ParkingBGomez.view;
+package com.lksnext.ParkingBGomez.view.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.HourItem;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
+import com.lksnext.ParkingBGomez.view.holder.HourViewHolder;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.LocalDate;
@@ -46,21 +47,21 @@ public class HourAdapter extends RecyclerView.Adapter<HourViewHolder> {
         final HourItem hour = hours.get(position);
 
         // Setup the button properties based on the HourItem's state
-        holder.button.setText(hour.getHour());
-        holder.button.setEnabled(hour.isEnabled());
+        holder.getButton().setText(hour.getHour());
+        holder.getButton().setEnabled(hour.isEnabled());
 
         if (hour.isEnabled()) {
-            holder.button.setAlpha(1.0f);
+            holder.getButton().setAlpha(1.0f);
         } else {
-            holder.button.setAlpha(0.5f);
+            holder.getButton().setAlpha(0.5f);
         }
 
-        holder.button.setBackgroundResource(hour.isInMiddle() ?
+        holder.getButton().setBackgroundResource(hour.isInMiddle() ?
                 R.drawable.in_middle_timeslot : R.drawable.default_timeslot);
 
-        holder.button.setSelected(hour.isSelected());
+        holder.getButton().setSelected(hour.isSelected());
 
-        holder.button.setOnClickListener(v -> {
+        holder.getButton().setOnClickListener(v -> {
             final int newSelectedPosition = holder.getAdapterPosition();
             final HourItem newSelectedHourItem = hours.get(newSelectedPosition);
 

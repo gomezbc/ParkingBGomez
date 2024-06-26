@@ -1,4 +1,4 @@
-package com.lksnext.ParkingBGomez.view;
+package com.lksnext.ParkingBGomez.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +19,6 @@ import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.domain.ReservationsRefreshListener;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
-import com.lksnext.ParkingBGomez.view.fragment.ReservasMainFragmentDirections;
 
 public class ReservaListBottomSheet extends BottomSheetDialogFragment {
 

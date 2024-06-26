@@ -1,4 +1,4 @@
-package com.lksnext.ParkingBGomez.view;
+package com.lksnext.ParkingBGomez.view.holder;
 
 import android.view.View;
 import android.widget.Button;
@@ -10,11 +10,15 @@ import com.lksnext.ParkingBGomez.R;
 
 
 public class HourViewHolder extends RecyclerView.ViewHolder {
-    Button button;
+    private Button button;
 
     public HourViewHolder(@NonNull View itemView) {
         super(itemView);
         button = itemView.findViewById(R.id.btnTimeSlot);
+    }
+
+    public Button getButton() {
+        return button;
     }
 }
 

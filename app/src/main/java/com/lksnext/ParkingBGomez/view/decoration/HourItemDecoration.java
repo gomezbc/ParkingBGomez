@@ -1,4 +1,4 @@
-package com.lksnext.ParkingBGomez.view;
+package com.lksnext.ParkingBGomez.view.decoration;
 
 import android.graphics.Rect;
 import android.view.View;

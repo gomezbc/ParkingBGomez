@@ -26,8 +26,8 @@ import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.HourItem;
 import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
-import com.lksnext.ParkingBGomez.view.HourAdapter;
-import com.lksnext.ParkingBGomez.view.HourItemDecoration;
+import com.lksnext.ParkingBGomez.view.adapter.HourAdapter;
+import com.lksnext.ParkingBGomez.view.decoration.HourItemDecoration;
 import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import java.time.LocalDate;
