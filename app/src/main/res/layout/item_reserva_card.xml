@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Material3.CardView.Filled"
     android:id="@+id/materialCardView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
     app:cardElevation="1dp"
-    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge"
-    app:strokeWidth="1dp">
+    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,7 +57,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_selected_duration"
-                style="@style/Widget.Material3.Chip.Assist"
+                style="@style/Widget.Material3.Chip.Assist.Elevated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -68,7 +69,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_car"
-                style="@style/Widget.Material3.Chip.Assist"
+                style="@style/Widget.Material3.Chip.Assist.Elevated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -80,7 +81,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_accessible_car"
-                style="@style/Widget.Material3.Chip.Assist"
+                style="@style/Widget.Material3.Chip.Assist.Elevated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -92,7 +93,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_motorcycle"
-                style="@style/Widget.Material3.Chip.Assist"
+                style="@style/Widget.Material3.Chip.Assist.Elevated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -104,7 +105,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_electric_car"
-                style="@style/Widget.Material3.Chip.Assist"
+                style="@style/Widget.Material3.Chip.Assist.Elevated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -116,7 +117,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_parking_slot"
-                style="@style/Widget.Material3.Chip.Assist"
+                style="@style/Widget.Material3.Chip.Assist.Elevated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
