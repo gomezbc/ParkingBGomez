@@ -9,11 +9,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentCuentaMainBinding;
+import com.lksnext.ParkingBGomez.enums.SettingsEnum;
 import com.lksnext.ParkingBGomez.view.activity.LoginActivity;
 
 public class CuentaMainFragment extends Fragment{
@@ -46,6 +49,20 @@ public class CuentaMainFragment extends Fragment{
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
             getActivity().finish();
+        });
+
+        binding.editarPerfil.setOnClickListener(v -> {
+            NavController navController = NavHostFragment.findNavController(this);
+            CuentaMainFragmentDirections.ActionCuentaMainFragmentToSettingsWrapperFragment action =
+                    CuentaMainFragmentDirections.actionCuentaMainFragmentToSettingsWrapperFragment(SettingsEnum.ABOUT_ME);
+            navController.navigate(action);
+        });
+
+        binding.settings.setOnClickListener(v -> {
+            NavController navController = NavHostFragment.findNavController(this);
+            CuentaMainFragmentDirections.ActionCuentaMainFragmentToSettingsWrapperFragment action =
+                    CuentaMainFragmentDirections.actionCuentaMainFragmentToSettingsWrapperFragment(SettingsEnum.GENERAL_SETTINGS);
+            navController.navigate(action);
         });
 
         return binding.getRoot();

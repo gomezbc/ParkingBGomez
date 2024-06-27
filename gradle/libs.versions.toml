@@ -28,6 +28,7 @@ playServicesAuth = "21.2.0"
 playServicesMaps = "18.2.0"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
+preference = "1.2.0"
 
 [libraries]
 core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
@@ -58,6 +59,7 @@ org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJac
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

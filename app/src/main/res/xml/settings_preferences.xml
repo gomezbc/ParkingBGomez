@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <Preference
+        app:icon="@drawable/baseline_notifications_24"
+        app:key="notification_settings"
+        app:title="@string/notifications" />
+
+    <ListPreference
+        app:defaultValue="Predeterminado del sistema"
+        app:entries="@array/theme_entries"
+        app:entryValues="@array/reply_values"
+        app:icon="@drawable/baseline_contrast_24"
+        app:key="app_theme"
+        app:title="Tema"
+        app:useSimpleSummaryProvider="true" />
+
+
+    <PreferenceCategory app:title="About">
+        <Preference
+            app:key="version"
+            app:title="Build version"
+            app:summary="1.0.0" />
+    </PreferenceCategory>
+</PreferenceScreen>

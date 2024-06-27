@@ -89,4 +89,8 @@
     <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
 </style>
 
+<style name="PrefsTheme.Theme.ParkingBGomez" parent="PreferenceThemeOverlay.v14.Material">
+    <item name="android:layout">@layout/fragment_settings</item>
+</style>
+
 </resources>
