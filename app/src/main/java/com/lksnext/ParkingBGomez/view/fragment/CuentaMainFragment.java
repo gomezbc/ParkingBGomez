@@ -3,6 +3,7 @@ package com.lksnext.ParkingBGomez.view.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,9 @@ import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.FragmentCuentaMainBinding;
 import com.lksnext.ParkingBGomez.enums.SettingsEnum;
 import com.lksnext.ParkingBGomez.view.activity.LoginActivity;
+
+import coil.ImageLoader;
+import coil.request.ImageRequest;
 
 public class CuentaMainFragment extends Fragment{
 
@@ -39,7 +43,16 @@ public class CuentaMainFragment extends Fragment{
 
         Uri userPhotoURI = user.getPhotoUrl();
         if (userPhotoURI != null) {
-            binding.avatar.setImageURI(userPhotoURI);
+            var imageLoader = new ImageLoader.Builder(getContext())
+                    .crossfade(true)
+                    .build();
+            var request = new ImageRequest.Builder(getContext())
+                    .data(userPhotoURI)
+                    .crossfade(true)
+                    .target(binding.avatar)
+                    .build();
+
+            imageLoader.enqueue(request);
         }else {
             binding.avatar.setImageResource(R.drawable.person_fill);
         }

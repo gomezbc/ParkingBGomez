@@ -90,6 +90,7 @@ dependencies {
     implementation libs.kotlinx.coroutines.android
     implementation libs.core.ktx
     implementation libs.preference
+    implementation libs.coil
     testImplementation libs.junit
     testImplementation libs.mockito.core
     testImplementation libs.core.testing
