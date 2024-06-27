@@ -96,4 +96,6 @@
     <string name="name">Nombre</string>
     <string name="username">Nombre de usuario</string>
     <string name="upload_foto">Sube una foto de perfil</string>
+    <string name="save">Guardar</string>
+    <string name="phone_number">Número de teléfono</string>
 </resources>

@@ -54,7 +54,7 @@ public class CuentaMainFragment extends Fragment{
 
             imageLoader.enqueue(request);
         }else {
-            binding.avatar.setImageResource(R.drawable.person_fill);
+            binding.avatar.setImageResource(R.drawable.default_avatar);
         }
 
         binding.btnLogout.setOnClickListener(v -> {
