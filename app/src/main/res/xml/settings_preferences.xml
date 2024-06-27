@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" >
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
         app:icon="@drawable/baseline_notifications_24"
@@ -7,19 +8,20 @@
         app:title="@string/notifications" />
 
     <ListPreference
-        app:defaultValue="Predeterminado del sistema"
-        app:entries="@array/theme_entries"
-        app:entryValues="@array/reply_values"
         app:icon="@drawable/baseline_contrast_24"
-        app:key="app_theme"
-        app:title="Tema"
-        app:useSimpleSummaryProvider="true" />
+        app:key="@string/settings_theme_key"
+        app:title="@string/settings_theme_title"
+        app:useSimpleSummaryProvider="true"
+        android:dialogTitle="@string/settings_theme_dialog_title"
+        android:entries="@array/settings_theme_entries"
+        android:entryValues="@array/settings_theme_values"
+        android:defaultValue="@string/settings_theme_default" />
 
 
     <PreferenceCategory app:title="About">
         <Preference
-            app:key="version"
-            app:title="Build version"
+            app:key="@string/settings_version_key"
+            app:title="@string/settings_version_title"
             app:summary="1.0.0" />
     </PreferenceCategory>
 </PreferenceScreen>

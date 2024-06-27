@@ -28,7 +28,7 @@ playServicesAuth = "21.2.0"
 playServicesMaps = "18.2.0"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
-preference = "1.2.0"
+preference = "1.2.1"
 
 [libraries]
 core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }

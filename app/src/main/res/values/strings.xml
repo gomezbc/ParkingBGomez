@@ -84,4 +84,16 @@
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="settings_theme_key" translatable="false">app_theme</string>
+    <string name="settings_theme_title">Tema</string>
+    <string name="settings_theme_dialog_title">Selecciona tu tema favorito</string>
+    <string name="settings_theme_default">Predeterminado del sistema</string>
+    <string name="settings_theme_value_default" translatable="false">DEFAULT</string>
+    <string name="settings_theme_value_light" translatable="false">LIGHT</string>
+    <string name="settings_theme_value_dark" translatable="false">DARK</string>
+    <string name="settings_version_key" translatable="false">version</string>
+    <string name="settings_version_title" translatable="false">Versión</string>
+    <string name="name">Nombre</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="upload_foto">Sube una foto de perfil</string>
 </resources>

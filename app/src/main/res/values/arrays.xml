@@ -1,13 +1,12 @@
 <resources>
-    <string-array name="theme_entries">
+    <string-array name="settings_theme_values">
+        <item>@string/settings_theme_value_default</item>
+        <item>@string/settings_theme_value_light</item>
+        <item>@string/settings_theme_value_dark</item>
+    </string-array>
+    <string-array name="settings_theme_entries">
+        <item>Predeterminado del sistema</item>
         <item>Claro</item>
         <item>Oscuro</item>
-        <item>Predeterminado del sistema</item>
-    </string-array>
-
-    <string-array name="reply_values">
-        <item>light</item>
-        <item>dark</item>
-        <item>system</item>
     </string-array>
 </resources>
