@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -132,9 +133,8 @@ public class ReservarMainFragment extends Fragment{
         if (state == ReservarState.RESERVADO){
             Snackbar.make(view, "Reserva realizada", BaseTransientBottomBar.LENGTH_LONG)
                     .setAction("Ver", v -> {
-                                NavController navController = Navigation.findNavController(v);
-                                navController.navigate(
-                                        R.id.action_reservarMainFragment_to_reservasMainFragment);
+                                BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation);
+                                bottomNavigationView.setSelectedItemId(R.id.reservasMainFragment);
                             })
                     .show();
 
