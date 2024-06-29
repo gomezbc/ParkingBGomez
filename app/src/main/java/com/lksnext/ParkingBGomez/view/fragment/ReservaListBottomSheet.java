@@ -1,5 +1,6 @@
 package com.lksnext.ParkingBGomez.view.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.ReservaListBottomSheetBinding;
 import com.lksnext.ParkingBGomez.domain.Callback;
@@ -65,18 +68,27 @@ public class ReservaListBottomSheet extends BottomSheetDialogFragment {
         });
 
         binding.reservaDeleteButton.setOnClickListener(v -> {
-            DataRepository.getInstance().deleteReserva(reserva, new Callback() {
-                @Override
-                public void onSuccess() {
-                    Snackbar.make(view, "Reserva eliminada", BaseTransientBottomBar.LENGTH_SHORT).show();
-                    refreshListener.onReservationsRefreshRequested();
-                }
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.cancel_reserva)
+                    .setMessage(R.string.cancel_reserva_text)
+                    .setIcon(R.drawable.baseline_delete_forever_24)
+                    .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                        DataRepository.getInstance().deleteReserva(reserva, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                Snackbar.make(view, "Reserva eliminada", BaseTransientBottomBar.LENGTH_SHORT).show();
+                                refreshListener.onReservationsRefreshRequested();
+                            }
 
-                @Override
-                public void onFailure() {
-                    Snackbar.make(view, "Error al eliminar la reserva", BaseTransientBottomBar.LENGTH_SHORT).show();
-                }
-            });
+                            @Override
+                            public void onFailure() {
+                                Snackbar.make(view, "Error al eliminar la reserva", BaseTransientBottomBar.LENGTH_SHORT).show();
+                            }
+                        });
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss()).show();
+
             dismiss();
         });
     }

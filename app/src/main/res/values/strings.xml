@@ -98,4 +98,8 @@
     <string name="upload_foto">Sube una foto de perfil</string>
     <string name="save">Guardar</string>
     <string name="phone_number">Número de teléfono</string>
+    <string name="cancel_reserva">¿Cancelar reserva?</string>
+    <string name="cancel_reserva_text">¡Atención! Al cancelar esta reserva, perderás tu lugar y otro usuario podría reservarlo en su lugar. ¿Estás seguro de que deseas continuar con la cancelación?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
 </resources>
