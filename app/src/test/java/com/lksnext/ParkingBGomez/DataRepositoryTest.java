@@ -42,9 +42,10 @@ public class DataRepositoryTest {
     private DataRepository dataRepository;
 
     @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        dataRepository = new DataRepository(mockFirestore, mockAuth);
+    public void setUp() throws Exception{
+        try (AutoCloseable ignored = MockitoAnnotations.openMocks(this)) {
+            dataRepository = new DataRepository(mockFirestore, mockAuth);
+        }
     }
 
     @Test
@@ -212,7 +213,7 @@ public class DataRepositoryTest {
     }
 
     @Test
-    public void testGetReservaByUuid_Success() throws InterruptedException {
+    public void testGetReservaByUuid_Success() {
         // Arrange
         String uuid = UUID.randomUUID().toString();
         Callback callback = mock(Callback.class);

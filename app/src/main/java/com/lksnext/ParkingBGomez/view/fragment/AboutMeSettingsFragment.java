@@ -43,10 +43,10 @@ public class AboutMeSettingsFragment extends Fragment {
 
         Uri userPhotoURI = user.getPhotoUrl();
         if (userPhotoURI != null) {
-            var imageLoader = new ImageLoader.Builder(getContext())
+            var imageLoader = new ImageLoader.Builder(requireContext())
                     .crossfade(true)
                     .build();
-            var request = new ImageRequest.Builder(getContext())
+            var request = new ImageRequest.Builder(requireContext())
                     .data(userPhotoURI)
                     .crossfade(true)
                     .target(binding.avatar)
