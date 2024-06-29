@@ -13,6 +13,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldPath;
@@ -24,6 +25,7 @@ import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.domain.HourItem;
 import com.lksnext.ParkingBGomez.domain.Plaza;
 import com.lksnext.ParkingBGomez.domain.Reserva;
+import com.lksnext.ParkingBGomez.domain.UserInfo;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
 
@@ -47,6 +49,7 @@ public class DataRepository {
 
     private static final String RESERVAS_COLLECTION = "reservas";
     private static final String PLAZAS_COLLECTION = "plazas";
+    private static final String USER_INFO_COLLECTION = "userInfo";
     private static final String TIPO_PLAZA = "tipoPlaza";
     private static final String USUARIO = "usuario";
     private static final String FECHA = "fecha";
@@ -140,6 +143,74 @@ public class DataRepository {
         FirebaseUser user = mAuth.getCurrentUser();
         Log.d(TAG, "getCurrentUser: " + user);
         return user;
+    }
+
+    public void updateProfile(UserProfileChangeRequest profileUpdates, Callback callback){
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null){
+            callback.onFailure();
+            return;
+        }
+        try{
+            user.updateProfile(profileUpdates)
+                    .addOnSuccessListener( unused -> {
+                        Log.d(TAG, "updateProfile:success");
+                        callback.onSuccess();
+                    }).addOnFailureListener(e -> {
+                        Log.w(TAG, "updateProfile:failure", e);
+                        callback.onFailure();
+                    });
+        } catch (Exception e){
+            Log.w(TAG, "updateProfile:exception", e);
+            callback.onFailure();
+        }
+    }
+
+    public void updateEmail(String email, Callback callback){
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null){
+            callback.onFailure();
+            return;
+        }
+        try{
+            user.verifyBeforeUpdateEmail(email)
+                    .addOnSuccessListener( unused -> {
+                        Log.d(TAG, "updateEmail:success");
+                        callback.onSuccess();
+                    }).addOnFailureListener(e -> {
+                        Log.w(TAG, "updateEmail:failure", e);
+                        callback.onFailure();
+                    });
+        } catch (Exception e){
+            Log.w(TAG, "updateEmail:exception", e);
+            callback.onFailure();
+        }
+    }
+
+    public void updateUserInfo(UserInfo userInfo, Callback callback){
+        db.collection(USER_INFO_COLLECTION)
+                .document(userInfo.getUuid())
+                .set(userInfo)
+                .addOnSuccessListener(documentReference -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onFailure());
+    }
+
+    public LiveData<UserInfo> getUserInfoByUuid(String uuid, Callback callback){
+        MutableLiveData<UserInfo> liveData = new MutableLiveData<>();
+        try{
+            db.collection(USER_INFO_COLLECTION)
+                    .document(uuid)
+                    .get()
+                    .addOnSuccessListener(documentReference -> {
+                        if (documentReference.exists()){
+                            liveData.setValue(documentReference.toObject(UserInfo.class));
+                        }
+                        callback.onSuccess();
+                    }).addOnFailureListener(e -> callback.onFailure());
+        } catch (Exception e){
+            callback.onFailure();
+        }
+        return liveData;
     }
 
     public LiveData<Reserva> getReservaByUuid(String uuid, Callback callback){

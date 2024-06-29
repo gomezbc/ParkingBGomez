@@ -21,7 +21,11 @@
         android:id="@+id/cuentaMainFragment"
         android:name="com.lksnext.ParkingBGomez.view.fragment.CuentaMainFragment"
         android:label="fragment_cuenta_main"
-        tools:layout="@layout/fragment_cuenta_main" />
+        tools:layout="@layout/fragment_cuenta_main" >
+        <action
+            android:id="@+id/action_cuentaMainFragment_to_settingsWrapperFragment"
+            app:destination="@id/settingsWrapperFragment" />
+    </fragment>
     <fragment
         android:id="@+id/inicioMainFragment"
         android:name="com.lksnext.ParkingBGomez.view.fragment.InicioMainFragment"
@@ -60,5 +64,14 @@
         <argument
             android:name="reservaToModifyUuid"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsWrapperFragment"
+        android:name="com.lksnext.ParkingBGomez.view.fragment.SettingsWrapperFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <argument
+            android:name="settingOption"
+            app:argType="com.lksnext.ParkingBGomez.enums.SettingsEnum" />
     </fragment>
 </navigation>

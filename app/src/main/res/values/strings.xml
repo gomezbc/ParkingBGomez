@@ -69,4 +69,33 @@
     <string name="reserva_anterior">Reserva anterior</string>
     <string name="no_possible_label">No se puede ni editar ni cancelar una reserva que ya ha pasado</string>
     <string name="slot_loading_helper">-</string>
+    <string name="icono_editar_perfil">Icono editar perfil</string>
+    <string name="editar_nombre_correo_direccion">Editar nombre, correo, dirección</string>
+    <string name="editar_perfil">Editar Perfil</string>
+    <string name="arrow_forward">arrow forward</string>
+    <string name="settings">Ajustes</string>
+    <string name="settings_description">Configura notificaciones, seguridad</string>
+    <string name="about_me">Sobre mí</string>
+    <string name="messages_header">Messages</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="settings_theme_key" translatable="false">app_theme</string>
+    <string name="settings_theme_title">Tema</string>
+    <string name="settings_theme_dialog_title">Selecciona tu tema favorito</string>
+    <string name="settings_theme_default">Predeterminado del sistema</string>
+    <string name="settings_theme_value_default" translatable="false">DEFAULT</string>
+    <string name="settings_theme_value_light" translatable="false">LIGHT</string>
+    <string name="settings_theme_value_dark" translatable="false">DARK</string>
+    <string name="settings_version_key" translatable="false">version</string>
+    <string name="settings_version_title" translatable="false">Versión</string>
+    <string name="name">Nombre</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="upload_foto">Sube una foto de perfil</string>
+    <string name="save">Guardar</string>
+    <string name="phone_number">Número de teléfono</string>
 </resources>

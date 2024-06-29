@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.0"
+coil = "2.6.0"
 coreTesting = "2.2.0"
 credentials = "1.2.2"
 firebaseBom = "33.1.1"
@@ -28,8 +29,10 @@ playServicesAuth = "21.2.0"
 playServicesMaps = "18.2.0"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
+preference = "1.2.1"
 
 [libraries]
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
@@ -58,6 +61,7 @@ org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJac
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
