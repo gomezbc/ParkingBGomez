@@ -62,13 +62,9 @@ public class AboutMeSettingsFragment extends Fragment {
         binding.btnSave.setOnClickListener(v -> {
             // Save changes
             String newUsername = String.valueOf(binding.username.getText());
-            String newEmail = String.valueOf(binding.email.getText());
             String newPhone = String.valueOf(binding.phone.getText());
             if (!newUsername.equals(user.getDisplayName())){
                 setNewUsername(newUsername);
-            }
-            if (!newEmail.equals(user.getEmail())){
-                setNewEmail(newEmail);
             }
             if (userInfo.getPhone() == null || !newPhone.equals(userInfo.getPhone())){
                 setNewPhone(newPhone);
@@ -118,22 +114,6 @@ public class AboutMeSettingsFragment extends Fragment {
             @Override
             public void onFailure() {
                 Log.d(TAG, "User info failed to fetch");
-            }
-        });
-    }
-
-    private void setNewEmail(String newEmail) {
-        DataRepository.getInstance().updateEmail(newEmail, new Callback() {
-            @Override
-            public void onSuccess() {
-                Log.d(TAG, "Email updated successfully");
-                Toast.makeText(requireContext(), "Tus datos se han actualizado correctamente", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure() {
-                Log.d(TAG, "Email failed to update");
-                Toast.makeText(requireContext(), "Hubo un problema al intentar actualizar tus datos. Por favor, inténtalo de nuevo más tarde", Toast.LENGTH_SHORT).show();
             }
         });
     }

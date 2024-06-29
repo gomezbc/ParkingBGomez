@@ -166,27 +166,6 @@ public class DataRepository {
         }
     }
 
-    public void updateEmail(String email, Callback callback){
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null){
-            callback.onFailure();
-            return;
-        }
-        try{
-            user.verifyBeforeUpdateEmail(email)
-                    .addOnSuccessListener( unused -> {
-                        Log.d(TAG, "updateEmail:success");
-                        callback.onSuccess();
-                    }).addOnFailureListener(e -> {
-                        Log.w(TAG, "updateEmail:failure", e);
-                        callback.onFailure();
-                    });
-        } catch (Exception e){
-            Log.w(TAG, "updateEmail:exception", e);
-            callback.onFailure();
-        }
-    }
-
     public void updateUserInfo(UserInfo userInfo, Callback callback){
         db.collection(USER_INFO_COLLECTION)
                 .document(userInfo.getUuid())
