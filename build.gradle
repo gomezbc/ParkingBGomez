@@ -17,4 +17,5 @@ plugins {
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     id 'org.jetbrains.kotlinx.kover' version '0.8.1' apply false
+    alias(libs.plugins.googleFirebaseCrashlytics) apply false
 }

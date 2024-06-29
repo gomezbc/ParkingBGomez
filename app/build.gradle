@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id 'androidx.navigation.safeargs'
+    alias(libs.plugins.googleFirebaseCrashlytics)
 }
 
 apply plugin: 'com.android.application'
@@ -91,6 +92,7 @@ dependencies {
     implementation libs.core.ktx
     implementation libs.preference
     implementation libs.coil
+    implementation libs.firebase.crashlytics
     testImplementation libs.junit
     testImplementation libs.mockito.core
     testImplementation libs.core.testing
