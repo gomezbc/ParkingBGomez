@@ -44,7 +44,9 @@ public class ReservaListBottomSheet extends BottomSheetDialogFragment {
         if (nowEpoch >= reservaEpoch) {
             binding.reservaInfoText.setVisibility(View.VISIBLE);
             binding.reservaEditButton.setEnabled(false);
-            binding.reservaDeleteButton.setEnabled(false);
+
+            binding.reservaDeleteButton.setVisibility(View.GONE);
+            binding.reservaDeleteButtonDisabled.setVisibility(View.VISIBLE);
         }
 
         return binding.getRoot();

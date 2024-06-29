@@ -61,6 +61,17 @@
                 app:icon="@drawable/baseline_delete_forever_24"
                 app:iconTint="?attr/colorTertiary" />
 
+            <Button
+                android:id="@+id/reserva_delete_button_disabled"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cancelar_reserva"
+                android:textAlignment="viewStart"
+                android:visibility="gone"
+                android:enabled="false"
+                app:icon="@drawable/baseline_delete_forever_24" />
+
         </LinearLayout>
 
     </FrameLayout>
