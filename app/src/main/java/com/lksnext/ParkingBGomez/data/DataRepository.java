@@ -474,13 +474,6 @@ public class DataRepository {
         AtomicInteger completedReads = new AtomicInteger(0);
         int totalReads = (int) ChronoUnit.MINUTES.between(startOfAvailableHoursLocalTime, endOfAvailableHoursLocalTime) / 30;
 
-        if (totalReads < 0){
-            // No hay horas disponibles
-            callback.onSuccess();
-            liveData.setValue(hourItems);
-            return liveData;
-        }
-
         LiveData<Integer> totalPlazasByTipoPlaza = getTotalPlazasByTipoPlaza(tipoPlaza, callback);
 
         totalPlazasByTipoPlaza.observe(lifecycleOwner, totalPlazas -> {
