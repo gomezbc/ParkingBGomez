@@ -429,29 +429,22 @@ public class DataRepository {
     }
 
     public LiveData<List<HourItem>> getAvailableHoursForDateAndTipoPlaza(LocalDate date, TipoPlaza tipoPlaza, LifecycleOwner lifecycleOwner, Callback callback){
+        Log.d(TAG, "getAvailableHoursForDateAndTipoPlaza: date: " + date);
+
         MutableLiveData<List<HourItem>> liveData = new MutableLiveData<>();
         List<HourItem> hourItems = new ArrayList<>();
 
-        boolean isToday = date.equals(LocalDate.now());
-
-        LocalTime localTimeNow = TimeUtils.convertEpochTolocalDateTime(TimeUtils.getNowEpoch()).toLocalTime();
-
-        boolean shouldAddAnHour = isToday && localTimeNow.getMinute() >= 30;
-
-        LocalTime todayStartLocalTime =
-                shouldAddAnHour ?
-                        localTimeNow.plusHours(1).withMinute(0).withSecond(0)
-                        : localTimeNow.withMinute(30).withSecond(0);
-
-        LocalTime startOfAvailableHoursLocalTime =
-                isToday ?
-                        todayStartLocalTime.minusMinutes(30) // Para permitir reservar la hora actual
-                        : LocalTime.of(7, 0, 0);
-
+        LocalTime startOfAvailableHoursLocalTime = getStartOfAvailableHoursLocalTime(date);
         LocalTime endOfAvailableHoursLocalTime = LocalTime.of(21, 30, 0);
 
+        if (isToday(date) && isAfterEndOfAvailableHours(date, endOfAvailableHoursLocalTime)){
+            callback.onFailure();
+            liveData.setValue(hourItems);
+            return liveData;
+        }
+
         AtomicInteger completedReads = new AtomicInteger(0);
-        int totalReads = (int) ChronoUnit.MINUTES.between(startOfAvailableHoursLocalTime, endOfAvailableHoursLocalTime) / 30;
+        int totalReads = getTotalReads(startOfAvailableHoursLocalTime, endOfAvailableHoursLocalTime);
 
         LiveData<Integer> totalPlazasByTipoPlaza = getTotalPlazasByTipoPlaza(tipoPlaza, callback);
 
@@ -467,17 +460,19 @@ public class DataRepository {
                         Filter.lessThanOrEqualTo(FECHA, timestamp)))
                     .get()
                     .addOnSuccessListener(documentReference -> {
-                        AtomicLong count = new AtomicLong(0);
+                        AtomicLong countReservasInThatTime = new AtomicLong(0);
                         documentReference.toObjects(Reserva.class).forEach(reserva -> {
                             if (reserva.getHora().getHoraFin() > epoch){
-                                count.getAndIncrement();
+                                countReservasInThatTime.getAndIncrement();
                             }
                         });
                         Date timeToAdd = new Date(epoch * 1000);
                         String timeString = df.format(timeToAdd);
 
-                        addHourItem(totalPlazas, count, hourItems, timeString);
+                        // Adds the hour item to the list
+                        addHourItem(totalPlazas, countReservasInThatTime, hourItems, timeString);
 
+                        // When all the time reads are completed, sort the list and set the value of the liveData
                         if (completedReads.incrementAndGet() == totalReads) {
                             Collections.sort(hourItems);
                             liveData.setValue(hourItems);
@@ -493,6 +488,34 @@ public class DataRepository {
         return liveData;
     }
 
+    private LocalTime getStartOfAvailableHoursLocalTime(LocalDate date) {
+        LocalTime localTimeNow = TimeUtils.convertEpochTolocalDateTime(TimeUtils.getNowEpoch()).toLocalTime();
+        boolean shouldAddAnHour = isToday(date) && localTimeNow.getMinute() >= 30;
+        LocalTime todayStartLocalTime = shouldAddAnHour ? localTimeNow.plusHours(1).withMinute(0).withSecond(0) : localTimeNow.withMinute(30).withSecond(0);
+        return isToday(date) ? todayStartLocalTime.minusMinutes(30) : LocalTime.of(7, 0, 0);
+    }
+
+    private boolean isToday(LocalDate date) {
+        return date.equals(LocalDate.now());
+    }
+
+    private boolean isAfterEndOfAvailableHours(LocalDate date, LocalTime endOfAvailableHoursLocalTime) {
+        LocalTime localTimeNow = TimeUtils.convertEpochTolocalDateTime(TimeUtils.getNowEpoch()).toLocalTime();
+        return isToday(date) && localTimeNow.isAfter(endOfAvailableHoursLocalTime);
+    }
+
+    private int getTotalReads(LocalTime startOfAvailableHoursLocalTime, LocalTime endOfAvailableHoursLocalTime) {
+        return (int) ChronoUnit.MINUTES.between(startOfAvailableHoursLocalTime, endOfAvailableHoursLocalTime) / 30;
+    }
+
+    /**
+     * Add an HourItem to the list of HourItems
+     * If the there are more reservations than totalPlazas, the HourItem is not available
+     * @param totalPlazas total number of plazas for that time and tipoPlaza
+     * @param count number of reservations for that time and tipoPlaza
+     * @param hourItems list of HourItems
+     * @param timeString time in HH:mm format
+     */
     private static void addHourItem(Integer totalPlazas, AtomicLong count, List<HourItem> hourItems, String timeString) {
         if (count.get() >= totalPlazas){
             hourItems.add(new HourItem(timeString, false));

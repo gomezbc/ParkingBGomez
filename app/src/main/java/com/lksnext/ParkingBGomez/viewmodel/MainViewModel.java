@@ -45,9 +45,15 @@ public class MainViewModel extends ViewModel {
     public void setSelectedDateDay(int selectedDateDay) {
         LocalDate newLocalDate = Objects.requireNonNull(selectedDate.getValue())
                 .withDayOfMonth(selectedDateDay);
-        // If the selected day is in the next month, we need to add a month to avoid
-        // setting the day in the current mont
-        if (selectedDateDay < selectedDate.getValue().getDayOfMonth()){
+        LocalDate now = LocalDate.now(TimeUtils.ZONE_ID);
+        if (selectedDateDay < selectedDate.getValue().lengthOfMonth()
+                && now.lengthOfMonth() <= selectedDateDay) {
+            newLocalDate = newLocalDate.minusMonths(1);
+
+            // Do nothing
+        } else if (selectedDateDay < selectedDate.getValue().lengthOfMonth()
+                && now.getMonthValue() == newLocalDate.getMonthValue()) {
+            // From 30 to 2
             newLocalDate = newLocalDate.plusMonths(1);
         }
         selectedDate.setValue(newLocalDate);
