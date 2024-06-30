@@ -292,14 +292,11 @@ public class ReservarMainFragment extends Fragment{
 
         listLiveData.observe(getViewLifecycleOwner(), hours -> {
             if (binding != null) {
-                HourAdapter adapter = (HourAdapter) binding.recyclerView.getAdapter();
-                if (adapter != null){
-                    adapter.updateData(hours);
-                    adapter.notifyItemRangeChanged(0, hours.size());
-                    binding.progressIndicatorHorarios.hide();
-                    binding.progressIndicatorHorarios.setVisibility(View.GONE);
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                }
+                HourAdapter adapter = new HourAdapter(hours, mainViewModel);
+                binding.recyclerView.setAdapter(adapter);
+                binding.progressIndicatorHorarios.hide();
+                binding.progressIndicatorHorarios.setVisibility(View.GONE);
+                binding.recyclerView.setVisibility(View.VISIBLE);
             }
             listLiveData.removeObservers(getViewLifecycleOwner());
         });

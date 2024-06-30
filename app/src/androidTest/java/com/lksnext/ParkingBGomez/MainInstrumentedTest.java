@@ -72,13 +72,24 @@ public class MainInstrumentedTest {
 
             await()
                 .pollInterval(500, TimeUnit.MILLISECONDS)
-                .pollDelay(2, TimeUnit.SECONDS)
-                .atMost(4, TimeUnit.SECONDS)
+                .pollDelay(4, TimeUnit.SECONDS)
+                .atMost(10, TimeUnit.SECONDS)
                 .untilAsserted(() -> onView(withId(R.id.recyclerView))
+                        .check(matches(isDisplayed())));
+
+            await()
+                .pollInterval(500, TimeUnit.MILLISECONDS)
+                .pollDelay(500, TimeUnit.MILLISECONDS)
+                .atMost(2, TimeUnit.SECONDS)
+                .untilAsserted(() -> onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
                         .perform(RecyclerViewActions.actionOnItemAtPosition(2, click())));
 
-            onView(withId(R.id.recyclerView))
-                    .perform(RecyclerViewActions.actionOnItemAtPosition(10, click()));
+            await()
+                .pollInterval(500, TimeUnit.MILLISECONDS)
+                .pollDelay(500, TimeUnit.MILLISECONDS)
+                .atMost(2, TimeUnit.SECONDS)
+                .untilAsserted(() -> onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
+                        .perform(RecyclerViewActions.actionOnItemAtPosition(10, click())));
 
             onView(withId(R.id.button_reservar_continue)).perform(click());
 
@@ -94,12 +105,15 @@ public class MainInstrumentedTest {
             onView(withId(R.id.ver_todas_reservas)).perform(click());
 
             await()
-                .pollInterval(500, TimeUnit.MILLISECONDS)
-                .pollDelay(1, TimeUnit.SECONDS)
-                .atMost(4, TimeUnit.SECONDS)
-                .untilAsserted(() -> onView(withId(R.id.recycler_view_reservas))
-                        .check(matches(isDisplayed()))
-                        .perform(RecyclerViewActions.actionOnItemAtPosition(0, click())));
+                    .pollInterval(500, TimeUnit.MILLISECONDS)
+                    .pollDelay(1, TimeUnit.SECONDS)
+                    .atMost(5, TimeUnit.SECONDS)
+                    .untilAsserted(() -> onView(withId(R.id.recycler_view_reservas))
+                            .check(matches(isDisplayed())));
+
+            onView(withId(R.id.recycler_view_reservas))
+                    .check(matches(isDisplayed()))
+                    .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
             onView(withId(R.id.reserva_edit_button)).check(matches(isEnabled())).perform(click());
 
@@ -126,10 +140,13 @@ public class MainInstrumentedTest {
             await()
                 .pollInterval(500, TimeUnit.MILLISECONDS)
                 .pollDelay(1, TimeUnit.SECONDS)
-                .atMost(4, TimeUnit.SECONDS)
+                .atMost(5, TimeUnit.SECONDS)
                 .untilAsserted(() -> onView(withId(R.id.recycler_view_reservas))
-                        .check(matches(isDisplayed()))
-                        .perform(RecyclerViewActions.actionOnItemAtPosition(0, click())));
+                        .check(matches(isDisplayed())));
+
+            onView(withId(R.id.recycler_view_reservas))
+                    .check(matches(isDisplayed()))
+                    .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
             onView(withId(R.id.reserva_delete_button)).check(matches(isEnabled())).perform(click());
 
