@@ -55,6 +55,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig true
         viewBinding true
     }
 
@@ -63,9 +64,7 @@ android {
     }
 
     testOptions {
-        execution 'ANDROID_TEST_ORCHESTRATOR'
         animationsDisabled true
-        unitTests.returnDefaultValues = true
     }
 
 }
@@ -93,16 +92,24 @@ dependencies {
     implementation libs.preference
     implementation libs.coil
     implementation libs.firebase.crashlytics
+    implementation libs.espresso.idling.resource
     testImplementation libs.junit
     testImplementation libs.mockito.core
     testImplementation libs.core.testing
     testImplementation libs.hamcrest
+    androidTestImplementation libs.core.testing
     androidTestImplementation libs.mockito.android
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+    androidTestImplementation libs.espresso.intents
+    androidTestImplementation(libs.espresso.contrib) {
+        exclude module: "protobuf-lite"
+    }
+    androidTestImplementation libs.rules
+    androidTestImplementation libs.uiautomator
+    androidTestImplementation libs.awaitility
     implementation platform(libs.firebase.bom)
     debugImplementation libs.leakcanary.android
-    androidTestImplementation libs.core.testing
 }
 
 secrets {
