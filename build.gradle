@@ -5,7 +5,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath libs.org.jacoco.core
         classpath libs.kover.gradle.plugin
     }
 }

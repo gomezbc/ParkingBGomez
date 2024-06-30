@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.FirebaseApp;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.databinding.ActivityLoginBinding;
 import com.lksnext.ParkingBGomez.viewmodel.LoginViewModel;
@@ -15,6 +16,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FirebaseApp.initializeApp(this);
 
         //Asignamos la vista/interfaz login (layout)
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());

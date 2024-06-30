@@ -43,8 +43,13 @@ public class MainViewModel extends ViewModel {
      * @param selectedDateDay the day of the month
      */
     public void setSelectedDateDay(int selectedDateDay) {
-        final LocalDate newLocalDate = Objects.requireNonNull(selectedDate.getValue())
+        LocalDate newLocalDate = Objects.requireNonNull(selectedDate.getValue())
                 .withDayOfMonth(selectedDateDay);
+        // If the selected day is in the next month, we need to add a month to avoid
+        // setting the day in the current mont
+        if (selectedDateDay < selectedDate.getValue().getDayOfMonth()){
+            newLocalDate = newLocalDate.plusMonths(1);
+        }
         selectedDate.setValue(newLocalDate);
     }
 

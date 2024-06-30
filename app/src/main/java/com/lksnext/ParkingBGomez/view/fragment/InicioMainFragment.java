@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,7 @@ import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
 import com.lksnext.ParkingBGomez.utils.TimeUtils;
+import com.lksnext.ParkingBGomez.view.activity.LoginActivity;
 import com.lksnext.ParkingBGomez.view.adapter.ReservaCardAdapter;
 import com.lksnext.ParkingBGomez.view.decoration.ReservaCardDecoration;
 
@@ -97,13 +99,15 @@ public class InicioMainFragment extends Fragment{
         LiveData<List<Reserva>> liveData =
                 getActiveReservasOfUser(recyclerView);
 
-        // Is executed when the LiveData object is updated with db data
-        liveData.observe(getViewLifecycleOwner(), dbReservasOfUser -> {
-            if (dbReservasOfUser != null) {
-                setRecyclerViewWithReservasFromDB(recyclerView, dbReservasOfUser);
-            }
-            liveData.removeObservers(getViewLifecycleOwner());
-        });
+        if (liveData != null) {
+            // Is executed when the LiveData object is updated with db data
+            liveData.observe(getViewLifecycleOwner(), dbReservasOfUser -> {
+                if (dbReservasOfUser != null) {
+                    setRecyclerViewWithReservasFromDB(recyclerView, dbReservasOfUser);
+                }
+                liveData.removeObservers(getViewLifecycleOwner());
+            });
+        }
     }
 
     private void setRecyclerViewWithReservasFromDB(RecyclerView recyclerView, List<Reserva> dbReservasOfUser) {
@@ -118,7 +122,15 @@ public class InicioMainFragment extends Fragment{
         }
     }
 
-    private static LiveData<List<Reserva>> getActiveReservasOfUser(View view) {
+    private LiveData<List<Reserva>> getActiveReservasOfUser(View view) {
+        var user = DataRepository.getInstance().getCurrentUser();
+        if (user == null) {
+            Toast.makeText(requireContext(), "Por favor inicia sessión primero", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireActivity(), LoginActivity.class);
+            startActivity(intent);
+            requireActivity().finish();
+            return null;
+        }
         return DataRepository.getInstance().getActiveReservasOfUser(DataRepository.getInstance().getCurrentUser().getUid(), new Callback() {
             @Override
             public void onSuccess() {

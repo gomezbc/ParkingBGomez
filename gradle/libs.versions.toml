@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.0"
+awaitility = "4.2.0"
 coil = "2.6.0"
 coreTesting = "2.2.0"
 credentials = "1.2.2"
@@ -25,7 +26,6 @@ googleGmsGoogleServices = "4.4.2"
 firebaseFirestore = "25.0.0"
 firebaseAuth = "23.0.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
-orgJacocoCore = "0.8.12"
 playServicesAuth = "21.2.0"
 playServicesMaps = "19.0.0"
 kotlin = "2.0.0"
@@ -33,12 +33,18 @@ coreKtx = "1.13.1"
 preference = "1.2.1"
 firebaseCrashlytics = "19.0.2"
 googleFirebaseCrashlytics = "3.0.2"
+rules = "1.6.1"
+uiautomator = "2.3.0"
 
 [libraries]
+awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
+espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espressoCore" }
+espresso-idling-resource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espressoCore"}
+espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCore" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "hamcrest" }
@@ -61,12 +67,13 @@ firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
-org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJacocoCore" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+rules = { module = "androidx.test:rules", version.ref = "rules" }
+uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
