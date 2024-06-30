@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.databinding.ActivityMainBinding;
 
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FirebaseApp.initializeApp(this);
 
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
 
