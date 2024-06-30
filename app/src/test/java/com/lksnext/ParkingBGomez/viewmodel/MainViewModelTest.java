@@ -1,13 +1,13 @@
-package com.lksnext.ParkingBGomez;
+package com.lksnext.ParkingBGomez.viewmodel;
 
 import static org.junit.Assert.assertEquals;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
+import com.lksnext.ParkingBGomez.LiveDataTestUtil;
 import com.lksnext.ParkingBGomez.domain.Hora;
 import com.lksnext.ParkingBGomez.enums.ReservarState;
 import com.lksnext.ParkingBGomez.enums.TipoPlaza;
-import com.lksnext.ParkingBGomez.viewmodel.MainViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;

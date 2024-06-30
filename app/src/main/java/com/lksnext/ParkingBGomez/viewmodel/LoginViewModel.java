@@ -1,14 +1,11 @@
 package com.lksnext.ParkingBGomez.viewmodel;
 
 import android.content.Context;
-import android.util.Patterns;
 
-import androidx.credentials.Credential;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.lksnext.ParkingBGomez.R;
 import com.lksnext.ParkingBGomez.data.DataRepository;
 import com.lksnext.ParkingBGomez.data.login.LoginResult;
@@ -17,10 +14,11 @@ import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.data.login.LoginFormState;
 import com.lksnext.ParkingBGomez.utils.GoogleSignInHelper;
 
+import java.util.regex.Pattern;
+
 public class LoginViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
-    private final MutableLiveData<Integer> loginProgress = new MutableLiveData<>(0);
 
     private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private final MutableLiveData<SignUpFormState> signUpFormState = new MutableLiveData<>();
@@ -105,20 +103,12 @@ public class LoginViewModel extends ViewModel {
         if (username == null) {
             return false;
         }
-        return Patterns.EMAIL_ADDRESS.matcher(username).matches();
+        return Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$").matcher(username).matches();
     }
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
-    }
-
-    public LiveData<Integer> getLoginProgress(){
-        return loginProgress;
-    }
-
-    public void setLoginProgress(int progress){
-        loginProgress.setValue(progress);
     }
 
 }

@@ -17,12 +17,6 @@ public class TimeUtils {
     private TimeUtils() {
     }
 
-    public static long convertLocalTimeToEpoch(LocalTime localTime) {
-        LocalDateTime localDateTime = localTime.atDate(LocalDate.now());
-        Instant instant = localDateTime.atZone(ZONE_ID).toInstant();
-        return instant.getEpochSecond();
-    }
-
     public static long convertLocalDateTimeToEpoch(LocalDateTime localDateTime) {
         Instant instant = localDateTime.atZone(ZONE_ID).toInstant();
         return instant.getEpochSecond();
@@ -42,18 +36,9 @@ public class TimeUtils {
         return instant.getEpochSecond();
     }
 
-    public static LocalDateTime convertStringToDateLocalTime(String localDateTime) {
-        return LocalDateTime.parse(localDateTime);
-    }
-
     public static LocalDateTime convertEpochTolocalDateTime(long epoch) {
         Instant instant = Instant.ofEpochSecond(epoch);
         return LocalDateTime.ofInstant(instant, ZONE_ID);
-    }
-
-    public static long convertLocalDateTimeStringToEpoch(String localDateTimeString) {
-        LocalDateTime localDateTime = LocalDateTime.parse(localDateTimeString);
-        return localDateTime.toEpochSecond(ZONE_OFFSET);
     }
 
     public static long getStartOfTodayEpoch() {

@@ -1,4 +1,4 @@
-package com.lksnext.ParkingBGomez;
+package com.lksnext.ParkingBGomez.data;
 
 import static org.mockito.Mockito.*;
 
@@ -11,7 +11,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.lksnext.ParkingBGomez.data.DataRepository;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lksnext.ParkingBGomez.domain.Callback;
 import com.lksnext.ParkingBGomez.domain.Reserva;
 import org.junit.Before;
@@ -236,5 +237,19 @@ public class DataRepositoryTest {
 
         // Assert
         verify(mockDocument).get();
+    }
+
+    @Test
+    public void testGetCurrentUser() {
+        // Arrange
+
+        when(mockAuth.getCurrentUser()).thenReturn(mockFirebaseUser);
+
+        // Act
+        var user = dataRepository.getCurrentUser();
+
+        // Assert
+        verify(mockAuth).getCurrentUser();
+        assert user == mockFirebaseUser;
     }
 }
