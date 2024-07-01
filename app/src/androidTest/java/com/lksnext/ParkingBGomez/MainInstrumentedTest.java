@@ -16,10 +16,12 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.lksnext.ParkingBGomez.view.activity.LoginActivity;
 import com.lksnext.ParkingBGomez.view.activity.MainActivity;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -160,5 +162,11 @@ public class MainInstrumentedTest {
     @After
     public void tearDown() {
         // Clean up after the test
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        // Clean up after all tests
+        FirebaseAuth.getInstance().signOut();
     }
 }
