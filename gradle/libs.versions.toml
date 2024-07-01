@@ -26,6 +26,7 @@ googleGmsGoogleServices = "4.4.2"
 firebaseFirestore = "25.0.0"
 firebaseAuth = "23.0.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
+orchestrator = "1.5.0"
 playServicesAuth = "21.2.0"
 playServicesMaps = "19.0.0"
 kotlin = "2.0.0"
@@ -67,12 +68,14 @@ firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+orchestrator = { module = "androidx.test:orchestrator", version.ref = "orchestrator" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 rules = { module = "androidx.test:rules", version.ref = "rules" }
+runner = { module = "androidx.test:runner", version.ref = "rules" }
 uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
 
 [plugins]

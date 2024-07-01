@@ -64,7 +64,9 @@ android {
     }
 
     testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
         animationsDisabled true
+        unitTests.returnDefaultValues = true
     }
 
 }
@@ -97,6 +99,8 @@ dependencies {
     testImplementation libs.mockito.core
     testImplementation libs.core.testing
     testImplementation libs.hamcrest
+    androidTestUtil libs.orchestrator
+    androidTestImplementation libs.runner
     androidTestImplementation libs.core.testing
     androidTestImplementation libs.mockito.android
     androidTestImplementation libs.ext.junit
