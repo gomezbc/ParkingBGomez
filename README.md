@@ -3,6 +3,9 @@
 ## Descripción
 Esta aplicación Android fue desarrollada como parte del Aula de Empresa LKS NEXT: Movilidad en la Facultad de Informática de San Sebastián de la Universidad del País Vasco (UPV/EHU). El proyecto se realizó entre el 07/03/2024 y el 04/07/2024.
 
+### Objetivo de la Aplicación
+El objetivo principal de esta aplicación es facilitar la gestión de reservas de plazas de aparcamiento. La aplicación permite a los usuarios registrar y acceder a sus cuentas, realizar y gestionar reservas de plazas de aparcamiento, recibir notificaciones sobre sus reservas y visualizar su historial de uso. Además, incluye funcionalidades específicas como la diferenciación entre tipos de plazas de aparcamiento (normales, con cargador eléctrico, para motos, etc.), y la integración con un backend en Firebase para la gestión de datos y autenticación. Esta aplicación busca proporcionar una solución eficiente y user-friendly para optimizar la experiencia de estacionamiento de los usuarios.
+
 ![app preview](https://github.com/gomezbc/ParkingBGomez/assets/77118356/14707673-f3e3-4b04-b981-743f91b2d2ca)
 
 ## Características
